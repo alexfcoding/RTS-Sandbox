@@ -168,11 +168,13 @@ public class SeekerClass : FractionIndexClass
 
         if (lootAfterDeath == true)
         {
-            for (int i = 0; i < 10; i++)
-            {
-                int RndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
+            int rndLootCount = Random.Range(0, 10);
 
-                GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[RndNum], transform.position + new Vector3(Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+            for (int i = 0; i < rndLootCount; i++)
+            {
+                int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
+
+                GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], transform.position + new Vector3(Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
 
                 if (createdObject.GetComponent<Rigidbody>() == null)
                 {
@@ -189,7 +191,7 @@ public class SeekerClass : FractionIndexClass
                 createdObject.GetComponent<Follower>().ownerToFollow = gameObject;
                 createdObject.GetComponent<Follower>().followOwner = true;
                 createdObject.GetComponent<Follower>().moveToNextOwner = true;
-                Destroy(createdObject, 300);
+                Destroy(createdObject, 60);
             }
         }
 

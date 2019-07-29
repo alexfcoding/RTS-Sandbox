@@ -53,7 +53,7 @@ public class Follower : FractionIndexClass
                     normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 10, -3) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади владельца
 
                 if (ownerToFollow.gameObject.tag == "Seeker")
-                    transform.position += normalizeDirection * Time.deltaTime * speed * 1.5f; // Сближать координату куба с Seeker или Player (перемещать куб)
+                    transform.position += normalizeDirection * Time.deltaTime * speed * 1.1f; // Сближать координату куба с Seeker или Player (перемещать куб)
 
                 if (ownerToFollow.gameObject.tag == "Player")
                     transform.position += normalizeDirection * Time.deltaTime * speed * 2f; // Сближать координату куба с Seeker или Player (перемещать куб)

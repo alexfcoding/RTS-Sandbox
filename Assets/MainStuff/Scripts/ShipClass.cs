@@ -15,7 +15,7 @@ public class ShipClass : SeekerClass
 
     public override void Awake()
     {
-        money = 5000;
+        money = 10000;
         health = 200000;
         maxHP = 200000;
         gameObject.tag = "Ship";
@@ -65,14 +65,14 @@ public class ShipClass : SeekerClass
 
         if (fractionId != 0)
         {
-            if (fractionBarracsList.Count > 0 && CountFractionWarriors(fractionId) <= fractionBarracsList.Count * 20 && money > 600)
+            if (fractionBarracsList.Count > 0 && CountFractionWarriors(fractionId) <= fractionBarracsList.Count * 10 && money > 600)
             {
                 SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
                 SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
                 rndUnit = Random.Range(0, 100);
 
                 if (rndUnit < 30)
-                    spendMoney(600, startCreatingLightShip);
+                    spendMoney(600, startCreatingTrooper);
                 else
                     spendMoney(300, startCreatingLightShip);
             }
@@ -182,7 +182,7 @@ public class ShipClass : SeekerClass
         if (rndPlayerAttack < choosenProbability)
         {
             attacker.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.player.transform.gameObject;
-            attacker.GetComponent<TrooperClass>().lootAfterDeath = true;
+            //attacker.GetComponent<TrooperClass>().lootAfterDeath = true;
         }
             
     }

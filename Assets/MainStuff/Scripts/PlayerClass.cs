@@ -226,7 +226,7 @@ public class PlayerClass: FractionIndexClass
 
         if (spectatorMode == true)
         {
-            transform.RotateAround(new Vector3(0, 0, 0), transform.up, 5f * Time.deltaTime);
+            transform.RotateAround(new Vector3(0, 0, 0), transform.up, 2f * Time.deltaTime);
             transform.LookAt(new Vector3(0, 0, 0));
             // transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(new Vector3(0, 0, 0)), Time.deltaTime);
         }
