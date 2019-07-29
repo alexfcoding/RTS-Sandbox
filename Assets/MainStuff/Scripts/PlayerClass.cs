@@ -116,7 +116,7 @@ public class PlayerClass: FractionIndexClass
             mainPlayer = this;
 
         //DontDestroyOnLoad(this);
-        Level = 1;
+        level = 1;
         reload = false;
         alreadyHaveWeapon = false;
         health = 30000;

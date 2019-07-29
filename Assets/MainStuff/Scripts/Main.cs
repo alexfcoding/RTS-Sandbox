@@ -23,7 +23,7 @@ public class Main : MonoBehaviour
             if (i == 0)
             {
                 GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().shipIsDeadEvent += printDeadHandler;
-                GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(300, -GameMaster.GM.shipObjectList[i].transform.position.y + 30, -500);
+                GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(300, -GameMaster.GM.shipObjectList[i].transform.position.y + 30, -100);
                 GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, GameMaster.GM.player.transform.TransformPoint(0, 1000, 10000), Quaternion.Euler(0, 0, 0), "MachineGun", GameMaster.GM.weaponObjectList);
                 GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, GameMaster.GM.player.transform.TransformPoint(3000, 1000, 10000), Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
                 GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, GameMaster.GM.player.transform.TransformPoint(-3000, 1000, 10000), Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
@@ -50,7 +50,7 @@ public class Main : MonoBehaviour
         // Создаем SeekerPrefab под кораблями из GameMaster.GM.ShipObjectList с рандомной позицией
         // X,Z +- 90 от корабля с использованием кастомной функции ConstructObject и задаем имя Seeker, потом помещаем в общий список GlobalObjectList
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 5; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.seekerPrefab, GameMaster.GM.shipObjectList[i].transform.position - new Vector3(0, GameMaster.GM.shipObjectList[i].transform.position.y, 0) +
                     new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100)), Quaternion.Euler(0, 0, 0), "Seeker", GameMaster.GM.globalObjectList);

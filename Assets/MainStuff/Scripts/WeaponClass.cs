@@ -174,8 +174,9 @@ public class WeaponClass : MonoBehaviour
                             if (hit.transform.GetComponent<FractionIndexClass>() != null)
                             {
                                 hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
-                               //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
-                               hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
+                                ownerLevel = currentPlayer.transform.GetComponent<FractionIndexClass>().level;
+                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
+                               //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
                             }
                         }
                 }
@@ -261,8 +262,9 @@ public class WeaponClass : MonoBehaviour
                             if (targetInSphere.transform.GetComponent<FractionIndexClass>() != null && objectToStick != null && targetInSphere.transform.GetComponent<FractionIndexClass>().dead == false)
                             {
                                 targetInSphere.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
-                                //targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
-                                targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
+                                ownerLevel = currentSeeker.transform.GetComponent<FractionIndexClass>().level;
+                                targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
+                                //targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
                             }
                     }
                 }
@@ -300,7 +302,7 @@ public class WeaponClass : MonoBehaviour
             gameObject.transform.eulerAngles = collision.gameObject.transform.eulerAngles;
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;
-            ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().Level;
+            ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
         }
 
         if ((collision.gameObject.tag == "Seeker" || collision.gameObject.tag == "Trooper") && (collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon == false))
@@ -333,6 +335,8 @@ public class WeaponClass : MonoBehaviour
             {
                 transform.localPosition = new Vector3(0.4f, 5f, 7f); ;
             }
+
+            ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
         }
 
         if ((collision.gameObject.tag == "EnemyShip") && (collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon == false))
@@ -343,7 +347,6 @@ public class WeaponClass : MonoBehaviour
             gameObject.tag = "EnemyWeapon";
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;
-            ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().Level;
             weaponPositionOffset.Set(0, 6, 0);
         }
     }

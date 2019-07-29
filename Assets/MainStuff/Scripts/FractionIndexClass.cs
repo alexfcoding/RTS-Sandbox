@@ -14,7 +14,7 @@ public class FractionIndexClass : MonoBehaviour
     public float health;
     public float maxHP;
     public float healthBarScaleMultiplier;
-    public float Level;
+    public float level;
     public GameObject healthBar;
     public GameObject whoIsDamaging;
     public GameObject deathEffect;
@@ -23,7 +23,7 @@ public class FractionIndexClass : MonoBehaviour
 
     public virtual void Awake()
     {
-        Level = 1;
+        level = 1;
         health = 500;
         maxHP = 500;
         healthBarScaleMultiplier = 0;

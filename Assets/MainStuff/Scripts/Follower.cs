@@ -197,8 +197,9 @@ public class Follower : FractionIndexClass
             gameObject.GetComponent<ParticleSystem>().Play();
             audioPickEnemyCube.Play();
             //collisioninfo.gameObject.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
-            collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 50;
-            collisioninfo.gameObject.GetComponent<FractionIndexClass>().Level += 1;
+            FractionIndexClass collisionObject = collisioninfo.gameObject.GetComponent<FractionIndexClass>();
+            collisionObject.health += 50;
+            collisionObject.level += 1;
             GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
         }
 
@@ -208,9 +209,9 @@ public class Follower : FractionIndexClass
             audioPickEnemyCube.Play();
             //collisioninfo.gameObject.transform.localScale += new Vector3(0.5f, 0.5f, 0.5f);
             collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 100;
-            collisioninfo.gameObject.GetComponent<FractionIndexClass>().Level += 1;
+            collisioninfo.gameObject.GetComponent<FractionIndexClass>().level += 1;
             if (collisioninfo.gameObject.GetComponent<SeekerClass>() != null && collisioninfo.gameObject.GetComponent<SeekerClass>().currentWeapon != null)
-                collisioninfo.gameObject.GetComponent<SeekerClass>().currentWeapon.ownerLevel = Level;
+                collisioninfo.gameObject.GetComponent<SeekerClass>().currentWeapon.ownerLevel = level;
             GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
         }
 

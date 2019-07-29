@@ -21,6 +21,7 @@ public class SeekerClass : FractionIndexClass
 
     public override void Awake()
     {
+        level = 1;
         gameObject.tag = "Seeker";
         minDistance = 1000;
         minDistNum = 0;
@@ -31,9 +32,9 @@ public class SeekerClass : FractionIndexClass
         dead = false;
         foundObject = false;
         isVulnerable = true;
-        //TextHP = Instantiate(GameMaster.GM.Text3dDamage, transform.position + new Vector3(0, 7, 0), Quaternion.Euler(0, 0, 0));
-        //TextHP.gameObject.GetComponent<TextMesh>().text = Health.ToString();
-        //TextHP.transform.parent = transform;
+        textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, 18, 0), Quaternion.Euler(0, 0, 0));
+        textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
+        textHP.transform.parent = transform;
         healthBarScaleMultiplier = 1;
         healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
         healthBar.transform.SetParent(gameObject.transform);
@@ -50,7 +51,7 @@ public class SeekerClass : FractionIndexClass
         if (health > damage)
         {
             health -= damage;
-            //TextHP.gameObject.GetComponent<TextMesh>().text = Health.ToString();
+            textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
             healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
         }
         // Обездвижили

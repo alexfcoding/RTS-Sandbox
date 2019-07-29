@@ -15,7 +15,7 @@ public class ShipClass : SeekerClass
 
     public override void Awake()
     {
-        money = 10000;
+        money = 20000;
         health = 200000;
         maxHP = 200000;
         gameObject.tag = "Ship";
@@ -31,7 +31,7 @@ public class ShipClass : SeekerClass
         healthBarScaleMultiplier = 100;
 
         healthBar.transform.localScale = new Vector3(health / 30000 * healthBarScaleMultiplier, 10, 10);
-       // TextHP.transform.localScale = new Vector3(200, 200, 200);
+        textHP.transform.localScale = new Vector3(10, 10, 10);
         
         textHP.transform.localPosition = new Vector3(0, 1000, 400);
         healthBar.transform.localPosition = new Vector3(0, 500, 400);
@@ -127,9 +127,11 @@ public class ShipClass : SeekerClass
 
             if (fractionId == 0)
                 newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 50000),
-                 Quaternion.Euler(0, 0, 0), "Barracs", GameMaster.GM.trooperBaseList);
+                    Quaternion.Euler(0, 0, 0), "Barracs", GameMaster.GM.trooperBaseList);
+                //newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 50000),
+                //Quaternion.Euler(0, 0, 0), "Barracs", GameMaster.GM.trooperBaseList);
 
-            //newBuilding.transform.position = new Vector3(newBuilding.transform.position.x, 0, newBuilding.transform.position.z);
+            newBuilding.transform.position = new Vector3(newBuilding.transform.position.x, 0, newBuilding.transform.position.z);
 
             newBuilding.GetComponent<FractionIndexClass>().SetFractionId(fractionId);
             fractionBarracsList.Add(newBuilding);
@@ -155,7 +157,9 @@ public class ShipClass : SeekerClass
 
                         createdObject.GetComponent<TrooperClass>().targetIsShip = false;
                         createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.shipObjectList[ChooseRandomTarget(GameMaster.GM.shipObjectList)];
-
+                        //float randomScale = Random.Range(1f, 2f); // Рандомизируем размеры пехоты
+                        //createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
+                        createdObject.GetComponent<SeekerClass>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.fractionId];
                         if (createdObject.GetComponent<FractionIndexClass>().fractionId != 0)
                             AttackPlayerWithProbability(30, createdObject);
                         
