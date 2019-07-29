@@ -18,6 +18,9 @@ public class RotateObject : MonoBehaviour
     }
     void FixedUpdate()
     {
-        transform.Rotate(x, y, z);
+        if (gameObject.name == "art_5")
+            transform.Rotate(0, 0.2f, 0);
+        else
+            transform.Rotate(x, y, z);
     }
 }

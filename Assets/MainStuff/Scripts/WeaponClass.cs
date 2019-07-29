@@ -15,7 +15,7 @@ public class WeaponClass : MonoBehaviour
     public float camY;
     public float camZ;
     public Vector3 weaponPositionOffset;
-
+    public float ownerLevel;
     public GameObject rocketLauncherAmmoPrefab;
     public GameObject createdBullet;
     public GameObject bulletEffectAI, bulletEffectPlayer;
@@ -174,7 +174,8 @@ public class WeaponClass : MonoBehaviour
                             if (hit.transform.GetComponent<FractionIndexClass>() != null)
                             {
                                 hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
-                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * 4);
+                               //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
+                               hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
                             }
                         }
                 }
@@ -260,6 +261,7 @@ public class WeaponClass : MonoBehaviour
                             if (targetInSphere.transform.GetComponent<FractionIndexClass>() != null && objectToStick != null && targetInSphere.transform.GetComponent<FractionIndexClass>().dead == false)
                             {
                                 targetInSphere.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
+                                //targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
                                 targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
                             }
                     }
@@ -284,6 +286,7 @@ public class WeaponClass : MonoBehaviour
     {
         if (( collision.gameObject.tag=="Player") && (collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon == false))
         {
+            
             collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;
             collision.gameObject.GetComponent<PlayerClass>().currentWeapon = gameObject.GetComponent<WeaponClass>();
             gameObject.GetComponent<WeaponClass>().currentPlayer = collision.gameObject.GetComponent<PlayerClass>();
@@ -297,6 +300,7 @@ public class WeaponClass : MonoBehaviour
             gameObject.transform.eulerAngles = collision.gameObject.transform.eulerAngles;
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;
+            ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().Level;
         }
 
         if ((collision.gameObject.tag == "Seeker" || collision.gameObject.tag == "Trooper") && (collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon == false))
@@ -339,6 +343,7 @@ public class WeaponClass : MonoBehaviour
             gameObject.tag = "EnemyWeapon";
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;
+            ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().Level;
             weaponPositionOffset.Set(0, 6, 0);
         }
     }

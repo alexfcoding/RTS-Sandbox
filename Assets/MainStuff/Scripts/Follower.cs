@@ -117,15 +117,18 @@ public class Follower : FractionIndexClass
         if (gameObject.GetComponent<Rigidbody>() != null && jumping == true)
         { 
             gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(0, Random.Range(-jumpPower, jumpPower), 0, ForceMode.Impulse);
-            gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(Random.Range(-jumpPower/10, jumpPower / 10), 0, 0, ForceMode.Impulse);
-            gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(0, 0, Random.Range(-jumpPower / 10, jumpPower / 10), ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(Random.Range(-jumpPower, jumpPower / 10), 0, 0, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(0, 0, Random.Range(-jumpPower, jumpPower), ForceMode.Impulse);
         }
     }
 
     public void MoveAfterOwnerDeath ()
     {
-        speed = 70;
+        speed = 60;
+
         gameObject.GetComponent<Rigidbody>().mass = 50;
+        gameObject.GetComponent<Rigidbody>().angularDrag = 1;
+        gameObject.GetComponent<Rigidbody>().useGravity = false;
         Vector3 normalizeDirection;
 
         if (ownerToFollow != null)
@@ -137,9 +140,10 @@ public class Follower : FractionIndexClass
 
     IEnumerator MoveToNextOwnerTrigger()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.8f);
         moveToNextOwner = false;
-        speed = 30;
+        speed = 50;
+        gameObject.GetComponent<Rigidbody>().useGravity = true;
         gameObject.GetComponent<Rigidbody>().mass = 5;
 
         if (fractionId == 10)
@@ -155,7 +159,8 @@ public class Follower : FractionIndexClass
         //    gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(0, 0, Random.Range(-jumpPower, jumpPower), ForceMode.Impulse);
         //}
 
-        if (collisioninfo.gameObject.tag == "Seeker" || collisioninfo.gameObject.tag == "Player") // Если куб столкнулся с Seeker или Player ...
+        if (collisioninfo.gameObject.tag == "Seeker") // Если куб столкнулся с Seeker или Player ...
+        { 
             if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10) // ... и его индекс равен 10 (свободный)
             {
                 gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId); // установить  индекс равный Seeker или Player
@@ -184,6 +189,31 @@ public class Follower : FractionIndexClass
                 gameObject.GetComponent<ParticleSystem>().Play();
                 audioPickEnemyCube.Play();
             }
+        }
+        else if (collisioninfo.gameObject.tag == "Trooper" && ownerToFollow != null && 
+        ownerToFollow.GetComponent<SeekerClass>() != null && 
+        ownerToFollow.GetComponent<SeekerClass>().dead == false) 
+        {
+            gameObject.GetComponent<ParticleSystem>().Play();
+            audioPickEnemyCube.Play();
+            //collisioninfo.gameObject.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
+            collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 50;
+            collisioninfo.gameObject.GetComponent<FractionIndexClass>().Level += 1;
+            GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
+        }
+
+        else if (collisioninfo.gameObject.tag == "Player")
+        {
+            gameObject.GetComponent<ParticleSystem>().Play();
+            audioPickEnemyCube.Play();
+            //collisioninfo.gameObject.transform.localScale += new Vector3(0.5f, 0.5f, 0.5f);
+            collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 100;
+            collisioninfo.gameObject.GetComponent<FractionIndexClass>().Level += 1;
+            if (collisioninfo.gameObject.GetComponent<SeekerClass>() != null && collisioninfo.gameObject.GetComponent<SeekerClass>().currentWeapon != null)
+                collisioninfo.gameObject.GetComponent<SeekerClass>().currentWeapon.ownerLevel = Level;
+            GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
+        }
+
 
         if (collisioninfo.gameObject.tag == "Ship" && gameObject.tag == "OwnedFollower")
         {

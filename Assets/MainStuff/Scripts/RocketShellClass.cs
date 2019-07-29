@@ -34,7 +34,7 @@ public class RocketShellClass : MonoBehaviour
         Timer += Time.deltaTime;
 
         if ((isProjectile==true) && (gameObject.GetComponent<Rigidbody>()!=null))
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, speed += 4, ForceMode.Acceleration);
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, speed += 8, ForceMode.Acceleration);
         
         if (playersBullet == true && isHoming == true)
             if (Physics.BoxCast(GameMaster.GM.player.transform.TransformPoint(0, 0, 0), new Vector3(20, 20, 2), transform.forward, out RaycastHit hitInfo2, Quaternion.Euler(0, 0, 0), 400, 1 << 8))
@@ -91,9 +91,15 @@ public class RocketShellClass : MonoBehaviour
                                 hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject;
 
                             if (weaponToStick != null && weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject.name == "Player")
-                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * 4);
-                            else
+                            {
                                 hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                                //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
+                            }
+                            else
+                            {
+                                //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
+                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                            }
                         }
 
                         if (hit.GetComponent<PlayerClass>() != null)

@@ -50,7 +50,7 @@ public class Main : MonoBehaviour
         // Создаем SeekerPrefab под кораблями из GameMaster.GM.ShipObjectList с рандомной позицией
         // X,Z +- 90 от корабля с использованием кастомной функции ConstructObject и задаем имя Seeker, потом помещаем в общий список GlobalObjectList
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < 10; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.seekerPrefab, GameMaster.GM.shipObjectList[i].transform.position - new Vector3(0, GameMaster.GM.shipObjectList[i].transform.position.y, 0) +
                     new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100)), Quaternion.Euler(0, 0, 0), "Seeker", GameMaster.GM.globalObjectList);
@@ -59,20 +59,20 @@ public class Main : MonoBehaviour
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);
             }
 
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 300; i++)
         {
             int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
-            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -1000, 1000, Random.Range(-200, 200), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -500, 500, Random.Range(10, 500), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
 
             if (createdObject.GetComponent<Rigidbody>() == null)
                 createdObject.AddComponent<Rigidbody>();
 
             createdObject.GetComponent<Rigidbody>().mass = 5;
             //createdObject.transform.localScale = new Vector3(2, 2, 2);
-            createdObject.GetComponent<Rigidbody>().useGravity = false;
+            //createdObject.GetComponent<Rigidbody>().useGravity = false;
             createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
             createdObject.GetComponent<Rigidbody>().drag = 1f;
-            createdObject.GetComponent<Rigidbody>().AddForce(0, Random.Range(-1000, 1000), 0, ForceMode.Impulse);
+            //createdObject.GetComponent<Rigidbody>().AddForce(Random.Range(-200, 200), Random.Range(-200, 200), Random.Range(-200, 200), ForceMode.Impulse);
             createdObject.GetComponent<Rigidbody>().AddTorque(transform.up * Random.Range(-1000, 1000));
             createdObject.GetComponent<Rigidbody>().AddTorque(transform.forward * Random.Range(-1000, 1000));
             createdObject.GetComponent<Rigidbody>().AddTorque(transform.right * Random.Range(-1000, 1000));

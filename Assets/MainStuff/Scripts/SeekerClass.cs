@@ -148,7 +148,7 @@ public class SeekerClass : FractionIndexClass
             Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 25, 1 << 9);
 
             foreach (Collider hit in colliders)
-                if (hit.tag == "Follower" && dead == false)
+                if (gameObject.tag == "Seeker" && hit.tag == "Follower" && dead == false)
                 {
                     Vector3 normalizeDirection = (gameObject.transform.position - hit.transform.position).normalized;
                     hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed*2;
@@ -158,7 +158,7 @@ public class SeekerClass : FractionIndexClass
 
     IEnumerator Dying()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0f);
 
         totallyDead = true;
         if (GetComponent<AudioSource>() != null)
@@ -180,11 +180,15 @@ public class SeekerClass : FractionIndexClass
                 }
 
                 createdObject.GetComponent<Rigidbody>().mass = 5;
-                createdObject.GetComponent<Rigidbody>().useGravity = false;
+                //createdObject.GetComponent<Rigidbody>().useGravity = false;
                 createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
-                createdObject.GetComponent<Rigidbody>().drag = 1f;
+                //createdObject.GetComponent<Rigidbody>().drag = 1f;
                 if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
                     createdObject.GetComponent<MeshCollider>().convex = true;
+
+                createdObject.GetComponent<Follower>().ownerToFollow = gameObject;
+                createdObject.GetComponent<Follower>().followOwner = true;
+                createdObject.GetComponent<Follower>().moveToNextOwner = true;
                 Destroy(createdObject, 300);
             }
         }

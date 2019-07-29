@@ -309,13 +309,13 @@ public class GameMaster : MonoBehaviour
     {
         int rnd = Random.Range(0, 100);
 
-        if (rnd >= 85 && rnd < 100)
+        if (rnd >= 65 && rnd < 100)
             GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
 
-        if (rnd >= 70 && rnd < 85)
+        if (rnd >= 30 && rnd < 65)
          GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
 
-        if (rnd <= 70)
+        if (rnd <= 30)
             GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
     }
     

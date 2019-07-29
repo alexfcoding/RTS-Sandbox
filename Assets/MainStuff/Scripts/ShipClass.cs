@@ -148,7 +148,7 @@ public class ShipClass : SeekerClass
                 if (fractionBarracsList.Count > 0)
                     if (fractionBarracsList[rndBaseSpawnTrooper].gameObject != null)
                     {
-                        createdObject = GameMaster.GM.ConstructObject(unitPrefab, transform.position + new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)), Quaternion.Euler(0, 0, 0), UnitName, GameMaster.GM.unitList);
+                        createdObject = GameMaster.GM.ConstructObject(unitPrefab, fractionBarracsList[rndBaseSpawnTrooper].transform.position + new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)), Quaternion.Euler(0, 0, 0), UnitName, GameMaster.GM.unitList);
                         createdObject.GetComponent<FractionIndexClass>().SetFractionId(fractionId);
                         Vector3 warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);
                         GameMaster.GM.GiveWeaponToObject(warriorPosition);
