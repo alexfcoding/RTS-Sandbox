@@ -97,7 +97,7 @@ public class WeaponClass : MonoBehaviour
         int layerMask = 1 << 8;
         if (gameObject.tag == "EnemyWeapon")
         {
-            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 100, layerMask);
+            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 170, layerMask);
             for (int i = 0; i < colliders.Length; i++)
             {
                 if ((colliders[i].GetComponent<FractionIndexClass>() != null && objectToStick != null && colliders[i].gameObject != null

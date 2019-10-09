@@ -91,15 +91,15 @@ public class Main : MonoBehaviour
         }
 
         // Создаем пехоту TrooperPrefab рядом с TrooperBase
-        for (int i = 0; i < 0; i++)
-            for (int j = 0; j < 0; j++)
+        for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
+            for (int j = 0; j < 30; j++)
             {
-                GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.trooperPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y + 3, Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "Trooper", GameMaster.GM.unitList);
+                GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.trooperPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y , Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "Trooper", GameMaster.GM.unitList);
                 //GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
-                float randomScale = Random.Range(3f, 3f); // Рандомизируем размеры пехоты
-                createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
+                //float randomScale = Random.Range(3f, 3f); // Рандомизируем размеры пехоты
+                //createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
                 createdObject.GetComponent<FractionIndexClass>().SetFractionId(i);
-                warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);
+                warriorPosition = createdObject.transform.position + new Vector3(0, 0, 0);
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);
 
                 int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);

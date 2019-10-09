@@ -138,9 +138,11 @@ public class Follower : FractionIndexClass
         }
     }
 
+
     IEnumerator MoveToNextOwnerTrigger()
     {
-        yield return new WaitForSeconds(0.8f);
+        //yield return new WaitForSeconds(0.8f);
+        yield return new WaitForSeconds(0);
         moveToNextOwner = false;
         speed = 50;
         gameObject.GetComponent<Rigidbody>().useGravity = true;
