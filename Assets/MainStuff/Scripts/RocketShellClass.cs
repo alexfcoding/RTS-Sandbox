@@ -83,7 +83,7 @@ public class RocketShellClass : MonoBehaviour
                     foreach (Collider hit in colliders)
                     {
                         if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket"))
-                            hit.GetComponent<Rigidbody>().AddExplosionForce(500, gameObject.transform.position + new Vector3(0, 0, 0), 150, 1, ForceMode.Impulse);
+                            hit.GetComponent<Rigidbody>().AddExplosionForce(500, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
 
                         if (hit.GetComponent<FractionIndexClass>() != null && hit.gameObject != null)
                         {
@@ -92,13 +92,13 @@ public class RocketShellClass : MonoBehaviour
 
                             if (weaponToStick != null && weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject.name == "Player")
                             {
-                                //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
-                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
+                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                                //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
                             }
                             else if (weaponToStick != null)
                             {
-                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
-                                //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                                //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
+                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
                             }
                         }
 

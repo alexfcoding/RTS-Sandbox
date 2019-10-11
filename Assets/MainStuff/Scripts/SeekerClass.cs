@@ -14,6 +14,7 @@ public class SeekerClass : FractionIndexClass
     public bool findNextObject = true;
     public bool goingToBase;
     public bool alreadyHaveWeapon;
+    public bool isStationary;
 
     public GameObject textHP;
     public GameObject smoke;

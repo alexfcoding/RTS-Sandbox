@@ -9,11 +9,12 @@ public class WeaponClass : MonoBehaviour
     public float damageBullet;
     
     public float timer;
-    public float reloadTime, reloadTimeForEnemy;
+    public float reloadTime, reloadTimeForEnemy, range;
     public float tick;
     public float camX;
     public float camY;
     public float camZ;
+    float sprayShoot;
     public Vector3 weaponPositionOffset;
     public float ownerLevel;
     public GameObject rocketLauncherAmmoPrefab;
@@ -54,6 +55,12 @@ public class WeaponClass : MonoBehaviour
         if (objectToStick == null)
         {
             transform.Rotate(0, -5, 0);
+        }
+
+        if (currentSeeker != null && currentSeeker.tag =="Tower")
+        {
+            if (foundTargetToShoot == false)
+            transform.Rotate(0, -1, 0);
         }
     }
 
@@ -97,7 +104,7 @@ public class WeaponClass : MonoBehaviour
         int layerMask = 1 << 8;
         if (gameObject.tag == "EnemyWeapon")
         {
-            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 170, layerMask);
+            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, range, layerMask);
             for (int i = 0; i < colliders.Length; i++)
             {
                 if ((colliders[i].GetComponent<FractionIndexClass>() != null && objectToStick != null && colliders[i].gameObject != null
@@ -197,8 +204,18 @@ public class WeaponClass : MonoBehaviour
         {
             if (foundTargetToShoot == true && targetInSphere != null)
             {
-                transform.LookAt(targetInSphere.transform.position);
 
+                sprayShoot = Random.Range(-5, 5);
+                if (currentSeeker.tag != "Tower")
+                    transform.LookAt(targetInSphere.transform.position);
+                else
+                    transform.LookAt(targetInSphere.transform.position + new Vector3(0,-10,0));
+
+                if (targetInSphere.tag == "Tower")
+                {
+                    transform.LookAt(targetInSphere.transform.position + new Vector3(0, 30, 0));
+                }
+                
                 if (soundStop == false)
                 {
                     soundStop = true;
@@ -207,7 +224,11 @@ public class WeaponClass : MonoBehaviour
                 if (reloadNow == false && isProjectile == true)
                 {
                     reloadNow = true;
-                    createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(Vector3.forward * 2), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+                    if (currentSeeker.tag != "Tower")
+                        createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(Vector3.forward * 1), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+                    else
+                        createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(new Vector3(0,0.3f,0.7f)) + new Vector3(sprayShoot, sprayShoot, sprayShoot), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+
                     createdBullet.GetComponent<RocketShellClass>().LaunchSound();
                     createdBullet.GetComponent<RocketShellClass>().weaponToStick = gameObject;
                 }

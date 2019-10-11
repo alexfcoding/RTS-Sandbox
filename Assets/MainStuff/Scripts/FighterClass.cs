@@ -29,11 +29,11 @@ public class FighterClass : TrooperClass
         //  Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(Timer * 4f + randomY) * 1f + 15f,
         
         Vector3 moveSin = new Vector3(transform.position.x + Mathf.Sin(timer) * 0.1f,
-            transform.position.y + Mathf.Sin(timer * 2f) * 0.25f,
+            transform.position.y + Mathf.Sin(timer * 2f) * 0.1f,
                 transform.position.z + Mathf.Sin(timer * 2f) * 0.1f);
         
-        //if (transform.position.y < 20)
-        //    gameObject.GetComponent<Rigidbody>().AddForce(0, 300, 0, ForceMode.Impulse);
+        if (transform.position.y < 5)
+            gameObject.GetComponent<Rigidbody>().AddForce(0, 300, 0, ForceMode.Impulse);
 
         gameObject.GetComponent<Rigidbody>().MovePosition(moveSin);
     }

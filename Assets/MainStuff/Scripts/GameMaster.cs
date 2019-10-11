@@ -321,6 +321,6 @@ public class GameMaster : MonoBehaviour
     
     public void FixedUpdate()
     {
-        timer +=Time.deltaTime;
+        timer += Time.deltaTime;
     }
 }

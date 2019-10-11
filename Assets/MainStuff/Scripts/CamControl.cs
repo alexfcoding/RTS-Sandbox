@@ -29,7 +29,7 @@ public class CamControl : MonoBehaviour
 
         mouseX += Input.GetAxis("Mouse X") * rotationSpeed;
         mouseY += Input.GetAxis("Mouse Y") * rotationSpeed * (-1);
-        // mouseY = Mathf.Clamp(mouseY, -35, 60);
+        mouseY = Mathf.Clamp(mouseY, -30, 30);
 
         //transform.LookAt(TRG);
         if (player.GetComponent<PlayerClass>().spectatorMode == false)

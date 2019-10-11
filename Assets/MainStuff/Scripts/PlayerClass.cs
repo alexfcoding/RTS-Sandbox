@@ -148,8 +148,8 @@ public class PlayerClass: FractionIndexClass
             selectorScale += 4;
             selector.transform.localScale = new Vector3(selectorScale, selectorScale, 1);
             tacticMode = true;
-            //lookCube.transform.localPosition = new Vector3(0, 2000, 30000);
-            // GameMaster.GM.myCamera.transform.localPosition = Vector3.Lerp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(0, 30000, -40000),0.05f);
+            lookCube.transform.localPosition = new Vector3(0, 4000, 30000);
+             GameMaster.GM.myCamera.transform.localPosition = Vector3.Lerp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(0, 14000, -40000),0.05f);
         }
         
         // Если включен тактический режим
@@ -231,11 +231,11 @@ public class PlayerClass: FractionIndexClass
             // transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(new Vector3(0, 0, 0)), Time.deltaTime);
         }
         
-        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 2f) * 0.07f,
-            transform.position.z + Mathf.Sin(timer * 3f) * 0.03f);
+        //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 2f) * 0.07f,
+        //    transform.position.z + Mathf.Sin(timer * 3f) * 0.03f);
 
-         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 5,
-         //   transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
+         Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 5,
+            transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
         
         gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
 
@@ -404,6 +404,9 @@ public class PlayerClass: FractionIndexClass
 
     public void FixedUpdate()
     {
+        if (transform.position.y > 20)
+            transform.position = new Vector3(transform.position.x, 20, transform.position.z);
+
         if (Input.GetKey(KeyCode.LeftControl))
         {
             Cursor.visible = true;
@@ -570,6 +573,7 @@ public class PlayerClass: FractionIndexClass
                 gameObject.GetComponent<AudioSource>().Play();
             }
 
+            
             RB.AddRelativeForce(Vector3.up * (-1.5f), ForceMode.VelocityChange);
             fire7.Play();
             fire8.Play();
@@ -593,7 +597,9 @@ public class PlayerClass: FractionIndexClass
                 gameObject.GetComponent<AudioSource>().Play();
             }
 
-            RB.AddRelativeForce(Vector3.up * 1.5f, ForceMode.VelocityChange);
+            if (transform.position.y < 20)
+                RB.AddRelativeForce(Vector3.up * 1.5f, ForceMode.VelocityChange);
+            
             fire9.Play();
             fire10.Play();
         }
