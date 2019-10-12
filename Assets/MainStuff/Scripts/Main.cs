@@ -92,7 +92,7 @@ public class Main : MonoBehaviour
 
         // Создаем пехоту TrooperPrefab рядом с TrooperBase
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 30; j++)
+            for (int j = 0; j < 0; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.trooperPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y , Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "Trooper", GameMaster.GM.unitList);
                 //GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));

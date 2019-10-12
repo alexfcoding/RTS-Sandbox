@@ -11,7 +11,8 @@ public class TrooperClass : SeekerClass
     public bool wait;
     public bool foundTargetToAttack;
     public bool targetIsShip;
-    
+    public bool ignorePlayerCommandAndStay;
+
     bool stopDoing;
 
     public int attackTargetId;
@@ -100,7 +101,7 @@ public class TrooperClass : SeekerClass
             if (targetToChase != null && targetToChase.GetComponent<ShipClass>() == null)
                 pointFromShooting = pointFromShooting + pointFromShootingRandomize;
 
-            if ((currentWeapon != null && enemyToLook != null && fractionId != 0) || (currentWeapon != null && enemyToLook != null && fractionId == 0 && enemyToLook.gameObject == targetToChaseByPlayerCommand) )
+            if ((currentWeapon != null && enemyToLook != null) || (currentWeapon != null && enemyToLook != null) )
             {
                 if (enemyToLook.GetComponent<ShipClass>() != null)
                 {

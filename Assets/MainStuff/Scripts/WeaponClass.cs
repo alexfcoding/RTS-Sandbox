@@ -59,8 +59,13 @@ public class WeaponClass : MonoBehaviour
 
         if (currentSeeker != null && currentSeeker.tag =="Tower")
         {
+
             if (foundTargetToShoot == false)
-            transform.Rotate(0, -1, 0);
+            {
+                gameObject.transform.localEulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+                transform.Rotate(0, -1, 0);
+            }
+                
         }
     }
 
@@ -111,16 +116,18 @@ public class WeaponClass : MonoBehaviour
                 && colliders[i].GetComponent<FractionIndexClass>().fractionId != objectToStick.GetComponent<FractionIndexClass>().fractionId
                 && currentSeeker.GetComponent<FractionIndexClass>().dead == false
                 && colliders[i].GetComponent<FractionIndexClass>().isSimpleFollower == false
-                && colliders[i].GetComponent<FractionIndexClass>().dead == false && objectToStick.GetComponent<FractionIndexClass>().fractionId != 0) 
-                || 
-                (
-                colliders[i].GetComponent<FractionIndexClass>() != null && objectToStick != null && colliders[i].gameObject != null
-                && colliders[i].GetComponent<FractionIndexClass>().fractionId != objectToStick.GetComponent<FractionIndexClass>().fractionId
-                && currentSeeker.GetComponent<FractionIndexClass>().dead == false
-                && colliders[i].GetComponent<FractionIndexClass>().isSimpleFollower == false
-                && colliders[i].GetComponent<FractionIndexClass>().dead == false && objectToStick.transform.GetComponent<TrooperClass>() != null 
-                && objectToStick.GetComponent<FractionIndexClass>().fractionId == 0
-                && colliders[i].gameObject == objectToStick.transform.GetComponent<TrooperClass>().targetToChaseByPlayerCommand))
+                && colliders[i].GetComponent<FractionIndexClass>().dead == false) 
+                 
+                //(
+                //colliders[i].GetComponent<FractionIndexClass>() != null && objectToStick != null && colliders[i].gameObject != null
+                //&& colliders[i].GetComponent<FractionIndexClass>().fractionId != objectToStick.GetComponent<FractionIndexClass>().fractionId
+                //&& currentSeeker.GetComponent<FractionIndexClass>().dead == false
+                //&& colliders[i].GetComponent<FractionIndexClass>().isSimpleFollower == false
+                //&& colliders[i].GetComponent<FractionIndexClass>().dead == false && objectToStick.transform.GetComponent<TrooperClass>() != null 
+                //&& objectToStick.GetComponent<FractionIndexClass>().fractionId == 0)
+
+                /*&& colliders[i].gameObject == objectToStick.transform.GetComponent<TrooperClass>().targetToChaseByPlayerCommand*/)
+
                 {
                     foundTargetToShoot = true;
                     targetInSphere = colliders[i].gameObject;
@@ -182,8 +189,8 @@ public class WeaponClass : MonoBehaviour
                             {
                                 hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
                                 ownerLevel = currentPlayer.transform.GetComponent<FractionIndexClass>().level;
-                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
-                               //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
+                               // hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
+                               hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
                             }
                         }
                 }
@@ -284,8 +291,8 @@ public class WeaponClass : MonoBehaviour
                             {
                                 targetInSphere.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
                                 ownerLevel = currentSeeker.transform.GetComponent<FractionIndexClass>().level;
-                                targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
-                                //targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
+                                //targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
+                                targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
                             }
                     }
                 }

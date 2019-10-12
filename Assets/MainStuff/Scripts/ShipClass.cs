@@ -67,8 +67,8 @@ public class ShipClass : SeekerClass
         {
             if (fractionBarracsList.Count > 0 && CountFractionWarriors(fractionId) <= fractionBarracsList.Count * 10 && money > 600)
             {
-                SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
-                SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
+                //SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
+                //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
                 rndUnit = Random.Range(0, 100);
 
                 if (rndUnit < 30)
@@ -79,16 +79,26 @@ public class ShipClass : SeekerClass
 
             if (fractionBarracsList.Count < 4 && money > 3000)
             {
-                SpendMoneyMethod SpendOnBarracsDelegate = startBarracsConstruction;
-                SpendMoneyMethod SpendOnFactoryDelegate = startFactoryConstruction;
+                //SpendMoneyMethod SpendOnBarracsDelegate = startBarracsConstruction;
+                //SpendMoneyMethod SpendOnFactoryDelegate = startFactoryConstruction;
                 rndBuilding = Random.Range(0, 100);
                 
                 if (rndBuilding < 50)
-                    spendMoney(2000, SpendOnBarracsDelegate);
+                    spendMoney(2000, startBarracsConstruction);
                 else 
                 {
-                    spendMoney(3000, SpendOnFactoryDelegate);
+                    spendMoney(3000, startFactoryConstruction);
                 }
+            }
+
+            if (fractionBarracsList.Count > 0 && money > 5000)
+            {
+                SpendMoneyMethod SpendOnTowerDelegate = startCreatingTower;
+                
+                rndBuilding = Random.Range(0, 100);
+
+                spendMoney(5000, SpendOnTowerDelegate);
+               
             }
         }
     }
@@ -113,6 +123,11 @@ public class ShipClass : SeekerClass
         CreateUnit(5, GameMaster.GM.lightShipPrefab, "LightShip");
     }
 
+    public void startCreatingTower()
+    {
+        CreateBuilding(GameMaster.GM.TowerPrefab, "Tower");
+    }
+
     public void CreateBuilding(GameObject buildingPrefabObject, string buildingName)
     {
         GameObject newBuilding = null;
@@ -121,7 +136,7 @@ public class ShipClass : SeekerClass
             if (fractionId != 0)
             {
                 newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.shipObjectList[fractionId].transform.position
-                 + new Vector3(Random.Range(-100, 100), -GameMaster.GM.shipObjectList[fractionId].transform.position.y, Random.Range(-100, 100)),
+                 + new Vector3(Random.Range(-250, 250), -GameMaster.GM.shipObjectList[fractionId].transform.position.y, Random.Range(-250, 250)),
                   Quaternion.Euler(0, 0, 0), buildingName, GameMaster.GM.trooperBaseList);
             }
 
@@ -154,16 +169,21 @@ public class ShipClass : SeekerClass
                         createdObject.GetComponent<FractionIndexClass>().SetFractionId(fractionId);
                         Vector3 warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);
                         GameMaster.GM.GiveWeaponToObject(warriorPosition);
-
-                        createdObject.GetComponent<TrooperClass>().targetIsShip = false;
-                        createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.shipObjectList[ChooseRandomTarget(GameMaster.GM.shipObjectList)];
+                        if (createdObject.GetComponent<TrooperClass>() != null)
+                        {
+                            createdObject.GetComponent<TrooperClass>().targetIsShip = false;
+                            createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.shipObjectList[ChooseRandomTarget(GameMaster.GM.shipObjectList)];
+                        }
+                       
                         //float randomScale = Random.Range(1f, 2f); // Рандомизируем размеры пехоты
                         //createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
                         createdObject.GetComponent<SeekerClass>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.fractionId];
+
                         if (createdObject.GetComponent<FractionIndexClass>().fractionId != 0)
                             AttackPlayerWithProbability(30, createdObject);
-                        
-                        createdObject.GetComponent<TrooperClass>().targetToChaseByPlayerCommand = createdObject.GetComponent<TrooperClass>().targetToChase;
+
+                        if (createdObject.GetComponent<TrooperClass>() != null)
+                            createdObject.GetComponent<TrooperClass>().targetToChaseByPlayerCommand = createdObject.GetComponent<TrooperClass>().targetToChase;
                     }
             }
         }
@@ -185,6 +205,7 @@ public class ShipClass : SeekerClass
 
         if (rndPlayerAttack < choosenProbability)
         {
+            if (attacker.GetComponent<TrooperClass>() != null)
             attacker.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.player.transform.gameObject;
             //attacker.GetComponent<TrooperClass>().lootAfterDeath = true;
         }

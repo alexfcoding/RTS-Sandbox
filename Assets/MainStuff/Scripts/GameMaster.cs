@@ -95,6 +95,12 @@ public class GameMaster : MonoBehaviour
     public GameObject trooperPrefab;
 
     /// <summary>
+    /// Tower prefab
+    /// </summary>
+    public GameObject TowerPrefab;
+
+
+    /// <summary>
     /// FLight ship prefab
     /// </summary>
     public GameObject lightShipPrefab;

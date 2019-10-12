@@ -13,8 +13,8 @@ public class TowerClass : SeekerClass
         minDistNum = 0;
         countOfItemsCollected = 0;
         alreadyHaveWeapon = true;
-        health = 30000;
-        maxHP = 30000;
+        health = 60000;
+        maxHP = 60000;
         dead = false;
         foundObject = false;
         isVulnerable = true;
