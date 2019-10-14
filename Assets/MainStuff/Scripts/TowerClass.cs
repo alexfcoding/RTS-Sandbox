@@ -14,7 +14,7 @@ public class TowerClass : SeekerClass
         countOfItemsCollected = 0;
         alreadyHaveWeapon = true;
         health = 60000;
-        maxHP = 60000;
+        maxHP = 30000;
         dead = false;
         foundObject = false;
         isVulnerable = true;

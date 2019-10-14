@@ -201,7 +201,7 @@ public class Follower : FractionIndexClass
             //collisioninfo.gameObject.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
             FractionIndexClass collisionObject = collisioninfo.gameObject.GetComponent<FractionIndexClass>();
             collisionObject.health += 50;
-            collisionObject.level += 1;
+            //collisionObject.level += 1;
             GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
         }
 

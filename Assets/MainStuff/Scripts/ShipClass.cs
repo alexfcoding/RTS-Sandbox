@@ -172,7 +172,9 @@ public class ShipClass : SeekerClass
                         if (createdObject.GetComponent<TrooperClass>() != null)
                         {
                             createdObject.GetComponent<TrooperClass>().targetIsShip = false;
-                            createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.shipObjectList[ChooseRandomTarget(GameMaster.GM.shipObjectList)];
+                            //createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.shipObjectList[ChooseRandomTarget(GameMaster.GM.shipObjectList)];
+                            if (fractionId == 0)
+                                createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.player.gameObject;
                         }
                        
                         //float randomScale = Random.Range(1f, 2f); // Рандомизируем размеры пехоты

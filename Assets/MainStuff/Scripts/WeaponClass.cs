@@ -212,7 +212,7 @@ public class WeaponClass : MonoBehaviour
             if (foundTargetToShoot == true && targetInSphere != null)
             {
 
-                sprayShoot = Random.Range(-5, 5);
+                sprayShoot = Random.Range(-6, 6);
                 if (currentSeeker.tag != "Tower")
                     transform.LookAt(targetInSphere.transform.position);
                 else

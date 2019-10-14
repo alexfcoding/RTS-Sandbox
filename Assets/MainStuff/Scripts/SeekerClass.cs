@@ -28,8 +28,8 @@ public class SeekerClass : FractionIndexClass
         minDistNum = 0;
         countOfItemsCollected = 0;
         alreadyHaveWeapon = false;
-        health = 2000;
-        maxHP = 2000;
+        health = 20000;
+        maxHP = 20000;
         dead = false;
         foundObject = false;
         isVulnerable = true;
@@ -51,7 +51,9 @@ public class SeekerClass : FractionIndexClass
     {
         if (health > damage)
         {
-            health -= damage;
+            if (whoIsDamaging != null && whoIsDamaging.GetComponent<FractionIndexClass>().fractionId != GetComponent<FractionIndexClass>().fractionId)
+                health -= damage;
+
             textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
             healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
         }
@@ -161,16 +163,23 @@ public class SeekerClass : FractionIndexClass
     IEnumerator Dying()
     {
         yield return new WaitForSeconds(0f);
+        if (whoIsDamaging != null)
+            whoIsDamaging.GetComponent<FractionIndexClass>().level += 1;
+
+        if (whoIsDamaging != null && (whoIsDamaging.tag == "Trooper" || whoIsDamaging.tag == "Seeker"))
+            whoIsDamaging.GetComponent<FractionIndexClass>().health = maxHP * 3;
 
         totallyDead = true;
+
         if (GetComponent<AudioSource>() != null)
             GetComponent<AudioSource>().Play();
+
         GameObject Explode = Instantiate(deathEffect, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
         Destroy(Explode, 2f);
 
         if (lootAfterDeath == true)
         {
-            int rndLootCount = Random.Range(0, 10);
+            int rndLootCount = Random.Range(20, 50);
 
             for (int i = 0; i < rndLootCount; i++)
             {
