@@ -18,6 +18,7 @@ public class SeekerClass : FractionIndexClass
 
     public GameObject textHP;
     public GameObject smoke;
+    public GameObject currentTargetObject;
     public WeaponClass currentWeapon;
 
     public override void Awake()
@@ -128,7 +129,12 @@ public class SeekerClass : FractionIndexClass
                 if (foundObject == true && goingToBase == false)
                 {
                     findNextObject = false;
-                    currentTarget = objectList[minDistNum].transform.position;
+
+                    if(objectList[minDistNum].gameObject != null)
+                        currentTarget = objectList[minDistNum].transform.position;
+                    else
+                        minDistNum = Random.Range(0, objectList.Count);
+                    
                     Quaternion lookOnLook = Quaternion.LookRotation(currentTarget - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
                     Vector3 normalizeDirection = (objectList[minDistNum].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
@@ -179,7 +185,7 @@ public class SeekerClass : FractionIndexClass
 
         if (lootAfterDeath == true)
         {
-            int rndLootCount = Random.Range(20, 50);
+            int rndLootCount = Random.Range(1, 5);
 
             for (int i = 0; i < rndLootCount; i++)
             {

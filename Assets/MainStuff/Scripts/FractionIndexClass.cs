@@ -24,8 +24,8 @@ public class FractionIndexClass : MonoBehaviour
     public virtual void Awake()
     {
         level = 1;
-        health = 500;
-        maxHP = 500;
+        health = 100;
+        maxHP = 100;
         healthBarScaleMultiplier = 0;
         healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
         healthBar.transform.SetParent(gameObject.transform);
@@ -77,7 +77,7 @@ public class FractionIndexClass : MonoBehaviour
 
                     if (lootAfterDeath == true)
                     {
-                        for (int i = 0; i < 30; i++)
+                        for (int i = 0; i < 5; i++)
                         {
                             int RndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
                             GameObject CreatedObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[RndNum], transform.position + new Vector3(Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);

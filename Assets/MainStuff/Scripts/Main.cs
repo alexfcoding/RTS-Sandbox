@@ -16,7 +16,7 @@ public class Main : MonoBehaviour
 
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
         {
-            GameObject newShipObject = GameMaster.GM.ConstructObject(GameMaster.GM.shipPrefab, new Vector3(1200 * Mathf.Cos(spawnCircleAngle * 3.14f / 180), 110, 1200 * Mathf.Sin(spawnCircleAngle * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "Seeker", GameMaster.GM.shipObjectList);
+            GameObject newShipObject = GameMaster.GM.ConstructObject(GameMaster.GM.shipPrefab, new Vector3(1700 * Mathf.Cos(spawnCircleAngle * 3.14f / 180), 110, 1700 * Mathf.Sin(spawnCircleAngle * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "Seeker", GameMaster.GM.shipObjectList);
             newShipObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             newShipObject.GetComponent<ShipClass>().SetFractionId(i);
             
@@ -59,10 +59,10 @@ public class Main : MonoBehaviour
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);
             }
 
-        for (int i = 0; i < 100; i++)
+        for (int i = 0; i < 400; i++)
         {
             int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
-            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -500, 500, Random.Range(10, 500), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -1000, 1000, Random.Range(10, 500), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
 
             if (createdObject.GetComponent<Rigidbody>() == null)
                 createdObject.AddComponent<Rigidbody>();
@@ -92,7 +92,7 @@ public class Main : MonoBehaviour
 
         // Создаем пехоту TrooperPrefab рядом с TrooperBase
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 0; j++)
+            for (int j = 0; j < 10; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.trooperPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y , Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "Trooper", GameMaster.GM.unitList);
                 //GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
@@ -111,8 +111,8 @@ public class Main : MonoBehaviour
                     createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.player.gameObject;
             }
 
-        for (int i = 0; i < 0; i++)
-            for (int j = 0; j < 0; j++)
+        for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
+            for (int j = 0; j < 10; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.lightShipPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y + 3, Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "LightShip", GameMaster.GM.unitList);
                 float RandomScale = Random.Range(2f, 3f); // Рандомизируем размеры пехоты
