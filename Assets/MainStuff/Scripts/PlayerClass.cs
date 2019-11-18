@@ -401,6 +401,12 @@ public class PlayerClass: FractionIndexClass
         GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().spendMoney(600, spendOnTowerDelegate);
     }
 
+    public void CallCreatingGunTower()
+    {
+        SpendMoneyMethod spendOnGunTowerDelegate = GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().startCreatingGunTower;
+        GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().spendMoney(600, spendOnGunTowerDelegate);
+    }
+
 
     IEnumerator cancelIgnoringEnemies (GameObject weaponToControl)
     {

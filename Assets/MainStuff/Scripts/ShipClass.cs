@@ -128,6 +128,11 @@ public class ShipClass : SeekerClass
         CreateBuilding(GameMaster.GM.TowerPrefab, "Tower");
     }
 
+    public void startCreatingGunTower()
+    {
+        CreateBuilding(GameMaster.GM.TowerGunPrefab, "GunTower");
+    }
+
     public void CreateBuilding(GameObject buildingPrefabObject, string buildingName)
     {
         GameObject newBuilding = null;

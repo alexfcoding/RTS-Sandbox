@@ -99,7 +99,11 @@ public class GameMaster : MonoBehaviour
     /// </summary>
     public GameObject TowerPrefab;
 
-
+    /// <summary>
+    /// Tower with gun prefab
+    /// </summary>
+    public GameObject TowerGunPrefab;
+    
     /// <summary>
     /// FLight ship prefab
     /// </summary>

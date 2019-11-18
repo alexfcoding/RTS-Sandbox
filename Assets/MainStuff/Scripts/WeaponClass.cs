@@ -57,7 +57,7 @@ public class WeaponClass : MonoBehaviour
             transform.Rotate(0, -5, 0);
         }
 
-        if (currentSeeker != null && currentSeeker.tag =="Tower")
+        if (currentSeeker != null && currentSeeker.tag == "Tower")
         {
 
             if (foundTargetToShoot == false)
@@ -222,7 +222,12 @@ public class WeaponClass : MonoBehaviour
                 {
                     transform.LookAt(targetInSphere.transform.position + new Vector3(0, 30, 0));
                 }
-                
+
+                if (targetInSphere.tag == "TowerGun")
+                {
+                    transform.LookAt(targetInSphere.transform.position + new Vector3(0, 0, 0));
+                }
+
                 if (soundStop == false)
                 {
                     soundStop = true;
