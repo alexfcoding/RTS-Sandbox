@@ -171,7 +171,7 @@ public class Follower : FractionIndexClass
                 {
                     SeekerClass Seeker = collisioninfo.gameObject.GetComponent<SeekerClass>();
                     Seeker.findNextObject = true; // Команда Seeker для поиска нового куба
-                    Seeker.Heal(1); // Лечение Seeker
+                    //Seeker.Heal(1); // Лечение Seeker
                     Seeker.countOfItemsCollected++; // Счетчик подобранных кубов++
                 }
 
@@ -192,7 +192,7 @@ public class Follower : FractionIndexClass
                 audioPickEnemyCube.Play();
             }
         }
-        else if (collisioninfo.gameObject.tag == "Trooper" && ownerToFollow != null && 
+        else if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10 && collisioninfo.gameObject.tag == "Trooper" && ownerToFollow != null && 
         ownerToFollow.GetComponent<SeekerClass>() != null && 
         ownerToFollow.GetComponent<SeekerClass>().dead == false) 
         {
@@ -205,7 +205,7 @@ public class Follower : FractionIndexClass
             GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
         }
 
-        else if (collisioninfo.gameObject.tag == "Player")
+        else if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10 && collisioninfo.gameObject.tag == "Player")
         {
             gameObject.GetComponent<ParticleSystem>().Play();
             audioPickEnemyCube.Play();
