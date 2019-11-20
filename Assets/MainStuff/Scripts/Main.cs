@@ -83,6 +83,20 @@ public class Main : MonoBehaviour
             numCubes++;
         }
 
+        for (int i = 0; i < 50; i++)
+        {
+            int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
+            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "RollerEnemyBase", GameMaster.GM.globalObjectList);
+
+            createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
+
+            int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
+           
+           // createdObject.GetComponent<RollerEnemyBase>().targetToChase = GameMaster.GM.shipObjectList[rnDShip];
+            
+
+        }
+
         for (int i = 0; i < 0; i++) // Создаем оружие RocketLauncherPrefab, RocketLauncherMiniPrefab, MachineGunPrefab в рандомной позиции от 50 до 950 (вся карта)
         {
             GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, -1000, 1000, 4, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);

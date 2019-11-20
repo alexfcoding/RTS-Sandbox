@@ -13,7 +13,7 @@ public class TrooperClass : SeekerClass
     public bool targetIsShip;
     public bool ignorePlayerCommandAndStay;
 
-    bool stopDoing;
+    public bool stopDoing;
 
     public int attackTargetId;
 
