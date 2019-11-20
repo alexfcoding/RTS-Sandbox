@@ -185,7 +185,7 @@ public class SeekerClass : FractionIndexClass
 
         if (lootAfterDeath == true)
         {
-            int rndLootCount = Random.Range(1, 5);
+            int rndLootCount = Random.Range(1, 5 * (int) gameObject.GetComponent<FractionIndexClass>().level);
 
             for (int i = 0; i < rndLootCount; i++)
             {
@@ -198,17 +198,17 @@ public class SeekerClass : FractionIndexClass
                     createdObject.AddComponent<Rigidbody>();
                 }
 
-                createdObject.GetComponent<Rigidbody>().mass = 5;
+                createdObject.GetComponent<Rigidbody>().mass = 1;
                 //createdObject.GetComponent<Rigidbody>().useGravity = false;
                 createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
-                //createdObject.GetComponent<Rigidbody>().drag = 1f;
+                createdObject.GetComponent<Rigidbody>().drag = 0.5f;
                 if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
                     createdObject.GetComponent<MeshCollider>().convex = true;
 
                 createdObject.GetComponent<Follower>().ownerToFollow = gameObject;
                 createdObject.GetComponent<Follower>().followOwner = true;
                 createdObject.GetComponent<Follower>().moveToNextOwner = true;
-                Destroy(createdObject, 60);
+                //Destroy(createdObject, 10);
             }
         }
 

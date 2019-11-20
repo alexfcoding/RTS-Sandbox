@@ -146,7 +146,7 @@ public class ShipClass : SeekerClass
             }
 
             if (fractionId == 0)
-                newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 50000),
+                newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 25000),
                     Quaternion.Euler(0, 0, 0), "Barracs", GameMaster.GM.trooperBaseList);
                 //newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 50000),
                 //Quaternion.Euler(0, 0, 0), "Barracs", GameMaster.GM.trooperBaseList);

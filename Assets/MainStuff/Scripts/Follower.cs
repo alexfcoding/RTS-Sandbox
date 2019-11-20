@@ -192,29 +192,43 @@ public class Follower : FractionIndexClass
                 audioPickEnemyCube.Play();
             }
         }
-        else if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10 && collisioninfo.gameObject.tag == "Trooper" && ownerToFollow != null && 
-        ownerToFollow.GetComponent<SeekerClass>() != null && 
-        ownerToFollow.GetComponent<SeekerClass>().dead == false) 
-        {
-            gameObject.GetComponent<ParticleSystem>().Play();
-            audioPickEnemyCube.Play();
-            //collisioninfo.gameObject.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
-            FractionIndexClass collisionObject = collisioninfo.gameObject.GetComponent<FractionIndexClass>();
-            collisionObject.health += 50;
-            //collisionObject.level += 1;
-            GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
-        }
+        //else if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10 && collisioninfo.gameObject.tag == "Trooper" && ownerToFollow != null && 
+        //ownerToFollow.GetComponent<SeekerClass>() != null && 
+        //ownerToFollow.GetComponent<SeekerClass>().dead == false) 
+        //{
+        //    gameObject.GetComponent<ParticleSystem>().Play();
+        //    audioPickEnemyCube.Play();
+        //    //collisioninfo.gameObject.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
+        //    FractionIndexClass collisionObject = collisioninfo.gameObject.GetComponent<FractionIndexClass>();
+        //    collisionObject.health += 50;
+        //    //collisionObject.level += 1;
+        //    GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
+        //}
 
         else if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10 && collisioninfo.gameObject.tag == "Player")
         {
             gameObject.GetComponent<ParticleSystem>().Play();
             audioPickEnemyCube.Play();
             //collisioninfo.gameObject.transform.localScale += new Vector3(0.5f, 0.5f, 0.5f);
-            collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 100;
-            collisioninfo.gameObject.GetComponent<FractionIndexClass>().level += 1;
+           // collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 100;
+           // collisioninfo.gameObject.GetComponent<FractionIndexClass>().level += 1;
             if (collisioninfo.gameObject.GetComponent<SeekerClass>() != null && collisioninfo.gameObject.GetComponent<SeekerClass>().currentWeapon != null)
                 collisioninfo.gameObject.GetComponent<SeekerClass>().currentWeapon.ownerLevel = level;
-            GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
+            // GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
+
+            gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId);
+            ownerToFollow = collisioninfo.collider.gameObject;
+
+            gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
+            gameObject.GetComponent<Follower>().followOwner = true; // Двигаться к владельцу = true
+            gameObject.GetComponent<Follower>().followOwnerCharger = false; // Двигаться к площадке = false
+            gameObject.tag = "OwnedFollower"; // Изменить тег куба на OwnedFollower (имеет владельца)
+
+            ContactPoint contact = collisioninfo.contacts[0];
+            Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
+            Vector3 pos = contact.point;
+            gameObject.GetComponent<ParticleSystem>().Play();
+            audioPickEnemyCube.Play();
         }
 
 

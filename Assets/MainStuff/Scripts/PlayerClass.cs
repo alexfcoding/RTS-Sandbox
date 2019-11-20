@@ -160,9 +160,10 @@ public class PlayerClass: FractionIndexClass
 
             float playerHeightTerrain = Terrain.activeTerrain.SampleHeight(transform.position);
             float selectorDistance = Mathf.Sqrt(Mathf.Pow(groundDistance.distance, 2) - Mathf.Pow(playerHeightTerrain, 2));
-            selector.transform.position = transform.position + transform.forward * selectorDistance;
-            selector.transform.position = new Vector3(selector.transform.position.x, 1, selector.transform.position.z);
-            selector.transform.eulerAngles = new Vector3(90, 0, 0);
+           // selector.transform.position = transform.position + transform.forward * selectorDistance;
+           // selector.transform.position = new Vector3(selector.transform.position.x, 1, selector.transform.position.z);
+            selector.transform.position = new Vector3(gameObject.transform.position.x, 1, gameObject.transform.position.z);
+           // selector.transform.eulerAngles = new Vector3(90, 0, 0);
 
             foreach (GameObject teamMate in teamMateList)
             {
@@ -234,7 +235,7 @@ public class PlayerClass: FractionIndexClass
         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 2f) * 0.07f,
         //    transform.position.z + Mathf.Sin(timer * 3f) * 0.03f);
 
-         Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 5,
+         Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 8,
             transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
         
         gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);

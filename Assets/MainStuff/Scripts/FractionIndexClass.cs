@@ -80,12 +80,13 @@ public class FractionIndexClass : MonoBehaviour
                         for (int i = 0; i < 5; i++)
                         {
                             int RndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
-                            GameObject CreatedObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[RndNum], transform.position + new Vector3(Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
-                            if (CreatedObject.GetComponent<Rigidbody>() == null)
-                                CreatedObject.AddComponent<Rigidbody>();
-                            CreatedObject.GetComponent<Rigidbody>().mass = 5;
-                            if (CreatedObject.GetComponent<MeshCollider>() != null && CreatedObject.GetComponent<MeshCollider>().convex == false)
-                                CreatedObject.GetComponent<MeshCollider>().convex = true;                            
+                            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[RndNum], transform.position + new Vector3(Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+                            if (createdObject.GetComponent<Rigidbody>() == null)
+                                createdObject.AddComponent<Rigidbody>();
+                            createdObject.GetComponent<Rigidbody>().mass = 5;
+                            if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
+                                createdObject.GetComponent<MeshCollider>().convex = true;
+                            //Destroy(createdObject, 10);
                         }
                     }
                 }

@@ -59,7 +59,7 @@ public class Main : MonoBehaviour
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);
             }
 
-        for (int i = 0; i < 400; i++)
+        for (int i = 0; i < 0; i++)
         {
             int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
             GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -1000, 1000, Random.Range(10, 500), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
