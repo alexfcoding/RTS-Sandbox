@@ -253,9 +253,9 @@ public class WeaponClass : MonoBehaviour
                     {
                         reloadNow = true;
                         if (currentSeeker.tag != "Tower")
-                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(Vector3.forward * 1), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(Vector3.forward * 1), transform.rotation, "Bomb", GameMaster.GM.bulletObjectList);
                         else
-                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(new Vector3(0, 0.3f, 0.7f)) + new Vector3(sprayShoot, sprayShoot, sprayShoot), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(new Vector3(0, 0.3f, 0.7f)) + new Vector3(sprayShoot, sprayShoot, sprayShoot), transform.rotation, "Bomb", GameMaster.GM.bulletObjectList);
 
                         createdBullet.GetComponent<RocketShellClass>().LaunchSound();
                         createdBullet.GetComponent<RocketShellClass>().weaponToStick = gameObject;

@@ -10,7 +10,11 @@ public class BombShellClass : RocketShellClass
         playersBullet = false;
 
         if (gameObject.GetComponent<Rigidbody>() != null)
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, speed += 8, ForceMode.Impulse);
+        {
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, 1000, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 200, 0, ForceMode.Impulse);
+        }
+            
     }
     public override void MoveBullet()
     {
@@ -34,7 +38,7 @@ public class BombShellClass : RocketShellClass
 
     public override void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name != "Rocket" && collision.gameObject.name != "Terrain")
+        if (collision.gameObject.name != "Bomb" && collision.gameObject.name != "Terrain" && collision.gameObject.GetComponent<FractionIndexClass>() != weaponToStick.GetComponent<WeaponClass>().objectToStick.GetComponent<FractionIndexClass>())
             if (playersBullet == false && collision.gameObject.tag == "Player" || playersBullet == true && collision.gameObject.tag != "Player" || playersBullet == false && collision.gameObject.tag != "Player")
             {
                 audio2.Play();

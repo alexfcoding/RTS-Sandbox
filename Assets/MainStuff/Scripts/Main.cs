@@ -84,13 +84,14 @@ public class Main : MonoBehaviour
             numCubes++;
         }
 
-        for (int i = 0; i < 50; i++)
+        for (int i = 0; i < 10; i++)
         {
             int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
             GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "RollerEnemyBase", GameMaster.GM.globalObjectList);
 
-            createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
-
+            //createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
+                        
+            createdObject.GetComponent<FractionIndexClass>().SetFractionId(0);
             int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
            
            // createdObject.GetComponent<RollerEnemyBase>().targetToChase = GameMaster.GM.shipObjectList[rnDShip];
@@ -107,7 +108,7 @@ public class Main : MonoBehaviour
 
         // Создаем пехоту TrooperPrefab рядом с TrooperBase
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 0; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.trooperPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y , Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "Trooper", GameMaster.GM.unitList);
                 //GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
@@ -127,7 +128,7 @@ public class Main : MonoBehaviour
             }
 
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 10; j++)
+            for (int j = 0; j < 0; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.lightShipPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y + 3, Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "LightShip", GameMaster.GM.unitList);
                 float RandomScale = Random.Range(2f, 3f); // Рандомизируем размеры пехоты
