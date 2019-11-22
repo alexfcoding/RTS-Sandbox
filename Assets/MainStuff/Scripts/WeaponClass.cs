@@ -26,9 +26,12 @@ public class WeaponClass : MonoBehaviour
     public bool reloadNow;
     public bool soundStop;
     public bool isProjectile;
+    public bool isBombLauncher;
+    public bool isRocket;
     public bool rotatable;
     public bool foundTargetToShoot;
     public bool playerFollowingCommand;
+
 
     public SeekerClass currentSeeker;
     public PlayerClass currentPlayer;
@@ -211,7 +214,6 @@ public class WeaponClass : MonoBehaviour
         {
             if (foundTargetToShoot == true && targetInSphere != null)
             {
-
                 sprayShoot = Random.Range(-6, 6);
                 if (currentSeeker.tag != "Tower")
                     transform.LookAt(targetInSphere.transform.position);
@@ -235,14 +237,29 @@ public class WeaponClass : MonoBehaviour
 
                 if (reloadNow == false && isProjectile == true)
                 {
-                    reloadNow = true;
-                    if (currentSeeker.tag != "Tower")
-                        createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(Vector3.forward * 1), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
-                    else
-                        createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(new Vector3(0,0.3f,0.7f)) + new Vector3(sprayShoot, sprayShoot, sprayShoot), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+                    if (isRocket == true) 
+                    { 
+                        reloadNow = true;
+                        if (currentSeeker.tag != "Tower")
+                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(Vector3.forward * 1), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+                        else
+                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(new Vector3(0,0.3f,0.7f)) + new Vector3(sprayShoot, sprayShoot, sprayShoot), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
 
-                    createdBullet.GetComponent<RocketShellClass>().LaunchSound();
-                    createdBullet.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                        createdBullet.GetComponent<RocketShellClass>().LaunchSound();
+                        createdBullet.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                    }
+
+                    if (isBombLauncher == true)
+                    {
+                        reloadNow = true;
+                        if (currentSeeker.tag != "Tower")
+                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(Vector3.forward * 1), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+                        else
+                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(new Vector3(0, 0.3f, 0.7f)) + new Vector3(sprayShoot, sprayShoot, sprayShoot), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+
+                        createdBullet.GetComponent<RocketShellClass>().LaunchSound();
+                        createdBullet.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                    }
                 }
 
                 timer += Time.deltaTime;

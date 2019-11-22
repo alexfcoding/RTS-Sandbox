@@ -13,7 +13,7 @@ public class RocketShellClass : MonoBehaviour
     public float speed;
     public float damage;
     public float dmgRadius;
-    float Timer;
+    public float Timer;
 
     public bool isProjectile;
     public bool isHoming;
@@ -29,7 +29,7 @@ public class RocketShellClass : MonoBehaviour
         audio.Play();
     }
 
-    public void MoveBullet ()
+    public virtual void MoveBullet ()
     {
         Timer += Time.deltaTime;
 
@@ -50,15 +50,15 @@ public class RocketShellClass : MonoBehaviour
            Destroy(gameObject);
     }
 
-    public void Awake()
+    public virtual void Awake()
     {
         isProjectile = true;
         playersBullet = false;
     }
 
-    public void OnCollisionEnter(Collision collision)
+    public virtual void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.name!="Rocket")
+        if (collision.gameObject.name != "Rocket")
             if (playersBullet == false && collision.gameObject.tag=="Player" || playersBullet == true && collision.gameObject.tag != "Player" || playersBullet == false && collision.gameObject.tag != "Player")
                 {
                     audio2.Play();

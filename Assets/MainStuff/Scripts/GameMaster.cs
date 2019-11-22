@@ -83,6 +83,11 @@ public class GameMaster : MonoBehaviour
     /// Rocket launcher mini prefab
     /// </summary>
     public GameObject rocketLauncherMiniPrefab;
+    
+    /// <summary>
+    /// Bomb launcher prefab
+    /// </summary>
+    public GameObject bombLauncherPrefab;
 
     /// <summary>
     /// Machine gun prefab
