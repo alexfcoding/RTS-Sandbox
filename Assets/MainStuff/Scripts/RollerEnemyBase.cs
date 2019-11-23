@@ -79,7 +79,7 @@ public class RollerEnemyBase : TrooperClass
                 //gameObject.transform.LookAt(pointFromShooting);
                 //rbTrooper.AddRelativeForce(Vector3.forward * trooperSpeed * Time.deltaTime * 40, ForceMode.VelocityChange);//* Time.deltaTime * 30
                 Vector3 direction = (targetToChase.transform.position - transform.position).normalized;
-                rbTrooper.AddForce(direction * 3, ForceMode.VelocityChange);
+                rbTrooper.AddForce(direction * 2, ForceMode.VelocityChange);
                 //if (gameObject.GetComponent<Animator>() != null)
                 //    gameObject.GetComponent<Animator>().Play("Run_Guard");
             }
