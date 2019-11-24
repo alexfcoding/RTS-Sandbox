@@ -154,19 +154,37 @@ public class WeaponClass : MonoBehaviour
     {
         if (gameObject.tag == "PlayerWeapon")
         {
-            if (Input.GetMouseButton(0) && isProjectile == true && Cursor.visible == false && objectToStick.GetComponent<PlayerClass>().tacticMode == false)
+            if (Input.GetMouseButton(0) && isProjectile == true && Cursor.visible == false && objectToStick.GetComponent<PlayerClass>().tacticMode == false) 
+            { 
                 if (reloadNow == false)
                 {
-                    GameMaster.GM.shakeCamera = true;
-                    reloadNow = true;
-                    GameObject CreatedObject = GameMaster.GM.ConstructObject(PlayerClass.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
-                    PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0, 0, 4), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
-                    "Rocket", GameMaster.GM.bulletObjectList);
-                    CreatedObject.GetComponent<RocketShellClass>().playersBullet = true;
-                    CreatedObject.GetComponent<RocketShellClass>().LaunchSound();
-                    CreatedObject.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                    if (isRocket == true)
+                    {
+                        GameMaster.GM.shakeCamera = true;
+                        reloadNow = true;
+                        GameObject CreatedObject = GameMaster.GM.ConstructObject(PlayerClass.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
+                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0, 0, 4), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
+                        "Rocket", GameMaster.GM.bulletObjectList);
+                        CreatedObject.GetComponent<RocketShellClass>().playersBullet = true;
+                        CreatedObject.GetComponent<RocketShellClass>().LaunchSound();
+                        CreatedObject.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                    }
+
+                    if (isBombLauncher == true)
+                    {
+                        GameMaster.GM.shakeCamera = true;
+                        reloadNow = true;
+                        GameObject CreatedObject = GameMaster.GM.ConstructObject(PlayerClass.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
+                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0, 0, 4), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
+                        "Bomb", GameMaster.GM.bulletObjectList);
+                        CreatedObject.GetComponent<RocketShellClass>().playersBullet = true;
+                        CreatedObject.GetComponent<RocketShellClass>().LaunchSound();
+                        CreatedObject.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                    }
                 }
 
+
+            }
             if (Input.GetMouseButton(0) && isProjectile == false && Cursor.visible == false && objectToStick.GetComponent<PlayerClass>().tacticMode == false) // Если нажали мышь и оружие не стреляет объектами, а пулями 
             {
                 GameMaster.GM.myCamera.transform.localPosition = new Vector3(Random.Range(-30, 30), Random.Range(camY - 30, camY + 30), Random.Range(camZ - 30, camZ + 30));
@@ -336,7 +354,7 @@ public class WeaponClass : MonoBehaviour
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-        if (( collision.gameObject.tag=="Player") && (collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon == false))
+        if (( collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<PlayerClass>() != null) && (collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon == false))
         {
             
             collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;

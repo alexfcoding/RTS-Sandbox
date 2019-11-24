@@ -5,9 +5,33 @@ using UnityEngine;
 public class RollerEnemyBase : TrooperClass
 {
     // Start is called before the first frame update
-    void Start()
+    public override void Awake()
     {
-        
+        level = 1;
+        attackTargetId = Random.Range(0, 6);
+        targetIsShip = true;
+        health = 1000;
+        maxHP = 1000;
+        destinationPass = false;
+        foundTargetToAttack = false;
+        wait = false;
+        distToLerp = 170;
+        gameObject.tag = "Trooper";
+        wait = true;
+        alreadyHaveWeapon = false;
+        dead = false;
+        foundObject = false;
+        isVulnerable = true;
+
+        textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, 10, 0), Quaternion.Euler(0, 0, 0));
+        textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
+        textHP.transform.parent = transform;
+
+        healthBarScaleMultiplier = 0.8f;
+        healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 5, 0), Quaternion.Euler(0, 0, 0));
+        healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
+        healthBar.transform.SetParent(gameObject.transform);
+        pointFromShootingRandomize.Set(Random.Range(-40, 40), 0, Random.Range(-40, 40));
     }
 
     // Update is called once per frame
