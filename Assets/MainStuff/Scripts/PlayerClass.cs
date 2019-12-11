@@ -418,8 +418,8 @@ public class PlayerClass: FractionIndexClass
 
     public void FixedUpdate()
     {
-        if (transform.position.y > 20)
-            transform.position = new Vector3(transform.position.x, 20, transform.position.z);
+        //if (transform.position.y > 20)
+        //    transform.position = new Vector3(transform.position.x, 20, transform.position.z);
 
         if (Input.GetKey(KeyCode.LeftControl))
         {
@@ -611,7 +611,8 @@ public class PlayerClass: FractionIndexClass
                 gameObject.GetComponent<AudioSource>().Play();
             }
 
-            if (transform.position.y < 20)
+            //if (transform.position.y < 20)
+            if (spectatorMode == true)
                 RB.AddRelativeForce(Vector3.up * 1.5f, ForceMode.VelocityChange);
             
             fire9.Play();

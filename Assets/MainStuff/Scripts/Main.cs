@@ -16,7 +16,7 @@ public class Main : MonoBehaviour
 
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
         {
-            GameObject newShipObject = GameMaster.GM.ConstructObject(GameMaster.GM.shipPrefab, new Vector3(2300 * Mathf.Cos(spawnCircleAngle * 3.14f / 180), 110, 2300 * Mathf.Sin(spawnCircleAngle * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "Seeker", GameMaster.GM.shipObjectList);
+            GameObject newShipObject = GameMaster.GM.ConstructObject(GameMaster.GM.shipPrefab, new Vector3(2000 * Mathf.Cos(spawnCircleAngle * 3.14f / 180), 110, 2000 * Mathf.Sin(spawnCircleAngle * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "Seeker", GameMaster.GM.shipObjectList);
             newShipObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             newShipObject.GetComponent<ShipClass>().SetFractionId(i);
             
@@ -60,7 +60,7 @@ public class Main : MonoBehaviour
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);
             }
 
-        for (int i = 0; i < 0; i++)
+        for (int i = 0; i < 150; i++)
         {
             int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
             GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -1000, 1000, Random.Range(10, 500), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
@@ -84,7 +84,7 @@ public class Main : MonoBehaviour
             numCubes++;
         }
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 0; i++)
         {
             int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
             GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "RollerEnemyBase", GameMaster.GM.globalObjectList);

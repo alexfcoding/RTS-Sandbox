@@ -175,8 +175,8 @@ public class Follower : FractionIndexClass
                     Seeker.countOfItemsCollected++; // Счетчик подобранных кубов++
                 }
 
-                if (collisioninfo.gameObject.GetComponent<PlayerClass>() != null) // Если столкновение с Player, то ... 
-                    collisioninfo.gameObject.GetComponent<PlayerClass>().Heal(20); // Лечение Player
+                //if (collisioninfo.gameObject.GetComponent<PlayerClass>() != null) // Если столкновение с Player, то ... 
+                //    collisioninfo.gameObject.GetComponent<PlayerClass>().Heal(20); // Лечение Player
 
                 ownerToFollow = collisioninfo.collider.gameObject; // Присвоить кубу владельца OwnerToFollow (Seeker или Player)
 

@@ -10,6 +10,8 @@ public class FighterClass : TrooperClass
     {
         //randomY = Random.Range(0, 10); 
         timer = Random.Range(0, 100);
+        health = 1000;
+        maxHP = 1000;
     }
 
     public override void Update()

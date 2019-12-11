@@ -173,7 +173,11 @@ public class SeekerClass : FractionIndexClass
             whoIsDamaging.GetComponent<FractionIndexClass>().level += 1;
 
         if (whoIsDamaging != null && (whoIsDamaging.tag == "Trooper" || whoIsDamaging.tag == "Seeker"))
-            whoIsDamaging.GetComponent<FractionIndexClass>().health = maxHP * 3;
+        {
+            whoIsDamaging.GetComponent<FractionIndexClass>().health += 1000;
+            maxHP += 1000;
+        }
+           
 
         totallyDead = true;
 

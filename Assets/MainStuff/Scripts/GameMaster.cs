@@ -233,7 +233,7 @@ public class GameMaster : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-        mainBaseCount = 4;
+        mainBaseCount = 5;
     }
 
     public void SetFractionColors ()
