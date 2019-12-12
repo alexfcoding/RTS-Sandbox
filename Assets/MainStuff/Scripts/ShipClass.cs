@@ -11,11 +11,12 @@ public class ShipClass : SeekerClass
     float timer;
     public float money;
     public List<GameObject> fractionBarracsList;
+    public List<GameObject> fractionTowerList;
     public AudioSource insufficientFunds;
 
     public override void Awake()
     {
-        money = 20000;
+        money = 5000;
         health = 200000;
         maxHP = 200000;
         gameObject.tag = "Ship";
@@ -91,7 +92,7 @@ public class ShipClass : SeekerClass
                 }
             }
 
-            if (fractionBarracsList.Count > 0 && money > 5000)
+            if (fractionBarracsList.Count > 0 && money > 5000 && fractionBarracsList.Count < 3)
             {
                 SpendMoneyMethod SpendOnTowerDelegate = startCreatingTower;
                 
@@ -154,7 +155,8 @@ public class ShipClass : SeekerClass
             newBuilding.transform.position = new Vector3(newBuilding.transform.position.x, 0, newBuilding.transform.position.z);
 
             newBuilding.GetComponent<FractionIndexClass>().SetFractionId(fractionId);
-            fractionBarracsList.Add(newBuilding);
+            if (newBuilding.gameObject.tag == "Barracs")
+                fractionBarracsList.Add(newBuilding);
         }
     }
 

@@ -227,17 +227,20 @@ public class PlayerClass: FractionIndexClass
 
         if (spectatorMode == true)
         {
-            transform.RotateAround(new Vector3(0, 0, 0), transform.up, 2f * Time.deltaTime);
+            //transform.RotateAround(new Vector3(0, 0, 0), transform.up, 2f * Time.deltaTime);
             transform.LookAt(new Vector3(0, 0, 0));
             // transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(new Vector3(0, 0, 0)), Time.deltaTime);
         }
-        
+
         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 2f) * 0.07f,
         //    transform.position.z + Mathf.Sin(timer * 3f) * 0.03f);
 
-         Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 8,
+        //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 8,
+        //   transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
+
+        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y,
             transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
-        
+
         gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
 
         camX = GameMaster.GM.myCamera.transform.localPosition.x;
@@ -612,7 +615,7 @@ public class PlayerClass: FractionIndexClass
             }
 
             //if (transform.position.y < 20)
-            if (spectatorMode == true)
+           // if (spectatorMode == true)
                 RB.AddRelativeForce(Vector3.up * 1.5f, ForceMode.VelocityChange);
             
             fire9.Play();

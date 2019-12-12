@@ -63,7 +63,7 @@ public class Main : MonoBehaviour
         for (int i = 0; i < 150; i++)
         {
             int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
-            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -1000, 1000, Random.Range(10, 500), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -500, 500, Random.Range(10, 500), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
 
             if (createdObject.GetComponent<Rigidbody>() == null)
                 createdObject.AddComponent<Rigidbody>();
