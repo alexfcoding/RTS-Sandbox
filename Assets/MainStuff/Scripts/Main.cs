@@ -12,6 +12,8 @@ public class Main : MonoBehaviour
 
     void Start()
     {
+        InvokeRepeating("GenerateCubes", 0f, 0.3f);
+
         GameMaster.GM.SetFractionColors();
 
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
@@ -60,36 +62,36 @@ public class Main : MonoBehaviour
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);
             }
 
-        for (int i = 0; i < 150; i++)
-        {
-            int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
-            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -500, 500, Random.Range(10, 500), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+        //for (int i = 0; i < 1000; i++)
+        //{
+        //    int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
+        //    GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -100, 100, Random.Range(10, 500), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
 
-            if (createdObject.GetComponent<Rigidbody>() == null)
-                createdObject.AddComponent<Rigidbody>();
+        //    if (createdObject.GetComponent<Rigidbody>() == null)
+        //        createdObject.AddComponent<Rigidbody>();
 
-            createdObject.GetComponent<Rigidbody>().mass = 5;
-            //createdObject.transform.localScale = new Vector3(2, 2, 2);
-            //createdObject.GetComponent<Rigidbody>().useGravity = false;
-            createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
-            createdObject.GetComponent<Rigidbody>().drag = 1f;
-            //createdObject.GetComponent<Rigidbody>().AddForce(Random.Range(-200, 200), Random.Range(-200, 200), Random.Range(-200, 200), ForceMode.Impulse);
-            createdObject.GetComponent<Rigidbody>().AddTorque(transform.up * Random.Range(-1000, 1000));
-            createdObject.GetComponent<Rigidbody>().AddTorque(transform.forward * Random.Range(-1000, 1000));
-            createdObject.GetComponent<Rigidbody>().AddTorque(transform.right * Random.Range(-1000, 1000));
-            if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
-                createdObject.GetComponent<MeshCollider>().convex = true;
+        //    createdObject.GetComponent<Rigidbody>().mass = 5;
+        //    //createdObject.transform.localScale = new Vector3(2, 2, 2);
+        //    //createdObject.GetComponent<Rigidbody>().useGravity = false;
+        //    createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
+        //    createdObject.GetComponent<Rigidbody>().drag = 1f;
+        //    //createdObject.GetComponent<Rigidbody>().AddForce(Random.Range(-200, 200), Random.Range(-200, 200), Random.Range(-200, 200), ForceMode.Impulse);
+        //    createdObject.GetComponent<Rigidbody>().AddTorque(transform.up * Random.Range(-1000, 1000));
+        //    createdObject.GetComponent<Rigidbody>().AddTorque(transform.forward * Random.Range(-1000, 1000));
+        //    createdObject.GetComponent<Rigidbody>().AddTorque(transform.right * Random.Range(-1000, 1000));
+        //    if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
+        //        createdObject.GetComponent<MeshCollider>().convex = true;
 
-            // GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
-            numCubes++;
-        }
+        //    // GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
+        //    numCubes++;
+        //}
 
         for (int i = 0; i < 0; i++)
         {
             int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
             GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "RollerEnemyBase", GameMaster.GM.globalObjectList);
 
-            //createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
+            createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
                         
             createdObject.GetComponent<FractionIndexClass>().SetFractionId(0);
             int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
@@ -147,12 +149,38 @@ public class Main : MonoBehaviour
                     createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.player.gameObject;
             }
     }
+        
+    public void GenerateCubes ()
+    {
+        int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
+        GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -50, 50, Random.Range(10, 10), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+
+        if (createdObject.GetComponent<Rigidbody>() == null)
+            createdObject.AddComponent<Rigidbody>();
+
+        createdObject.GetComponent<Rigidbody>().mass = 5;
+        //createdObject.transform.localScale = new Vector3(2, 2, 2);
+        //createdObject.GetComponent<Rigidbody>().useGravity = false;
+        createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
+        createdObject.GetComponent<Rigidbody>().drag = 1f;
+        //createdObject.GetComponent<Rigidbody>().AddForce(Random.Range(-200, 200), Random.Range(-200, 200), Random.Range(-200, 200), ForceMode.Impulse);
+        createdObject.GetComponent<Rigidbody>().AddTorque(transform.up * Random.Range(-1000, 1000));
+        createdObject.GetComponent<Rigidbody>().AddTorque(transform.forward * Random.Range(-1000, 1000));
+        createdObject.GetComponent<Rigidbody>().AddTorque(transform.right * Random.Range(-1000, 1000));
+        if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
+            createdObject.GetComponent<MeshCollider>().convex = true;
+
+        // GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
+        numCubes++;
+    }
 
     public static void printDeadHandler()
     {
         GameMaster.GM.playerShipHp.color = Color.red;
         GameMaster.GM.playerShipHp.text ="PlayerShip Destroyed";
     }
+    
+    
 }
 
                 

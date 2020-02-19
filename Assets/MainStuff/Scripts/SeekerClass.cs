@@ -29,7 +29,7 @@ public class SeekerClass : FractionIndexClass
         minDistNum = 0;
         countOfItemsCollected = 0;
         alreadyHaveWeapon = false;
-        health = 20000;
+        health = 200000;
         maxHP = 20000;
         dead = false;
         foundObject = false;
