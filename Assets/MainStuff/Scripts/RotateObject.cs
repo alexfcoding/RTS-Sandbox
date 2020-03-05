@@ -5,12 +5,13 @@ using UnityEngine;
 public class RotateObject : MonoBehaviour
 {
     float x, y, z;
-
+    float speed;
     private void Awake()
     {
-        x = Random.Range(-0.2f, 0.2f);
-        y = Random.Range(-0.2f, 0.2f);
-        z = Random.Range(-0.2f, 0.2f);
+        speed = 5;
+        x = Random.Range(-speed, speed);
+        y = Random.Range(-speed, speed);
+        z = Random.Range(-speed, speed);
     }
     private void Start()
     {

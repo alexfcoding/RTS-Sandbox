@@ -19,7 +19,7 @@ public class PlayerClass: FractionIndexClass
     public bool deadPlayer;
     public bool soundAlreadyPlaying;
     public bool targetLockedIn;
-
+    public bool stopCamControls;
     public float timer;
     public float tickWeapon;
     public float camX, camY, camZ, cameraX, cameraY, cameraZ;
@@ -149,7 +149,7 @@ public class PlayerClass: FractionIndexClass
             selector.transform.localScale = new Vector3(selectorScale, selectorScale, 1);
             tacticMode = true;
             lookCube.transform.localPosition = new Vector3(0, 4000, 30000);
-             GameMaster.GM.myCamera.transform.localPosition = Vector3.Lerp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(0, 14000, -40000),0.05f);
+            GameMaster.GM.myCamera.transform.localPosition = Vector3.Lerp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(0, 14000, -40000),0.05f);
         }
         
         // Если включен тактический режим
@@ -235,11 +235,11 @@ public class PlayerClass: FractionIndexClass
         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 2f) * 0.07f,
         //    transform.position.z + Mathf.Sin(timer * 3f) * 0.03f);
 
-        //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 8,
-        //   transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
+        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 8,
+           transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
 
-        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y,
-            transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
+       // Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y,
+       //     transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
 
         gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
 
@@ -372,6 +372,14 @@ public class PlayerClass: FractionIndexClass
             lookCube.transform.localPosition = new Vector3(0, 408, 1500);
             GameMaster.GM.myCamera.transform.localPosition = new Vector3(cameraX, cameraY, cameraZ);
         }
+
+        if (Input.GetKeyUp(KeyCode.Mouse0))
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+            stopCamControls = false;
+        }
+            
     }
 
 
@@ -428,6 +436,7 @@ public class PlayerClass: FractionIndexClass
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
+            stopCamControls = true;
         }
 
         if (Input.GetKeyUp("0"))

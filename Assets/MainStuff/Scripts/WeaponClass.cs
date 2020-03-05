@@ -155,7 +155,7 @@ public class WeaponClass : MonoBehaviour
         if (gameObject.tag == "PlayerWeapon")
         {
             if (Input.GetMouseButton(0) && isProjectile == true && Cursor.visible == false && objectToStick.GetComponent<PlayerClass>().tacticMode == false) 
-            { 
+            {
                 if (reloadNow == false)
                 {
                     if (isRocket == true)

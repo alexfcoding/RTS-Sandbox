@@ -12,7 +12,7 @@ public class Main : MonoBehaviour
 
     void Start()
     {
-        InvokeRepeating("GenerateCubes", 0f, 0.3f);
+        //InvokeRepeating("GenerateCubes", 0f, 0.3f);
 
         GameMaster.GM.SetFractionColors();
 
@@ -86,14 +86,14 @@ public class Main : MonoBehaviour
         //    numCubes++;
         //}
 
-        for (int i = 0; i < 0; i++)
+        for (int i = 0; i < 20; i++)
         {
             int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
             GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "RollerEnemyBase", GameMaster.GM.globalObjectList);
 
-            createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
+            //createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
+            createdObject.GetComponent<FractionIndexClass>().SetFractionId(5);
                         
-            createdObject.GetComponent<FractionIndexClass>().SetFractionId(0);
             int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
            
            // createdObject.GetComponent<RollerEnemyBase>().targetToChase = GameMaster.GM.shipObjectList[rnDShip];

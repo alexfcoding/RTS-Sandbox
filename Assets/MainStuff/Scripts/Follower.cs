@@ -192,9 +192,9 @@ public class Follower : FractionIndexClass
                 audioPickEnemyCube.Play();
             }
         }
-        //else if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10 && collisioninfo.gameObject.tag == "Trooper" && ownerToFollow != null && 
-        //ownerToFollow.GetComponent<SeekerClass>() != null && 
-        //ownerToFollow.GetComponent<SeekerClass>().dead == false) 
+        //else if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10 && collisioninfo.gameObject.tag == "Trooper" && ownerToFollow != null &&
+        //ownerToFollow.GetComponent<SeekerClass>() != null &&
+        //ownerToFollow.GetComponent<SeekerClass>().dead == false)
         //{
         //    gameObject.GetComponent<ParticleSystem>().Play();
         //    audioPickEnemyCube.Play();

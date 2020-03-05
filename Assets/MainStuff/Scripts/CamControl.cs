@@ -33,7 +33,8 @@ public class CamControl : MonoBehaviour
 
         //transform.LookAt(TRG);
         if (player.GetComponent<PlayerClass>().spectatorMode == false)
-            player.rotation = Quaternion.Euler(mouseY, mouseX - 70, 0);
+            if (player.GetComponent<PlayerClass>().stopCamControls == false)
+                player.rotation = Quaternion.Euler(mouseY, mouseX - 70, 0);
         
     }
 }
