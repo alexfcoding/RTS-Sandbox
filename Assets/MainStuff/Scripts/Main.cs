@@ -13,7 +13,7 @@ public class Main : MonoBehaviour
     void Start()
     {
         //InvokeRepeating("GenerateCubes", 0f, 0.3f);
-
+        InvokeRepeating("GenerateRollerBalls", 0f, 10f);
         GameMaster.GM.SetFractionColors();
 
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
@@ -86,20 +86,20 @@ public class Main : MonoBehaviour
         //    numCubes++;
         //}
 
-        for (int i = 0; i < 20; i++)
-        {
-            int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
-            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "RollerEnemyBase", GameMaster.GM.globalObjectList);
+        //for (int i = 0; i < 20; i++)
+        //{
+        //    int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
+        //    GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "RollerEnemyBase", GameMaster.GM.globalObjectList);
 
-            //createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
-            createdObject.GetComponent<FractionIndexClass>().SetFractionId(5);
+        //    //createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
+        //    createdObject.GetComponent<FractionIndexClass>().SetFractionId(5);
                         
-            int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
+        //    int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
            
-           // createdObject.GetComponent<RollerEnemyBase>().targetToChase = GameMaster.GM.shipObjectList[rnDShip];
+        //   // createdObject.GetComponent<RollerEnemyBase>().targetToChase = GameMaster.GM.shipObjectList[rnDShip];
             
 
-        }
+        //}
 
         for (int i = 0; i < 0; i++) // Создаем оружие RocketLauncherPrefab, RocketLauncherMiniPrefab, MachineGunPrefab в рандомной позиции от 50 до 950 (вся карта)
         {
@@ -167,11 +167,25 @@ public class Main : MonoBehaviour
         createdObject.GetComponent<Rigidbody>().AddTorque(transform.up * Random.Range(-1000, 1000));
         createdObject.GetComponent<Rigidbody>().AddTorque(transform.forward * Random.Range(-1000, 1000));
         createdObject.GetComponent<Rigidbody>().AddTorque(transform.right * Random.Range(-1000, 1000));
+
         if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
             createdObject.GetComponent<MeshCollider>().convex = true;
 
         // GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
         numCubes++;
+    }
+
+    public void GenerateRollerBalls()
+    {
+        int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
+        GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "Roller", GameMaster.GM.globalObjectList);
+
+        //createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
+        createdObject.GetComponent<FractionIndexClass>().SetFractionId(5);
+
+        int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
+
+        // createdObject.GetComponent<RollerEnemyBase>().targetToChase = GameMaster.GM.shipObjectList[rnDShip];
     }
 
     public static void printDeadHandler()

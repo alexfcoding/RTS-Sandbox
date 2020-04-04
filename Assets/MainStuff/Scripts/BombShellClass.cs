@@ -13,7 +13,7 @@ public class BombShellClass : RocketShellClass
         if (gameObject.GetComponent<Rigidbody>() != null)
         {
             gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, 1000, ForceMode.Impulse);
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 300, 0, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 600, 0, ForceMode.Impulse);
         }
             
     }
@@ -42,7 +42,7 @@ public class BombShellClass : RocketShellClass
 
     public override void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject != null && (collision.gameObject.name != "Bomb" && collision.gameObject.name != "Terrain" && collision.gameObject.GetComponent<FractionIndexClass>() != weaponToStick.GetComponent<WeaponClass>().objectToStick.GetComponent<FractionIndexClass>()))
+        if (collision.gameObject != null && (collision.gameObject.name != "Bomb" && collision.gameObject.name != "Terrain" && collision.gameObject.GetComponent<FractionIndexClass>() !=null && weaponToStick != null && collision.gameObject.GetComponent<FractionIndexClass>() != weaponToStick.GetComponent<WeaponClass>().objectToStick.GetComponent<FractionIndexClass>()))
             if (playersBullet == false && collision.gameObject.tag == "Player" || playersBullet == true && collision.gameObject.tag != "Player" || playersBullet == false && collision.gameObject.tag != "Player")
             {
                 explode();

@@ -103,12 +103,12 @@ public class SeekerClass : FractionIndexClass
     {
         RaycastHit GroundHit;
         Physics.Raycast(transform.position, -transform.up, out GroundHit, 10);
-
-        //if (transform.position.y < Terrain.activeTerrain.SampleHeight(transform.position) - 0.5f)
-        //{
-        //    gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-        //    gameObject.GetComponent<Rigidbody>().MovePosition(new Vector3(transform.position.x, Terrain.activeTerrain.SampleHeight(transform.position), transform.position.z));
-        //}
+        transform.position = new Vector3(transform.position.x, 20, transform.position.z);
+        if (transform.position.y < 20)
+        {
+            gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+            gameObject.GetComponent<Rigidbody>().MovePosition(new Vector3(transform.position.x, 20, transform.position.z));
+        }
 
         healthBar.transform.LookAt(Camera.main.transform.position, -Vector3.up);
 
@@ -119,14 +119,19 @@ public class SeekerClass : FractionIndexClass
                 minDistNum = Random.Range(0, objectList.Count);
             }
 
+            if (objectList[minDistNum] == null)
+            {
+                findNextObject = true;
+            }
+
             if (objectList[minDistNum]!=null)
             {
-                if (objectList[minDistNum].gameObject.tag == "Follower" && objectList[minDistNum].GetComponent<Follower>().followOwner == false)
+                if ((objectList[minDistNum].gameObject.tag == "Follower" && objectList[minDistNum].GetComponent<Follower>().followOwner == false) || (goingToBase == false && objectList[minDistNum].gameObject.name == "Roller" && objectList[minDistNum].gameObject.GetComponent<RollerEnemyBase>() != null))
                     foundObject = true;
                 else
                     foundObject = false;
 
-                if (findNextObject == false && objectList[minDistNum].GetComponent<Follower>().followOwner == true)
+                if (objectList[minDistNum].gameObject.tag == "Follower" && findNextObject == false && objectList[minDistNum].GetComponent<Follower>().followOwner == true)
                     findNextObject = true;
 
                 if (foundObject == true && goingToBase == false)
@@ -141,7 +146,7 @@ public class SeekerClass : FractionIndexClass
                     Quaternion lookOnLook = Quaternion.LookRotation(currentTarget - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
                     Vector3 normalizeDirection = (objectList[minDistNum].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
-                    gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 30;
+                    gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 50;
                 }
             }
 
@@ -150,7 +155,7 @@ public class SeekerClass : FractionIndexClass
                 currentTarget = platformList[fractionId].transform.position + new Vector3(0,4,0);
                 transform.LookAt(currentTarget);
                 Vector3 normalizeDirection = (platformList[fractionId].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
-                gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 30;
+                gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 50;
             }
 
             if (countOfItemsCollected >= 7)
@@ -166,6 +171,11 @@ public class SeekerClass : FractionIndexClass
                     Vector3 normalizeDirection = (gameObject.transform.position - hit.transform.position).normalized;
                     hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed*2;
                 }
+
+            if (findNextObject == false && foundObject == false)
+            {
+                findNextObject = true;
+            }
         }
     }
 
@@ -206,15 +216,15 @@ public class SeekerClass : FractionIndexClass
                     createdObject.AddComponent<Rigidbody>();
                 }
 
-                createdObject.GetComponent<Rigidbody>().mass = 1;
+                createdObject.GetComponent<Rigidbody>().mass = 2;
                 //createdObject.GetComponent<Rigidbody>().useGravity = false;
                 createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
-                createdObject.GetComponent<Rigidbody>().drag = 0.5f;
+                createdObject.GetComponent<Rigidbody>().drag = 1f;
                 if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
                     createdObject.GetComponent<MeshCollider>().convex = true;
 
-                createdObject.GetComponent<Follower>().ownerToFollow = gameObject;
-                createdObject.GetComponent<Follower>().followOwner = true;
+                //createdObject.GetComponent<Follower>().ownerToFollow = gameObject;
+                //createdObject.GetComponent<Follower>().followOwner = true;
                 createdObject.GetComponent<Follower>().moveToNextOwner = true;
                 //Destroy(createdObject, 10);
             }

@@ -35,6 +35,7 @@ public class Follower : FractionIndexClass
     public void Update()
     {
         MoveTo();
+        InvokeRepeating("CheckForDestroy", 60f, 1f);
     }
 
     public virtual void MoveTo()
@@ -50,7 +51,7 @@ public class Follower : FractionIndexClass
                 if (ownerToFollow.GetComponent<PlayerClass>() != null) // Если владелец куба - игрок ...
                     normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 0, -8000) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади игрока
                 else // Если владелец куба - не игрок ...
-                    normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 10, -3) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади владельца
+                    normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 50, -3) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади владельца
 
                 if (ownerToFollow.gameObject.tag == "Seeker")
                     transform.position += normalizeDirection * Time.deltaTime * speed * 1.1f; // Сближать координату куба с Seeker или Player (перемещать куб)
@@ -138,7 +139,6 @@ public class Follower : FractionIndexClass
         }
     }
 
-
     IEnumerator MoveToNextOwnerTrigger()
     {
         //yield return new WaitForSeconds(0.8f);
@@ -150,6 +150,14 @@ public class Follower : FractionIndexClass
 
         if (fractionId == 10)
             followOwner = false;
+    }
+
+    public void CheckForDestroy()
+    {
+        if (ownerToFollow == null)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public virtual void OnCollisionEnter(Collision collisioninfo)

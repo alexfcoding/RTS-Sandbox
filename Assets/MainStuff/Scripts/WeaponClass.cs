@@ -386,7 +386,7 @@ public class WeaponClass : MonoBehaviour
             gameObject.transform.SetParent(collision.transform);
 
             if (collision.gameObject.name == "Seeker")
-                transform.localPosition = new Vector3(0, 4f, 0);
+                transform.localPosition = new Vector3(0, -30f, 0);
 
             if (collision.gameObject.name == "Trooper")
             { 

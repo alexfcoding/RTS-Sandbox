@@ -641,5 +641,30 @@ public class PlayerClass: FractionIndexClass
             if (gameObject.GetComponent<AudioSource>().isPlaying == true)
                 gameObject.GetComponent<AudioSource>().Stop();
         }
+
+        if (Input.GetKeyUp("0"))
+        {
+            CallBarracsConstruction();
+        }
+
+        if (Input.GetKeyUp("1"))
+        {
+            CallCreatingTrooper();
+        }
+
+        if (Input.GetKeyUp("2"))
+        {
+            CallCreatingLightShip();
+        }
+
+        if (Input.GetKeyUp("3"))
+        {
+            CallCreatingGunTower();
+        }
+
+        if (Input.GetKeyUp("4"))
+        {
+            CallCreatingTower();
+        }
     }
 }

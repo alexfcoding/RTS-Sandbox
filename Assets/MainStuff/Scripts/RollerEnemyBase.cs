@@ -18,6 +18,7 @@ public class RollerEnemyBase : TrooperClass
         wait = false;
         distToLerp = 170;
         gameObject.tag = "Trooper";
+        gameObject.name = "Roller";
         wait = true;
         alreadyHaveWeapon = false;
         dead = false;
