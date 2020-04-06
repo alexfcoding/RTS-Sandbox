@@ -85,7 +85,7 @@ public class WeaponClass : MonoBehaviour
                 if (LockedTarget.gameObject != null && LockedTarget.GetComponent<SeekerClass>() != null)
                 {
                     if (LockedTarget.gameObject.name == "Trooper")
-                        gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 2, 0));
+                        gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 4, 0));
                     if (LockedTarget.gameObject.name == "Seeker")
                         gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 2, 0));
                     if (LockedTarget.gameObject.name == "LightShip")
@@ -139,6 +139,7 @@ public class WeaponClass : MonoBehaviour
                     break;
                 }
             }
+
             if (foundTargetToShoot == false)
                 if (objectToStick.transform.GetComponent<TrooperClass>() != null)
                 { 
@@ -198,7 +199,7 @@ public class WeaponClass : MonoBehaviour
                     RaycastHit hit;
 
                     if (Physics.Raycast(transform.position, transform.forward, out hit, 600))
-                        if (hit.transform.tag != "Player" && hit.transform.GetComponent<RocketShellClass>() == null)
+                        if (hit.transform.tag != "Player" )
                         {
                             GameObject BulletPlayer = Instantiate(bulletEffectPlayer, hit.point, Quaternion.LookRotation(hit.normal));
                             Destroy(BulletPlayer, 2f);
@@ -210,8 +211,14 @@ public class WeaponClass : MonoBehaviour
                             {
                                 hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
                                 ownerLevel = currentPlayer.transform.GetComponent<FractionIndexClass>().level;
-                               // hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
-                               hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
+                                // hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
+                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
+                            }
+
+                            if (hit.transform.GetComponent<RocketShellClass>() != null)
+                            {
+                                //hit.transform.GetComponent<RocketShellClass>().damagedByBullet = true;
+                                hit.transform.GetComponent<RocketShellClass>().DestroyRocket();
                             }
                         }
                 }

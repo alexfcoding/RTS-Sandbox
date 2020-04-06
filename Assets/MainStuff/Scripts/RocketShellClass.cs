@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +15,7 @@ public class RocketShellClass : MonoBehaviour
     public float damage;
     public float dmgRadius;
     public float Timer;
-
+    
     public bool isProjectile;
     public bool isHoming;
     public bool playersBullet;
@@ -60,70 +61,78 @@ public class RocketShellClass : MonoBehaviour
     {
         if (collision.gameObject.name != "Rocket")
             if (playersBullet == false && collision.gameObject.tag=="Player" || playersBullet == true && collision.gameObject.tag != "Player" || playersBullet == false && collision.gameObject.tag != "Player")
-                {
-                    audio2.Play();
+            {
+                ContactPoint contact = collision.contacts[0];
+                Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
+                Vector3 pos = contact.point;
+                GameObject Explosions = Instantiate(explosionRocketPrefab, pos, Quaternion.Euler(0, 0, 0));
+                Destroy(Explosions, 2f);
 
-                    foreach (Transform child in gameObject.transform)
-                    {
-                    // if (child.name != "WFXMR_Nuke 1")
-                        GameObject.Destroy(child.gameObject);
-                    }
-            
-                    gameObject.transform.GetComponent<Collider>().enabled = false;
-                    gameObject.transform.GetComponent<MeshRenderer>().enabled = false;
-                
-                    ContactPoint contact = collision.contacts[0];
-                    Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
-                    Vector3 pos = contact.point;
-                    GameObject Explosions = Instantiate(explosionRocketPrefab, pos, Quaternion.Euler(0, 0, 0));
-                    Destroy(Explosions, 2f);
-                    //ExplosionParticleSystem.Play();
-                    Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
-
-                    foreach (Collider hit in colliders)
-                    {
-                        if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket"))
-                            hit.GetComponent<Rigidbody>().AddExplosionForce(500, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
-
-                        if (hit.GetComponent<FractionIndexClass>() != null && hit.gameObject != null)
-                        {
-                            if (weaponToStick != null && hit.transform.GetComponent<FractionIndexClass>().dead == false)
-                                hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject;
-
-                            if (weaponToStick != null && weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject.name == "Player")
-                            {
-                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
-                                //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
-                            }
-                            else if (weaponToStick != null)
-                            {
-                                //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
-                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
-                            }
-                        }
-
-                        if (hit.GetComponent<PlayerClass>() != null)
-                        {
-                            hit.GetComponent<PlayerClass>().TakeDamage(damage);
-                        }        
-                    }
-
-                if (gameObject.GetComponent<MeshRenderer>() != null)
-                    gameObject.GetComponent<MeshRenderer>().enabled = false;
-
-                if (gameObject.GetComponent<Collider>() != null)
-                    gameObject.GetComponent<Collider>().enabled = false;
-
-                foreach (Transform child in transform)
-                {
-                    if (child.GetComponent<MeshRenderer>() != null)
-                        child.GetComponent<MeshRenderer>().enabled = false;
-                    if (child.GetComponent<Collider>() != null)
-                        child.GetComponent<Collider>().enabled = false;
-                }
-
-                Destroy(gameObject, 3);
+                DestroyRocket();
             }
+    }
+
+    public void DestroyRocket()
+    {
+        audio2.Play();
+
+        foreach (Transform child in gameObject.transform)
+        {
+            // if (child.name != "WFXMR_Nuke 1")
+            GameObject.Destroy(child.gameObject);
+        }
+
+        gameObject.transform.GetComponent<Collider>().enabled = false;
+        gameObject.transform.GetComponent<MeshRenderer>().enabled = false;
+
+        
+        
+        //ExplosionParticleSystem.Play();
+        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
+
+        foreach (Collider hit in colliders)
+        {
+            if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket"))
+                hit.GetComponent<Rigidbody>().AddExplosionForce(500, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
+
+            if (hit.GetComponent<FractionIndexClass>() != null && hit.gameObject != null)
+            {
+                if (weaponToStick != null && hit.transform.GetComponent<FractionIndexClass>().dead == false)
+                    hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject;
+
+                if (weaponToStick != null && weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject.name == "Player")
+                {
+                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                    //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
+                }
+                else if (weaponToStick != null)
+                {
+                    //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
+                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                }
+            }
+
+            if (hit.GetComponent<PlayerClass>() != null)
+            {
+                hit.GetComponent<PlayerClass>().TakeDamage(damage);
+            }
+        }
+
+        if (gameObject.GetComponent<MeshRenderer>() != null)
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+
+        if (gameObject.GetComponent<Collider>() != null)
+            gameObject.GetComponent<Collider>().enabled = false;
+
+        foreach (Transform child in transform)
+        {
+            if (child.GetComponent<MeshRenderer>() != null)
+                child.GetComponent<MeshRenderer>().enabled = false;
+            if (child.GetComponent<Collider>() != null)
+                child.GetComponent<Collider>().enabled = false;
+        }
+
+        Destroy(gameObject, 3);
     }
 }
 

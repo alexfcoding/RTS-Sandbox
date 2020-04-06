@@ -11,8 +11,8 @@ public class RollerEnemyBase : TrooperClass
         level = 1;
         attackTargetId = Random.Range(0, 6);
         targetIsShip = true;
-        health = 1000;
-        maxHP = 10000;
+        health = 2000;
+        maxHP = 2000;
         destinationPass = false;
         foundTargetToAttack = false;
         wait = false;

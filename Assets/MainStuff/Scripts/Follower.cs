@@ -35,7 +35,7 @@ public class Follower : FractionIndexClass
     public void Update()
     {
         MoveTo();
-        InvokeRepeating("CheckForDestroy", 60f, 1f);
+        //InvokeRepeating("CheckForDestroy", 60f, 1f);
     }
 
     public virtual void MoveTo()
@@ -51,10 +51,10 @@ public class Follower : FractionIndexClass
                 if (ownerToFollow.GetComponent<PlayerClass>() != null) // Если владелец куба - игрок ...
                     normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 0, -8000) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади игрока
                 else // Если владелец куба - не игрок ...
-                    normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 50, -3) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади владельца
+                    normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 5, -100) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади владельца
 
                 if (ownerToFollow.gameObject.tag == "Seeker")
-                    transform.position += normalizeDirection * Time.deltaTime * speed * 1.1f; // Сближать координату куба с Seeker или Player (перемещать куб)
+                    transform.position += normalizeDirection * Time.deltaTime * speed * 1.5f; // Сближать координату куба с Seeker или Player (перемещать куб)
 
                 if (ownerToFollow.gameObject.tag == "Player")
                     transform.position += normalizeDirection * Time.deltaTime * speed * 2f; // Сближать координату куба с Seeker или Player (перемещать куб)
@@ -125,9 +125,9 @@ public class Follower : FractionIndexClass
 
     public void MoveAfterOwnerDeath ()
     {
-        speed = 60;
+        speed = 34;
 
-        gameObject.GetComponent<Rigidbody>().mass = 50;
+        gameObject.GetComponent<Rigidbody>().mass = 5;
         gameObject.GetComponent<Rigidbody>().angularDrag = 1;
         gameObject.GetComponent<Rigidbody>().useGravity = false;
         Vector3 normalizeDirection;

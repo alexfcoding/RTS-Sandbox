@@ -24,8 +24,8 @@ public class FractionIndexClass : MonoBehaviour
     public virtual void Awake()
     {
         level = 1;
-        health = 100;
-        maxHP = 100;
+        health = 1000;
+        maxHP = 1000;
         healthBarScaleMultiplier = 0;
         healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
         healthBar.transform.SetParent(gameObject.transform);

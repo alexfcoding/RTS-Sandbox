@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class Main : MonoBehaviour
 {
     public int numCubes;     
-    public float spawnCircleAngle;   
+    public float spawnCircleAngle;
+    public float spawnCircleAngle2;
     public Vector3 warriorPosition;
     public Vector3 randomSpawnPosition;
 
@@ -32,8 +33,19 @@ public class Main : MonoBehaviour
                 GameMaster.GM.ConstructObject(GameMaster.GM.bombLauncherPrefab, GameMaster.GM.player.transform.TransformPoint(-6000, 0, 10000), Quaternion.Euler(0, 0, 0), "BombLauncher", GameMaster.GM.weaponObjectList);
             }
 
+            for (int j = 0; j < 20; j++)
+            {
+                GameObject newTower = GameMaster.GM.ConstructObject(GameMaster.GM.TowerGunPrefab, new Vector3(newShipObject.transform.position.x - 500 * Mathf.Cos(spawnCircleAngle2 * 3.14f / 180), 0, newShipObject.transform.position.z - 500 * Mathf.Sin(spawnCircleAngle2 * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "GunTower", GameMaster.GM.globalObjectList);
+                newTower.GetComponent<TowerClass>().SetFractionId(newShipObject.GetComponent<ShipClass>().fractionId);
+                newTower.GetComponent<TowerClass>().health = 5000;
+                newTower.GetComponent<TowerClass>().maxHP = 5000;
+                spawnCircleAngle2 += 360 / 20;
+
+            }
+
             spawnCircleAngle += 360 / GameMaster.GM.mainBaseCount;
         }
+
 
         Time.timeScale = 1;               
         
@@ -53,10 +65,10 @@ public class Main : MonoBehaviour
         // Создаем SeekerPrefab под кораблями из GameMaster.GM.ShipObjectList с рандомной позицией
         // X,Z +- 90 от корабля с использованием кастомной функции ConstructObject и задаем имя Seeker, потом помещаем в общий список GlobalObjectList
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 5; j++)
+            for (int j = 0; j < 3; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.seekerPrefab, GameMaster.GM.shipObjectList[i].transform.position - new Vector3(0, GameMaster.GM.shipObjectList[i].transform.position.y, 0) +
-                    new Vector3(Random.Range(-100, 100), 0, Random.Range(-100, 100)), Quaternion.Euler(0, 0, 0), "Seeker", GameMaster.GM.globalObjectList);
+                    new Vector3(Random.Range(-300, 300), 0, Random.Range(-300, 300)), Quaternion.Euler(0, 0, 0), "Seeker", GameMaster.GM.globalObjectList);
                 createdObject.GetComponent<SeekerClass>().SetFractionId(i);
                 warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);
@@ -110,12 +122,12 @@ public class Main : MonoBehaviour
 
         // Создаем пехоту TrooperPrefab рядом с TrooperBase
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 0; j++)
+            for (int j = 0; j < 10; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.trooperPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y , Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "Trooper", GameMaster.GM.unitList);
                 //GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
-                //float randomScale = Random.Range(3f, 3f); // Рандомизируем размеры пехоты
-                //createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
+                float randomScale = Random.Range(2f, 4f); // Рандомизируем размеры пехоты
+                createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
                 createdObject.GetComponent<FractionIndexClass>().SetFractionId(i);
                 warriorPosition = createdObject.transform.position + new Vector3(0, 0, 0);
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);
@@ -130,7 +142,7 @@ public class Main : MonoBehaviour
             }
 
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 0; j++)
+            for (int j = 0; j < 10; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.lightShipPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y + 3, Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "LightShip", GameMaster.GM.unitList);
                 float RandomScale = Random.Range(2f, 3f); // Рандомизируем размеры пехоты
@@ -178,7 +190,7 @@ public class Main : MonoBehaviour
     public void GenerateRollerBalls()
     {
         int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
-        GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "Roller", GameMaster.GM.globalObjectList);
+        GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, 0, 1000, Random.Range(10, 20), Quaternion.Euler(0, 0, 0), "Roller", GameMaster.GM.globalObjectList);
 
         //createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
         createdObject.GetComponent<FractionIndexClass>().SetFractionId(5);

@@ -21,8 +21,11 @@ public class SeekerClass : FractionIndexClass
     public GameObject currentTargetObject;
     public WeaponClass currentWeapon;
 
+    public float timer2;
+
     public override void Awake()
     {
+        timer2 = Random.Range(0, 100);
         level = 1;
         gameObject.tag = "Seeker";
         minDistance = 1000;
@@ -103,12 +106,23 @@ public class SeekerClass : FractionIndexClass
     {
         RaycastHit GroundHit;
         Physics.Raycast(transform.position, -transform.up, out GroundHit, 10);
+        
         transform.position = new Vector3(transform.position.x, 20, transform.position.z);
-        if (transform.position.y < 20)
-        {
-            gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-            gameObject.GetComponent<Rigidbody>().MovePosition(new Vector3(transform.position.x, 20, transform.position.z));
-        }
+
+        //timer2 += Time.deltaTime;
+        ////Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(Timer) * 0.1f,
+        ////  Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(Timer * 4f + randomY) * 1f + 15f,
+
+        //Vector3 moveSin = new Vector3(transform.position.x + Mathf.Sin(timer2) * 0.1f,
+        //    transform.position.y + Mathf.Sin(timer2 * 2f) * 0.1f,
+        //        transform.position.z + Mathf.Sin(timer2 * 2f) * 0.1f);
+
+        //gameObject.GetComponent<Rigidbody>().MovePosition(moveSin);
+        //if (transform.position.y < 20)
+        //{
+        //    gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
+        //    gameObject.GetComponent<Rigidbody>().MovePosition(new Vector3(transform.position.x, 20, transform.position.z));
+        //}
 
         healthBar.transform.LookAt(Camera.main.transform.position, -Vector3.up);
 
@@ -143,7 +157,7 @@ public class SeekerClass : FractionIndexClass
                     else
                         minDistNum = Random.Range(0, objectList.Count);
                     
-                    Quaternion lookOnLook = Quaternion.LookRotation(currentTarget - transform.position);
+                    Quaternion lookOnLook = Quaternion.LookRotation(new Vector3(currentTarget.x, transform.position.y, currentTarget.z) - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
                     Vector3 normalizeDirection = (objectList[minDistNum].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
                     gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 50;
@@ -152,13 +166,13 @@ public class SeekerClass : FractionIndexClass
 
             if (goingToBase == true && platformList[fractionId].gameObject != null)
             {
-                currentTarget = platformList[fractionId].transform.position + new Vector3(0,4,0);
+                currentTarget = new Vector3(platformList[fractionId].transform.position.x, transform.position.y, platformList[fractionId].transform.position.z);
                 transform.LookAt(currentTarget);
                 Vector3 normalizeDirection = (platformList[fractionId].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
                 gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 50;
             }
 
-            if (countOfItemsCollected >= 7)
+            if (countOfItemsCollected >= 14)
                 goingToBase = true;
             else if (countOfItemsCollected == 0)
                 goingToBase = false;
@@ -203,7 +217,7 @@ public class SeekerClass : FractionIndexClass
 
         if (lootAfterDeath == true)
         {
-            int rndLootCount = Random.Range(10, 40 * (int) gameObject.GetComponent<FractionIndexClass>().level);
+            int rndLootCount = Random.Range(5, 20 * (int) gameObject.GetComponent<FractionIndexClass>().level);
 
             for (int i = 0; i < rndLootCount; i++)
             {
@@ -216,7 +230,7 @@ public class SeekerClass : FractionIndexClass
                     createdObject.AddComponent<Rigidbody>();
                 }
 
-                createdObject.GetComponent<Rigidbody>().mass = 2;
+                createdObject.GetComponent<Rigidbody>().mass = 5;
                 //createdObject.GetComponent<Rigidbody>().useGravity = false;
                 createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
                 createdObject.GetComponent<Rigidbody>().drag = 1f;

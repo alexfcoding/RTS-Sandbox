@@ -106,18 +106,22 @@ public class TrooperClass : SeekerClass
                 if (enemyToLook.GetComponent<ShipClass>() != null)
                 {
                     if (gameObject.name == "LightShip")
-                        gameObject.transform.LookAt(enemyToLook.transform.position);
+                    {
+                        Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
+                        transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+                    }
+                        
                     wait = true;
                 }
                 else if (enemyToLook.GetComponent<ShipClass>() == null)
                 {
-                    gameObject.transform.LookAt(enemyToLook.transform.position);
+                    Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
                     wait = true;
                 }
             }
             else
             {
-                //gameObject.transform.LookAt(PointFromShooting);
                 wait = false;
             }
 
@@ -127,7 +131,10 @@ public class TrooperClass : SeekerClass
                             
            if ( ((Vector3.Distance(transform.position, pointFromShooting)) > 80) && (wait == false) )
                 {
-                    gameObject.transform.LookAt(pointFromShooting);
+
+                    Quaternion lookOnLook = Quaternion.LookRotation(pointFromShooting - transform.position);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+
                     rbTrooper.AddRelativeForce(Vector3.forward * trooperSpeed * Time.deltaTime * 40, ForceMode.VelocityChange);//* Time.deltaTime * 30
                     if (gameObject.GetComponent<Animator>() != null)
                         gameObject.GetComponent<Animator>().Play("Run_Guard");

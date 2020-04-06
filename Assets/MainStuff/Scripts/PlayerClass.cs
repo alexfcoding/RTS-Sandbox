@@ -381,8 +381,7 @@ public class PlayerClass: FractionIndexClass
         }
             
     }
-
-
+    
     public void CallBarracsConstruction()
     {
         SpendMoneyMethod spendOnBarracsDelegate = GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().startBarracsConstruction;
@@ -418,8 +417,7 @@ public class PlayerClass: FractionIndexClass
         SpendMoneyMethod spendOnGunTowerDelegate = GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().startCreatingGunTower;
         GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().spendMoney(600, spendOnGunTowerDelegate);
     }
-
-
+    
     IEnumerator cancelIgnoringEnemies (GameObject weaponToControl)
     {
         yield return new WaitForSeconds(10);
