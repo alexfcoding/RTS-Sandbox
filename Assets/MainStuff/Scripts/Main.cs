@@ -126,8 +126,8 @@ public class Main : MonoBehaviour
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.trooperPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y , Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "Trooper", GameMaster.GM.unitList);
                 //GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
-                float randomScale = Random.Range(2f, 4f); // Рандомизируем размеры пехоты
-                createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
+                //float randomScale = Random.Range(2f, 4f); // Рандомизируем размеры пехоты
+                //createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
                 createdObject.GetComponent<FractionIndexClass>().SetFractionId(i);
                 warriorPosition = createdObject.transform.position + new Vector3(0, 0, 0);
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);

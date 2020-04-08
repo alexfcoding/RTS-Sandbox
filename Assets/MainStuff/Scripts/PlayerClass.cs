@@ -235,11 +235,11 @@ public class PlayerClass: FractionIndexClass
         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 2f) * 0.07f,
         //    transform.position.z + Mathf.Sin(timer * 3f) * 0.03f);
 
-        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 8,
-           transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
+        //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 16,
+        //   transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
 
-       // Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y,
-       //     transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
+        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y,
+            transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
 
         gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
 

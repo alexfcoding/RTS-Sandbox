@@ -36,10 +36,19 @@ public class FractionIndexClass : MonoBehaviour
     {
         this.fractionId = fractionId;
 
-        if (gameObject.GetComponent<ShipClass>() != null)
+        if (gameObject.name == "Seeker" || gameObject.name == "GunTower" || gameObject.name == "Tower")
         {
-            gameObject.GetComponentsInChildren<Light>()[0].color = GameMaster.GM.fractionColors[this.fractionId];
-            gameObject.GetComponentsInChildren<Light>()[1].color = GameMaster.GM.fractionColors[this.fractionId];
+            int lightsCount = 0;
+
+            if (gameObject.GetComponentsInChildren<Light>() != null)
+            {
+                lightsCount = gameObject.GetComponentsInChildren<Light>().Length;
+
+                for (int i = 0; i < lightsCount; i++)
+                {
+                    gameObject.GetComponentsInChildren<Light>()[i].color = GameMaster.GM.fractionColors[this.fractionId];
+                }
+            }
         }
 
         if (healthBar != null)

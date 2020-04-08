@@ -32,7 +32,7 @@ public class Follower : FractionIndexClass
         isVulnerable = false;
     }
 
-    public void Update()
+    public void FixedUpdate()
     {
         MoveTo();
         //InvokeRepeating("CheckForDestroy", 60f, 1f);
