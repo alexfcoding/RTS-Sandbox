@@ -148,6 +148,7 @@ public class GameMaster : MonoBehaviour
     /// Team select sprite
     /// </summary>
     public GameObject teamSelect;
+    public GameObject teamSelectSphere;
 
     /// <summary>
     /// Team marker sprite
@@ -251,6 +252,8 @@ public class GameMaster : MonoBehaviour
             Color newRandomColor = new Color(r, g, b, 1f);
             fractionColors.Add(newRandomColor);
         }
+
+        fractionColors[0] = new Color(0, 1, 1, 1f);
     }
 
     /// <summary>
@@ -278,13 +281,17 @@ public class GameMaster : MonoBehaviour
     /// <summary>
     /// ConstructObject method overload for fixed Vector3 SpawnPosition.
     /// </summary>
-    public GameObject ConstructObject(GameObject prefab, Vector3 spawnPosition, Quaternion Q, string objectName, List<GameObject> listToAdd)
+    public GameObject ConstructObject(GameObject prefab, Vector3 spawnPosition, Quaternion Q, string objectName, List<GameObject> listToAdd, bool renderMesh = true)
     {
         GameObject CreatedObject = Instantiate(prefab, spawnPosition, Q) as GameObject;
         CreatedObject.gameObject.name = objectName;
         listToAdd.Add(CreatedObject);
         numCubes++;
-        return CreatedObject;
+
+        if (CreatedObject.GetComponent<MeshRenderer>() != null)
+            CreatedObject.GetComponent<MeshRenderer>().enabled = renderMesh;
+
+        return CreatedObject;        
     }
 
     public void PlayEnemyExplosionSound(Vector3 position)
@@ -330,13 +337,13 @@ public class GameMaster : MonoBehaviour
         int rnd = Random.Range(0, 100);
 
         if (rnd >= 65 && rnd < 100)
-            GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
+            GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList, false);
 
         if (rnd >= 30 && rnd < 65)
-         GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
+         GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList, false);
 
         if (rnd <= 30)
-            GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
+            GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList, false);
     }
     
     public void FixedUpdate()

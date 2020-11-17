@@ -91,8 +91,8 @@ public class TrooperClass : SeekerClass
 
                 if (fractionId != 0 && GameMaster.GM.shipObjectList[rnDShip] != null)
                     targetToChase = GameMaster.GM.shipObjectList[rnDShip];
-                else
-                    targetToChase = GameMaster.GM.player.gameObject;
+                //else
+                //    targetToChase = GameMaster.GM.player.gameObject;
             }
            
             if (targetToChase != null && targetToChase.GetComponent<ShipClass>() != null)

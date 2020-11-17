@@ -35,7 +35,7 @@ public class Follower : FractionIndexClass
     public void FixedUpdate()
     {
         MoveTo();
-        //InvokeRepeating("CheckForDestroy", 60f, 1f);
+        InvokeRepeating("CheckForDestroy", 20f, 1f);
     }
 
     public virtual void MoveTo()

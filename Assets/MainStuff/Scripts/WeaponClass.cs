@@ -60,16 +60,16 @@ public class WeaponClass : MonoBehaviour
             transform.Rotate(0, -5, 0);
         }
 
-        if (currentSeeker != null && currentSeeker.tag == "Tower")
-        {
+        //if (currentSeeker != null && currentSeeker.tag == "Tower")
+        //{
 
-            if (foundTargetToShoot == false)
-            {
-                gameObject.transform.localEulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-                transform.Rotate(0, -1, 0);
-            }
+        //    if (foundTargetToShoot == false)
+        //    {
+        //        gameObject.transform.localEulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+        //        transform.Rotate(0, -1, 0);
+        //    }
                 
-        }
+        //}
     }
 
     public void Update()
@@ -165,7 +165,7 @@ public class WeaponClass : MonoBehaviour
                         reloadNow = true;
                         GameObject CreatedObject = GameMaster.GM.ConstructObject(PlayerClass.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
                         PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0, 0, 4), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
-                        "Rocket", GameMaster.GM.bulletObjectList);
+                        "Rocket", GameMaster.GM.bulletObjectList, true);
                         CreatedObject.GetComponent<RocketShellClass>().playersBullet = true;
                         CreatedObject.GetComponent<RocketShellClass>().LaunchSound();
                         CreatedObject.GetComponent<RocketShellClass>().weaponToStick = gameObject;
@@ -239,12 +239,17 @@ public class WeaponClass : MonoBehaviour
         {
             if (foundTargetToShoot == true && targetInSphere != null)
             {
-                sprayShoot = Random.Range(-6, 6);
+                sprayShoot = Random.Range(-10, 10);
                 if (currentSeeker.tag != "Tower")
                     transform.LookAt(targetInSphere.transform.position);
                 else
-                    transform.LookAt(targetInSphere.transform.position + new Vector3(0,-10,0));
+                {
+                    Quaternion lookOnLook = Quaternion.LookRotation(new Vector3(targetInSphere.transform.position.x, targetInSphere.transform.position.y - 10, targetInSphere.transform.position.z) - transform.position);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 8);
 
+                    //transform.LookAt(targetInSphere.transform.position + new Vector3(0, -10, 0));
+                }
+                   
                 if (targetInSphere.tag == "Tower")
                 {
                     transform.LookAt(targetInSphere.transform.position + new Vector3(0, 30, 0));
@@ -268,7 +273,11 @@ public class WeaponClass : MonoBehaviour
                         if (currentSeeker.tag != "Tower")
                             createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(Vector3.forward * 1), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
                         else
-                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(new Vector3(0,0.3f,0.7f)) + new Vector3(sprayShoot, sprayShoot, sprayShoot), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+                        {
+                            createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(new Vector3(0, 0.3f, 0.7f)) + new Vector3(sprayShoot, sprayShoot, sprayShoot), transform.rotation, "Rocket", GameMaster.GM.bulletObjectList);
+                            createdBullet.transform.localScale = new Vector3(20, 20, 20);
+                        }
+                           
 
                         createdBullet.GetComponent<RocketShellClass>().LaunchSound();
                         createdBullet.GetComponent<RocketShellClass>().weaponToStick = gameObject;
@@ -388,7 +397,7 @@ public class WeaponClass : MonoBehaviour
             gameObject.tag = "EnemyWeapon";
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;
-            weaponPositionOffset.Set(0, 6, 0);
+            weaponPositionOffset.Set(0, 4, 0);
             Destroy(gameObject.GetComponent<Rigidbody>());
             gameObject.transform.SetParent(collision.transform);
 

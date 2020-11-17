@@ -16,7 +16,7 @@ public class ShipClass : SeekerClass
 
     public override void Awake()
     {
-        money = 20000;
+        money = 30000;
         health = 200000;
         maxHP = 200000;
         gameObject.tag = "Ship";
@@ -66,7 +66,7 @@ public class ShipClass : SeekerClass
 
         if (fractionId != 0)
         {
-            if (fractionBarracsList.Count > 0 && CountFractionWarriors(fractionId) <= fractionBarracsList.Count * 10 && money > 600)
+            if (fractionBarracsList.Count > 0 && CountFractionWarriors(fractionId) <= fractionBarracsList.Count * 20 && money > 600)
             {
                 //SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
                 //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
@@ -181,7 +181,8 @@ public class ShipClass : SeekerClass
                             createdObject.GetComponent<TrooperClass>().targetIsShip = false;
                             //createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.shipObjectList[ChooseRandomTarget(GameMaster.GM.shipObjectList)];
                             if (fractionId == 0)
-                                createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.player.gameObject;
+                                //createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.player.gameObject;
+                                createdObject.GetComponent<TrooperClass>().targetToChase = fractionBarracsList[rndBaseSpawnTrooper].gameObject;
                         }
                        
                         //float randomScale = Random.Range(1f, 2f); // Рандомизируем размеры пехоты
@@ -266,13 +267,13 @@ public class ShipClass : SeekerClass
             {
                 CheckForDeadShip();
                 healthBar.transform.localScale = new Vector3(0, 0, 0);
-                //smoke = Instantiate(GameMaster.GM.smokeAfterDeath, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
-                //smoke.transform.parent = gameObject.transform;
-                //GameObject Explode = Instantiate(GameMaster.GM.enemyDestroy, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
-                //Explode.transform.localScale += new Vector3(200, 200, 200);
-                //GameObject SmokeObj = Instantiate(smoke, gameObject.transform.position + new Vector3(0, -70, 0), Quaternion.Euler(0, 0, 0));
-                //SmokeObj.transform.localScale += new Vector3(100, 100, 100);
-                //SmokeObj.transform.parent = gameObject.transform;
+                smoke = Instantiate(GameMaster.GM.smokeAfterDeath, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
+                smoke.transform.parent = gameObject.transform;
+                GameObject Explode = Instantiate(GameMaster.GM.enemyDestroy, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
+                Explode.transform.localScale += new Vector3(200, 200, 200);
+                GameObject SmokeObj = Instantiate(smoke, gameObject.transform.position + new Vector3(0, -70, 0), Quaternion.Euler(0, 0, 0));
+                SmokeObj.transform.localScale += new Vector3(100, 100, 100);
+                SmokeObj.transform.parent = gameObject.transform;
             }
 
             dead = true;

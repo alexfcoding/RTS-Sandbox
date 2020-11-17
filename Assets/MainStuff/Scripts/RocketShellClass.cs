@@ -35,7 +35,7 @@ public class RocketShellClass : MonoBehaviour
         Timer += Time.deltaTime;
 
         if ((isProjectile==true) && (gameObject.GetComponent<Rigidbody>()!=null))
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, speed += 16, ForceMode.Acceleration);
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, speed += 18, ForceMode.Acceleration);
         
         if (playersBullet == true && isHoming == true)
             if (Physics.BoxCast(GameMaster.GM.player.transform.TransformPoint(0, 0, 0), new Vector3(20, 20, 2), transform.forward, out RaycastHit hitInfo2, Quaternion.Euler(0, 0, 0), 400, 1 << 8))

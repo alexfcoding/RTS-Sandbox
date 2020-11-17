@@ -32,15 +32,17 @@ public class SeekerClass : FractionIndexClass
         minDistNum = 0;
         countOfItemsCollected = 0;
         alreadyHaveWeapon = false;
-        health = 10000;
+        health = 20000;
         maxHP = 20000;
         dead = false;
         foundObject = false;
         isVulnerable = true;
+
         textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, 18, 0), Quaternion.Euler(0, 0, 0));
         textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
         textHP.transform.parent = transform;
-        healthBarScaleMultiplier = 1;
+
+        healthBarScaleMultiplier = 10;
         healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
         healthBar.transform.SetParent(gameObject.transform);
         healthBar.transform.localScale = new Vector3(health/maxHP * healthBarScaleMultiplier, 0.05f, 1);
@@ -53,36 +55,40 @@ public class SeekerClass : FractionIndexClass
 
     public override void TakeDamage(float damage)
     {
-        if (health > damage)
+        if (isVulnerable == true)
         {
-            if (whoIsDamaging != null && whoIsDamaging.GetComponent<FractionIndexClass>().fractionId != GetComponent<FractionIndexClass>().fractionId)
-                health -= damage;
-
-            textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
-            
-            if (healthBar != null)
-                healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
-        }
-        // Обездвижили
-        else
-        {
-            if (dead == false)
+            if (health > damage)
             {
+                if (whoIsDamaging != null && whoIsDamaging.GetComponent<FractionIndexClass>().fractionId != GetComponent<FractionIndexClass>().fractionId)
+                    health -= damage;
+
+                textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
+
                 if (healthBar != null)
-                    healthBar.transform.localScale = new Vector3(0,0,0);
-                //smoke = Instantiate(GameMaster.GM.smokeAfterDeath, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
-                //smoke.transform.parent = gameObject.transform;
-                //Destroy(smoke, 2f);
-
-                if (gameObject.GetComponent<TrooperClass>() == null)
-                    gameObject.GetComponent<Rigidbody>().AddForce(0, 800, 0, ForceMode.Impulse);
-
-                StartCoroutine(Dying());
+                    healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
             }
+            // Обездвижили
+            else
+            {
+                if (dead == false)
+                {
+                    if (healthBar != null)
+                        healthBar.transform.localScale = new Vector3(0, 0, 0);
+                    //smoke = Instantiate(GameMaster.GM.smokeAfterDeath, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
+                    //smoke.transform.parent = gameObject.transform;
+                    //Destroy(smoke, 2f);
 
-            dead = true;
-            health -= damage;
+                    if (gameObject.GetComponent<TrooperClass>() == null && gameObject.GetComponent<Rigidbody>() != null)
+                        gameObject.GetComponent<Rigidbody>().AddForce(0, 800, 0, ForceMode.Impulse);
+
+                    StartCoroutine(Dying());
+                }
+
+                dead = true;
+                health -= damage;
+            }
         }
+        
     }
 
     public void Heal(float healpoints)
@@ -133,7 +139,7 @@ public class SeekerClass : FractionIndexClass
                 minDistNum = Random.Range(0, objectList.Count);
             }
 
-            if (objectList[minDistNum] == null)
+            if (objectList[minDistNum] == null || objectList[minDistNum].GetComponent<FractionIndexClass>().fractionId != 0 && objectList[minDistNum].GetComponent<FractionIndexClass>().fractionId != fractionId)
             {
                 findNextObject = true;
             }
@@ -153,10 +159,14 @@ public class SeekerClass : FractionIndexClass
                     findNextObject = false;
 
                     if(objectList[minDistNum].gameObject != null)
+                    {
                         currentTarget = objectList[minDistNum].transform.position;
+                        currentTargetObject = objectList[minDistNum].gameObject;
+                    }                       
                     else
                         minDistNum = Random.Range(0, objectList.Count);
                     
+                   
                     Quaternion lookOnLook = Quaternion.LookRotation(new Vector3(currentTarget.x, transform.position.y, currentTarget.z) - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
                     Vector3 normalizeDirection = (objectList[minDistNum].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
@@ -172,7 +182,7 @@ public class SeekerClass : FractionIndexClass
                 gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 50;
             }
 
-            if (countOfItemsCollected >= 14)
+            if (countOfItemsCollected >= 8)
                 goingToBase = true;
             else if (countOfItemsCollected == 0)
                 goingToBase = false;
@@ -197,7 +207,8 @@ public class SeekerClass : FractionIndexClass
     {
         yield return new WaitForSeconds(0f);
         if (whoIsDamaging != null)
-            whoIsDamaging.GetComponent<FractionIndexClass>().level += 1;
+            if (whoIsDamaging.GetComponent<FractionIndexClass>().level < 5)
+                whoIsDamaging.GetComponent<FractionIndexClass>().level += 1;
 
         if (whoIsDamaging != null && (whoIsDamaging.tag == "Trooper" || whoIsDamaging.tag == "Seeker"))
         {
@@ -217,7 +228,7 @@ public class SeekerClass : FractionIndexClass
 
         if (lootAfterDeath == true)
         {
-            int rndLootCount = Random.Range(5, 20 * (int) gameObject.GetComponent<FractionIndexClass>().level);
+            int rndLootCount = Random.Range(1, 3 * (int) gameObject.GetComponent<FractionIndexClass>().level);
 
             for (int i = 0; i < rndLootCount; i++)
             {

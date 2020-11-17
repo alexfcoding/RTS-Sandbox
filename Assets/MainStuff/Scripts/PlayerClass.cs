@@ -43,7 +43,7 @@ public class PlayerClass: FractionIndexClass
 
     public List<GameObject> teamMateList;
 
-    public GameObject selector;
+    public GameObject selector;    
     public GameObject currentShipTarget;
     public GameObject clickedObject;
     public GameObject targetUI;
@@ -74,28 +74,31 @@ public class PlayerClass: FractionIndexClass
     
     public override void TakeDamage(float damage)
     {
-        if (health >= damage)
+        if (isVulnerable)
         {
-            health -= damage;
-        }
-        else
-        {
-            GameMaster.GM.playerHp.color = Color.red;
-            GameMaster.GM.playerHp.text = "GameOver";
-
-            if (deadPlayer == false)
+            if (health >= damage)
             {
-                GameObject Explode = Instantiate(GameMaster.GM.enemyDestroy, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
-                GameObject Smoke = Instantiate(GameMaster.GM.smokeAfterDeath, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
-                Smoke.transform.SetParent(gameObject.transform);
-                RB.isKinematic = true;
-                Time.timeScale = 0.3f;
-                playerDeath.Play();
-                missionFailed.Play();
+                health -= damage;
             }
+            else
+            {
+                GameMaster.GM.playerHp.color = Color.red;
+                GameMaster.GM.playerHp.text = "GameOver";
 
-            deadPlayer = true;
-        }
+                if (deadPlayer == false)
+                {
+                    GameObject Explode = Instantiate(GameMaster.GM.enemyDestroy, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
+                    GameObject Smoke = Instantiate(GameMaster.GM.smokeAfterDeath, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
+                    Smoke.transform.SetParent(gameObject.transform);
+                    RB.isKinematic = true;
+                    Time.timeScale = 0.3f;
+                    playerDeath.Play();
+                    missionFailed.Play();
+                }
+
+                deadPlayer = true;
+            }
+        }        
 
         GameMaster.GM.playerHp.text = "PlayerHP: " + PlayerClass.mainPlayer.health.ToString();
         playerHealth3dText.text = $"HP: {health}";
@@ -119,7 +122,7 @@ public class PlayerClass: FractionIndexClass
         level = 1;
         reload = false;
         alreadyHaveWeapon = false;
-        health = 30000;
+        //health = 30000;
         tickWeapon = 1;
         timer = 0;
         playerCubesCount = 0;
@@ -146,9 +149,9 @@ public class PlayerClass: FractionIndexClass
         if (Input.GetKey(KeyCode.Mouse1))
         {
             selectorScale += 4;
-            selector.transform.localScale = new Vector3(selectorScale, selectorScale, 1);
+            selector.transform.localScale = new Vector3(selectorScale, selectorScale, selectorScale);
             tacticMode = true;
-            lookCube.transform.localPosition = new Vector3(0, 4000, 30000);
+            lookCube.transform.localPosition = new Vector3(0, 4000, 3000);
             GameMaster.GM.myCamera.transform.localPosition = Vector3.Lerp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(0, 14000, -40000),0.05f);
         }
         
@@ -162,7 +165,7 @@ public class PlayerClass: FractionIndexClass
             float selectorDistance = Mathf.Sqrt(Mathf.Pow(groundDistance.distance, 2) - Mathf.Pow(playerHeightTerrain, 2));
            // selector.transform.position = transform.position + transform.forward * selectorDistance;
            // selector.transform.position = new Vector3(selector.transform.position.x, 1, selector.transform.position.z);
-            selector.transform.position = new Vector3(gameObject.transform.position.x, 1, gameObject.transform.position.z);
+            selector.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
            // selector.transform.eulerAngles = new Vector3(90, 0, 0);
 
             foreach (GameObject teamMate in teamMateList)
@@ -173,18 +176,27 @@ public class PlayerClass: FractionIndexClass
 
             teamMateList.Clear();
 
-            Collider[] team = Physics.OverlapSphere(selector.transform.position, selectorScale / 1.5f, 1 << 8);
-            //Collider[] team = Physics.OverlapBox(selector.transform.position, new Vector3(selectorScale / 1.5f, 9999, selectorScale / 1.5f), Quaternion.identity, 1 << 8);
+            //Collider[] team = Physics.OverlapSphere(selector.transform.position, selectorScale / 1.5f, 1 << 8);
+            Collider[] team = Physics.OverlapBox(selector.transform.position, new Vector3(selectorScale / 1.5f, 9999, selectorScale / 1.5f), Quaternion.identity, 1 << 8);
 
             foreach (Collider teamMate in team)
                 if (teamMate.tag == "Trooper" && teamMate.gameObject.GetComponent<FractionIndexClass>().fractionId == 0)
                 {
                     teamMateList.Add(teamMate.gameObject);
                     teamMate.GetComponent<TrooperClass>().teamSelectMark = Instantiate(GameMaster.GM.teamMarker, teamMate.transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
-                    teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.position = new Vector3(teamMate.GetComponent<TrooperClass>().transform.position.x, 0.2f, teamMate.GetComponent<TrooperClass>().transform.position.z);
+                    if (teamMate.name == "LightShip")
+                    {
+                        teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.position = new Vector3(teamMate.GetComponent<TrooperClass>().transform.position.x, teamMate.GetComponent<TrooperClass>().transform.position.y - 3, teamMate.GetComponent<TrooperClass>().transform.position.z);
+                    }
+
+                    if (teamMate.name == "Trooper")
+                    {
+                        teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.position = new Vector3(teamMate.GetComponent<TrooperClass>().transform.position.x, 0.4f, teamMate.GetComponent<TrooperClass>().transform.position.z);
+                    }
+
                     teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.Rotate(90, 0, 0);
                     teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.localScale = new Vector3(4, 4, 4);
-                    teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.SetParent(teamMate.gameObject.transform);
+                    teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.SetParent(teamMate.gameObject.transform);                    
                 }
 
             CheckTacticMode();
@@ -238,8 +250,8 @@ public class PlayerClass: FractionIndexClass
         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 16,
         //   transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
 
-        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y,
-            transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
+        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.05f, transform.position.y,
+            transform.position.z + Mathf.Sin(timer * 1f) * 0.02f);
 
         gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
 
@@ -247,10 +259,12 @@ public class PlayerClass: FractionIndexClass
         camY = GameMaster.GM.myCamera.transform.localPosition.y;
         camZ = GameMaster.GM.myCamera.transform.localPosition.z;
 
-        if (tacticMode == false)
+        if (tacticMode == false && isTimeToGiveCommand == false)
         {
             GameMaster.GM.myCamera.transform.localPosition = new Vector3(camX + Mathf.Sin(timer * fx) * 2f, camY + Mathf.Sin(timer * fy) * 1f,
             camZ + Mathf.Sin(timer * fz) * 2f);
+            lookCube.transform.localPosition = new Vector3(0, 408, 1500);
+            GameMaster.GM.myCamera.transform.localPosition = Vector3.Lerp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(cameraX, cameraY, cameraZ), 0.1f);
         }
 
         Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 40, 1 << 9);
@@ -265,6 +279,189 @@ public class PlayerClass: FractionIndexClass
         timer += Time.deltaTime;
 
         waitForCommand();
+
+        // ============================================ KEYS ========================================================
+
+        //if (transform.position.y > 20)
+        //    transform.position = new Vector3(transform.position.x, 20, transform.position.z);
+
+        if (Input.GetKey(KeyCode.LeftControl))
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+            stopCamControls = true;
+        }
+
+        if (Input.GetKeyUp("0"))
+        {
+            foreach (GameObject teamMate in teamMateList)
+            {
+                if (teamMate != null)
+                {
+                    if (teamMate.GetComponent<TrooperClass>() != null)
+                        teamMate.GetComponent<TrooperClass>().attackTargetId = 0;
+                }
+            }
+
+            int Rnd = Random.Range(0, 2);
+            switch (Rnd)
+            {
+                case 0:
+                    voice1.Play();
+                    break;
+                case 1:
+                    voice2.Play();
+                    break;
+                case 2:
+                    voice3.Play();
+                    break;
+            }
+        }
+
+        if (Input.GetKey("f"))
+        {
+            spectatorMode = true;
+        }
+
+        if (Input.GetKeyUp("f"))
+        {
+            spectatorMode = false;
+        }
+
+        if (Input.GetKey("j"))
+        {
+            currentWeapon.GetComponent<Transform>().position = gameObject.transform.position + new Vector3(5, 0, 5);
+            currentWeapon.GetComponent<WeaponClass>().tag = "WithoutUser";
+            currentWeapon.transform.parent = null;
+            currentWeapon.objectToStick = null;
+            currentWeapon.GetComponent<WeaponClass>().tick = 0f;
+            currentWeapon.GetComponent<WeaponClass>().timer = 0;
+            currentWeapon.GetComponent<WeaponClass>().reloadNow = true;
+            currentWeapon.GetComponent<WeaponClass>().soundStop = false;
+            alreadyHaveWeapon = false;
+        }
+
+        if (Input.GetKey("g"))
+        {
+            for (int i = 0; i < GameMaster.GM.globalObjectList.Count; i++)
+                Destroy(GameMaster.GM.globalObjectList[i].gameObject);
+
+            GameMaster.GM.globalObjectList.Clear();
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            RB.AddRelativeForce(Vector3.forward * 20000);
+        }
+
+        if (Input.GetKeyUp("0"))
+        {
+            CallBarracsConstruction();
+        }
+
+        if (Input.GetKeyUp("1"))
+        {
+            CallCreatingTrooper();
+        }
+
+        if (Input.GetKeyUp("2"))
+        {
+            CallCreatingLightShip();
+        }
+
+        if (Input.GetKeyDown("3"))
+        {
+            CallCreatingGunTower();
+        }
+
+        if (Input.GetKeyUp("4"))
+        {
+            CallCreatingTower();
+        }
+
+        if (Input.GetKey("w"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            {
+                gameObject.GetComponent<AudioSource>().Play();
+            }
+        }       
+
+        if (Input.GetKeyUp("w"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
+                gameObject.GetComponent<AudioSource>().Stop();
+        }
+
+        if (Input.GetKey("s"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            {
+                gameObject.GetComponent<AudioSource>().Play();
+            }
+        }       
+
+        if (Input.GetKeyUp("s"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
+                gameObject.GetComponent<AudioSource>().Stop();
+        }
+
+        if (Input.GetKey("d"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            {
+                gameObject.GetComponent<AudioSource>().Play();
+            }
+        }
+
+        if (Input.GetKeyUp("d"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
+                gameObject.GetComponent<AudioSource>().Stop();
+        }
+
+        if (Input.GetKey("a"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            {
+                gameObject.GetComponent<AudioSource>().Play();
+            }      
+        }
+
+        if (Input.GetKeyUp("a"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
+                gameObject.GetComponent<AudioSource>().Stop();
+        }
+
+        if (Input.GetKey("q"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            {
+                gameObject.GetComponent<AudioSource>().Play();
+            }
+        }
+        
+        if (Input.GetKeyUp("q"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
+                gameObject.GetComponent<AudioSource>().Stop();
+        }
+
+        if (Input.GetKey("e"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            {
+                gameObject.GetComponent<AudioSource>().Play();
+            }    
+        }       
+
+        if (Input.GetKeyUp("e"))
+        {
+            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
+                gameObject.GetComponent<AudioSource>().Stop();
+        }
     }
 
     public void CheckTacticMode()
@@ -344,7 +541,7 @@ public class PlayerClass: FractionIndexClass
 
                 if (teamMateList.Count > 0)
                 {
-                    int Rnd = Random.Range(0, 3);
+                    int Rnd = Random.Range(0, 2);
 
                     switch (Rnd)
                     {
@@ -354,9 +551,9 @@ public class PlayerClass: FractionIndexClass
                         case 1:
                             voice2.Play();
                             break;
-                        case 2:
-                            voice3.Play();
-                            break;
+                        //case 2:
+                        //    voice3.Play();
+                        //    break;
                     }
                 }
             }
@@ -369,8 +566,7 @@ public class PlayerClass: FractionIndexClass
 
             }
 
-            lookCube.transform.localPosition = new Vector3(0, 408, 1500);
-            GameMaster.GM.myCamera.transform.localPosition = new Vector3(cameraX, cameraY, cameraZ);
+            //GameMaster.GM.myCamera.transform.localPosition = new Vector3(cameraX, cameraY, cameraZ);
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
@@ -427,78 +623,6 @@ public class PlayerClass: FractionIndexClass
 
     public void FixedUpdate()
     {
-        //if (transform.position.y > 20)
-        //    transform.position = new Vector3(transform.position.x, 20, transform.position.z);
-
-        if (Input.GetKey(KeyCode.LeftControl))
-        {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            stopCamControls = true;
-        }
-
-        if (Input.GetKeyUp("0"))
-        {
-            foreach (GameObject teamMate in teamMateList)
-            {
-                if (teamMate != null)
-                {
-                    if (teamMate.GetComponent<TrooperClass>() != null)
-                        teamMate.GetComponent<TrooperClass>().attackTargetId = 0;
-                }
-            }
-
-            int Rnd = Random.Range(0, 3);
-            switch (Rnd)
-            {
-                case 0:
-                    voice1.Play();
-                    break;
-                case 1:
-                    voice2.Play();
-                    break;
-                case 2:
-                    voice3.Play();
-                    break;
-            }
-        }
-
-        if (Input.GetKey("f"))
-        {
-            spectatorMode = true;
-        }
-
-        if (Input.GetKeyUp("f"))
-        {
-            spectatorMode = false;
-        }
-
-        if (Input.GetKey("j"))
-        {
-            currentWeapon.GetComponent<Transform>().position = gameObject.transform.position + new Vector3(5, 0, 5);
-            currentWeapon.GetComponent<WeaponClass>().tag = "WithoutUser";
-            currentWeapon.transform.parent = null;
-            currentWeapon.objectToStick = null;
-            currentWeapon.GetComponent<WeaponClass>().tick = 0f;
-            currentWeapon.GetComponent<WeaponClass>().timer = 0;
-            currentWeapon.GetComponent<WeaponClass>().reloadNow = true;
-            currentWeapon.GetComponent<WeaponClass>().soundStop = false;
-            alreadyHaveWeapon = false;
-        }
-
-        if (Input.GetKey("g"))
-        {
-            for (int i = 0; i < GameMaster.GM.globalObjectList.Count; i++)
-                Destroy(GameMaster.GM.globalObjectList[i].gameObject);
-
-            GameMaster.GM.globalObjectList.Clear();
-        }
-
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            RB.AddRelativeForce(Vector3.forward * 20000);
-        }
-
         if (Input.GetKey("w"))
         {
             if (gameObject.GetComponent<AudioSource>().isPlaying == false)
@@ -597,7 +721,7 @@ public class PlayerClass: FractionIndexClass
                 gameObject.GetComponent<AudioSource>().Play();
             }
 
-            
+
             RB.AddRelativeForce(Vector3.up * (-1.5f), ForceMode.VelocityChange);
             fire7.Play();
             fire8.Play();
@@ -622,9 +746,9 @@ public class PlayerClass: FractionIndexClass
             }
 
             //if (transform.position.y < 20)
-           // if (spectatorMode == true)
-                RB.AddRelativeForce(Vector3.up * 1.5f, ForceMode.VelocityChange);
-            
+            // if (spectatorMode == true)
+            RB.AddRelativeForce(Vector3.up * 1.5f, ForceMode.VelocityChange);
+
             fire9.Play();
             fire10.Play();
         }
@@ -640,29 +764,15 @@ public class PlayerClass: FractionIndexClass
                 gameObject.GetComponent<AudioSource>().Stop();
         }
 
-        if (Input.GetKeyUp("0"))
+        if (Input.GetKey("x"))
         {
-            CallBarracsConstruction();
+            GameMaster.GM.myCamera.GetComponent<Camera>().fieldOfView -= 0.5f;
         }
 
-        if (Input.GetKeyUp("1"))
+        if (Input.GetKey("c"))
         {
-            CallCreatingTrooper();
-        }
-
-        if (Input.GetKeyUp("2"))
-        {
-            CallCreatingLightShip();
-        }
-
-        if (Input.GetKeyUp("3"))
-        {
-            CallCreatingGunTower();
-        }
-
-        if (Input.GetKeyUp("4"))
-        {
-            CallCreatingTower();
+            GameMaster.GM.myCamera.GetComponent<Camera>().fieldOfView = 45f;
         }
     }
+
 }
