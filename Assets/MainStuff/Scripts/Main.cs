@@ -10,35 +10,38 @@ public class Main : MonoBehaviour
     public float spawnCircleAngle2;
     public Vector3 warriorPosition;
     public Vector3 randomSpawnPosition;
+    public GameObject spawnPlatform;
 
     void Start()
     {
-        InvokeRepeating("GenerateCubes", 0f, 2f);
+        spawnPlatform = GameMaster.GM.ConstructObject(GameMaster.GM.spawnPlatform, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0), "SpawnPlatform", GameMaster.GM.globalObjectList);
+        InvokeRepeating("GenerateCubes", 0f, 0.2f);
         //InvokeRepeating("GenerateRollerBalls", 0f, 10f);
         GameMaster.GM.SetFractionColors();
 
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
         {
-            GameObject newShipObject = GameMaster.GM.ConstructObject(GameMaster.GM.shipPrefab, new Vector3(2000 * Mathf.Cos(spawnCircleAngle * 3.14f / 180), 110, 2000 * Mathf.Sin(spawnCircleAngle * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "Seeker", GameMaster.GM.shipObjectList);
+            GameObject newShipObject = GameMaster.GM.ConstructObject(GameMaster.GM.shipPrefab, new Vector3(2500 * Mathf.Cos(spawnCircleAngle * 3.14f / 180), 110, 2500 * Mathf.Sin(spawnCircleAngle * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "Seeker", GameMaster.GM.shipObjectList);
             newShipObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             newShipObject.GetComponent<ShipClass>().SetFractionId(i);
             
             if (i == 0)
             {
                 GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().shipIsDeadEvent += printDeadHandler;
-                GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(600, -110 + 5, -100);
+                //GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(600, -110 + 5, -100);
+                GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(300, -110 + 5, 0);
                 GameMaster.GM.player.GetComponent<PlayerClass>().playerHealth3dText.color = GameMaster.GM.fractionColors[0];                
-                GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, GameMaster.GM.player.transform.TransformPoint(0, 0, 10000), Quaternion.Euler(0, 0, 0), "MachineGun", GameMaster.GM.weaponObjectList);
-                GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, GameMaster.GM.player.transform.TransformPoint(3000, 0, 10000), Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
-                GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, GameMaster.GM.player.transform.TransformPoint(-3000, 0, 10000), Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
-                GameMaster.GM.ConstructObject(GameMaster.GM.bombLauncherPrefab, GameMaster.GM.player.transform.TransformPoint(-6000, 0, 10000), Quaternion.Euler(0, 0, 0), "BombLauncher", GameMaster.GM.weaponObjectList);
+                GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, -6000), Quaternion.Euler(0, 0, 0), "MachineGun", GameMaster.GM.weaponObjectList);
+                GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, -3000), Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
+                GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, 0), Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
+                GameMaster.GM.ConstructObject(GameMaster.GM.bombLauncherPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, 3000), Quaternion.Euler(0, 0, 0), "BombLauncher", GameMaster.GM.weaponObjectList);
                 
             }
             if (i != 0)
             {
                 for (int j = 0; j < 20; j++)
                 {
-                    GameObject newTower = GameMaster.GM.ConstructObject(GameMaster.GM.TowerGunPrefab, new Vector3(newShipObject.transform.position.x - 500 * Mathf.Cos(spawnCircleAngle2 * 3.14f / 180), 0, newShipObject.transform.position.z - 500 * Mathf.Sin(spawnCircleAngle2 * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "GunTower", GameMaster.GM.globalObjectList);
+                    GameObject newTower = GameMaster.GM.ConstructObject(GameMaster.GM.TowerGunPrefab, new Vector3(newShipObject.transform.position.x - 700 * Mathf.Cos(spawnCircleAngle2 * 3.14f / 180), 0, newShipObject.transform.position.z - 700 * Mathf.Sin(spawnCircleAngle2 * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "GunTower", GameMaster.GM.globalObjectList);
                     newTower.GetComponent<TowerClass>().SetFractionId(newShipObject.GetComponent<ShipClass>().fractionId);
                     newTower.GetComponent<TowerClass>().isVulnerable = true;
                     newTower.GetComponent<TowerClass>().health = 5000;
@@ -50,10 +53,8 @@ public class Main : MonoBehaviour
 
             spawnCircleAngle += 360 / GameMaster.GM.mainBaseCount;
         }
-
-
-        Time.timeScale = 1;               
         
+        Time.timeScale = 1; 
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
@@ -68,9 +69,9 @@ public class Main : MonoBehaviour
         }
 
         // Создаем SeekerPrefab под кораблями из GameMaster.GM.ShipObjectList с рандомной позицией
-        // X,Z +- 90 от корабля с использованием кастомной функции ConstructObject и задаем имя Seeker, потом помещаем в общий список GlobalObjectList
+        // X,Z +- 90 от корабля с использованием функции ConstructObject и задаем имя Seeker, потом помещаем в общий список GlobalObjectList
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
-            for (int j = 0; j < 3; j++)
+            for (int j = 0; j < 2; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.seekerPrefab, GameMaster.GM.shipObjectList[i].transform.position - new Vector3(0, GameMaster.GM.shipObjectList[i].transform.position.y, 0) +
                     new Vector3(Random.Range(-300, 300), 0, Random.Range(-300, 300)), Quaternion.Euler(0, 0, 0), "Seeker", GameMaster.GM.globalObjectList);
@@ -124,12 +125,12 @@ public class Main : MonoBehaviour
 
         //}
 
-        for (int i = 0; i < 0; i++) // Создаем оружие RocketLauncherPrefab, RocketLauncherMiniPrefab, MachineGunPrefab в рандомной позиции от 50 до 950 (вся карта)
-        {
-            GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, -1000, 1000, 4, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
-            createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, -1000, 1000, 4, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
-            createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, -1000, 1000, 4, Quaternion.Euler(0, 0, 0), "MachineGun", GameMaster.GM.weaponObjectList);
-        }
+        //for (int i = 0; i < 0; i++) // Создаем оружие RocketLauncherPrefab, RocketLauncherMiniPrefab, MachineGunPrefab в рандомной позиции от 50 до 950 (вся карта)
+        //{
+        //    GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, -1000, 1000, 4, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
+        //    createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, -1000, 1000, 4, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
+        //    createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, -1000, 1000, 4, Quaternion.Euler(0, 0, 0), "MachineGun", GameMaster.GM.weaponObjectList);
+        //}
 
         // Создаем пехоту TrooperPrefab рядом с TrooperBase
         //for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
@@ -185,9 +186,11 @@ public class Main : MonoBehaviour
     }
         
     public void GenerateCubes ()
-    {
+    {        
+        Debug.Log("Troopers:" + GameObject.FindGameObjectsWithTag("Trooper").Length.ToString() + " Cubes: " + GameObject.FindGameObjectsWithTag("Follower").Length.ToString() + " Rockets: " + GameObject.FindGameObjectsWithTag("RocketAmmo").Length.ToString() + " TowerGun: " + GameObject.FindGameObjectsWithTag("TowerGun").Length.ToString() + " TowerRocket: " + GameObject.FindGameObjectsWithTag("Tower").Length.ToString());
         int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
-        GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], -500, 500, Random.Range(10, 10), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+        //GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], new Vector3(Random.Range(0, 200), 10, Random.Range(0, 200)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+        GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], new Vector3(spawnPlatform.transform.position.x + Random.Range(-100, 100), 20, spawnPlatform.transform.position.z + Random.Range(-100, 100)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
 
         if (createdObject.GetComponent<Rigidbody>() == null)
             createdObject.AddComponent<Rigidbody>();
@@ -227,8 +230,6 @@ public class Main : MonoBehaviour
         GameMaster.GM.playerShipHp.color = Color.red;
         GameMaster.GM.playerShipHp.text ="PlayerShip Destroyed";
     }
-    
-    
 }
 
                 

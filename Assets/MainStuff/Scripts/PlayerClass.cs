@@ -203,39 +203,39 @@ public class PlayerClass: FractionIndexClass
         }
         
         // Наведение на цель для оружия
-        if (Physics.BoxCast(GameMaster.GM.player.transform.TransformPoint(0, 0, 0), new Vector3(0, 20, 20), transform.forward, out RaycastHit hitInfo2, Quaternion.Euler(0, 0, 0), 300, 1 << 8))
-        {
-            if (hitInfo2.transform.gameObject != null && hitInfo2.transform.GetComponent<SeekerClass>() != null && hitInfo2.transform.GetComponent<ShipClass>() == null && hitInfo2.transform.GetComponent<SeekerClass>().dead == false)
-            {
-                if (hitInfo2.transform.GetComponent<FractionIndexClass>().fractionId != 0)
-                {
-                    targetLockedIn = true;
-                    targetToLock = hitInfo2.transform.gameObject;
+        //if (Physics.BoxCast(GameMaster.GM.player.transform.TransformPoint(0, 0, 0), new Vector3(0, 20, 20), transform.forward, out RaycastHit hitInfo2, Quaternion.Euler(0, 0, 0), 300, 1 << 8))
+        //{
+        //    if (hitInfo2.transform.gameObject != null && hitInfo2.transform.GetComponent<SeekerClass>() != null && hitInfo2.transform.GetComponent<ShipClass>() == null && hitInfo2.transform.GetComponent<SeekerClass>().dead == false)
+        //    {
+        //        if (hitInfo2.transform.GetComponent<FractionIndexClass>().fractionId != 0)
+        //        {
+        //            targetLockedIn = true;
+        //            targetToLock = hitInfo2.transform.gameObject;
 
-                    if (hitInfo2.transform.name == "LightShip")
-                        targetSpritePrefab.transform.position = hitInfo2.transform.position + new Vector3(0, 0, 0);
-                    else
-                        targetSpritePrefab.transform.position = hitInfo2.transform.position + new Vector3(0, 3, 0);
+        //            if (hitInfo2.transform.name == "LightShip")
+        //                targetSpritePrefab.transform.position = hitInfo2.transform.position + new Vector3(0, 0, 0);
+        //            else
+        //                targetSpritePrefab.transform.position = hitInfo2.transform.position + new Vector3(0, 3, 0);
 
-                    targetSpritePrefab.transform.LookAt(Camera.main.transform.position, -Vector3.up);
+        //            targetSpritePrefab.transform.LookAt(Camera.main.transform.position, -Vector3.up);
                         
-                    if (hitInfo2.transform.GetComponent<FractionIndexClass>().fractionId == 0)
-                        targetSpritePrefab.GetComponent<SpriteRenderer>().color = Color.green;
-                    else
-                        targetSpritePrefab.GetComponent<SpriteRenderer>().color = Color.red;
-                }
-            }
-            else if (hitInfo2.transform.gameObject != null && hitInfo2.transform.GetComponent<SeekerClass>() != null && hitInfo2.transform.GetComponent<SeekerClass>().dead == true)
-            {
-                targetLockedIn = false;
-                targetSpritePrefab.transform.position = new Vector3(0, 1000, 0);
-            }
-        }
-        else
-        {
-            targetLockedIn = false;
-            targetSpritePrefab.transform.position = new Vector3(0, 1000, 0);
-        }
+        //            if (hitInfo2.transform.GetComponent<FractionIndexClass>().fractionId == 0)
+        //                targetSpritePrefab.GetComponent<SpriteRenderer>().color = Color.green;
+        //            else
+        //                targetSpritePrefab.GetComponent<SpriteRenderer>().color = Color.red;
+        //        }
+        //    }
+        //    else if (hitInfo2.transform.gameObject != null && hitInfo2.transform.GetComponent<SeekerClass>() != null && hitInfo2.transform.GetComponent<SeekerClass>().dead == true)
+        //    {
+        //        targetLockedIn = false;
+        //        targetSpritePrefab.transform.position = new Vector3(0, 1000, 0);
+        //    }
+        //}
+        //else
+        //{
+        //    targetLockedIn = false;
+        //    targetSpritePrefab.transform.position = new Vector3(0, 1000, 0);
+        //}
 
         if (spectatorMode == true)
         {
@@ -250,7 +250,7 @@ public class PlayerClass: FractionIndexClass
         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 16,
         //   transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
 
-        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.05f, transform.position.y,
+        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 1f) * 0.02f,
             transform.position.z + Mathf.Sin(timer * 1f) * 0.02f);
 
         gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
@@ -263,17 +263,17 @@ public class PlayerClass: FractionIndexClass
         {
             GameMaster.GM.myCamera.transform.localPosition = new Vector3(camX + Mathf.Sin(timer * fx) * 2f, camY + Mathf.Sin(timer * fy) * 1f,
             camZ + Mathf.Sin(timer * fz) * 2f);
-            lookCube.transform.localPosition = new Vector3(0, 408, 1500);
+            lookCube.transform.localPosition = new Vector3(0, 1000, 3000);
             GameMaster.GM.myCamera.transform.localPosition = Vector3.Lerp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(cameraX, cameraY, cameraZ), 0.1f);
         }
 
-        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 40, 1 << 9);
+        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50, 1 << 9);
 
         foreach (Collider hit in colliders)
             if (hit.tag == "Follower" && dead == false)
             {
                 Vector3 normalizeDirection = (gameObject.transform.position - hit.transform.position).normalized;
-                hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed * 2;
+                hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed;
             }
 
         timer += Time.deltaTime;
@@ -330,7 +330,7 @@ public class PlayerClass: FractionIndexClass
 
         if (Input.GetKey("j"))
         {
-            currentWeapon.GetComponent<Transform>().position = gameObject.transform.position + new Vector3(5, 0, 5);
+            currentWeapon.GetComponent<Transform>().position = gameObject.transform.TransformPoint(0, 0, 6000);
             currentWeapon.GetComponent<WeaponClass>().tag = "WithoutUser";
             currentWeapon.transform.parent = null;
             currentWeapon.objectToStick = null;
@@ -338,7 +338,9 @@ public class PlayerClass: FractionIndexClass
             currentWeapon.GetComponent<WeaponClass>().timer = 0;
             currentWeapon.GetComponent<WeaponClass>().reloadNow = true;
             currentWeapon.GetComponent<WeaponClass>().soundStop = false;
+            currentWeapon.GetComponent<Collider>().enabled = true;
             alreadyHaveWeapon = false;
+
         }
 
         if (Input.GetKey("g"))

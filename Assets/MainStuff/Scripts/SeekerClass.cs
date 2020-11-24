@@ -32,8 +32,8 @@ public class SeekerClass : FractionIndexClass
         minDistNum = 0;
         countOfItemsCollected = 0;
         alreadyHaveWeapon = false;
-        health = 20000;
-        maxHP = 20000;
+        health = 100000;
+        maxHP = 100000;
         dead = false;
         foundObject = false;
         isVulnerable = true;
@@ -62,10 +62,10 @@ public class SeekerClass : FractionIndexClass
                 if (whoIsDamaging != null && whoIsDamaging.GetComponent<FractionIndexClass>().fractionId != GetComponent<FractionIndexClass>().fractionId)
                     health -= damage;
 
-                textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
+                //textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
 
                 if (healthBar != null)
-                    healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
+                    healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.02f, 1);
             }
             // Обездвижили
             else
@@ -96,10 +96,10 @@ public class SeekerClass : FractionIndexClass
         health += healpoints;
         healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
 
-        if (textHP != null)
-        {
-            textHP.gameObject.GetComponent<TextMesh>().text = GetComponent<SeekerClass>().health.ToString();
-        }
+        //if (textHP != null)
+        //{
+        //    textHP.gameObject.GetComponent<TextMesh>().text = GetComponent<SeekerClass>().health.ToString();
+        //}
     }
 
     public void SetHealth(float inputHealth)
@@ -168,18 +168,21 @@ public class SeekerClass : FractionIndexClass
                     
                    
                     Quaternion lookOnLook = Quaternion.LookRotation(new Vector3(currentTarget.x, transform.position.y, currentTarget.z) - transform.position);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 3f);
                     Vector3 normalizeDirection = (objectList[minDistNum].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
-                    gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 50;
+                    gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 70;
                 }
             }
 
             if (goingToBase == true && platformList[fractionId].gameObject != null)
             {
                 currentTarget = new Vector3(platformList[fractionId].transform.position.x, transform.position.y, platformList[fractionId].transform.position.z);
-                transform.LookAt(currentTarget);
+                //transform.LookAt(currentTarget);
+
+                Quaternion lookOnLook = Quaternion.LookRotation(new Vector3(currentTarget.x, transform.position.y, currentTarget.z) - transform.position);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 3f);
                 Vector3 normalizeDirection = (platformList[fractionId].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
-                gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 50;
+                gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 70;
             }
 
             if (countOfItemsCollected >= 8)
@@ -187,13 +190,13 @@ public class SeekerClass : FractionIndexClass
             else if (countOfItemsCollected == 0)
                 goingToBase = false;
 
-            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 25, 1 << 9);
+            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50, 1 << 9);
 
             foreach (Collider hit in colliders)
                 if (gameObject.tag == "Seeker" && hit.tag == "Follower" && dead == false)
                 {
                     Vector3 normalizeDirection = (gameObject.transform.position - hit.transform.position).normalized;
-                    hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed*2;
+                    hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed;
                 }
 
             if (findNextObject == false && foundObject == false)
@@ -208,7 +211,13 @@ public class SeekerClass : FractionIndexClass
         yield return new WaitForSeconds(0f);
         if (whoIsDamaging != null)
             if (whoIsDamaging.GetComponent<FractionIndexClass>().level < 5)
+            {
                 whoIsDamaging.GetComponent<FractionIndexClass>().level += 1;
+
+                if (whoIsDamaging.GetComponent<SeekerClass>() != null)
+                    whoIsDamaging.GetComponent<SeekerClass>().textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
+            }
+                
 
         if (whoIsDamaging != null && (whoIsDamaging.tag == "Trooper" || whoIsDamaging.tag == "Seeker"))
         {
@@ -226,7 +235,7 @@ public class SeekerClass : FractionIndexClass
 
         Destroy(Explode, 2f);
 
-        if (lootAfterDeath == true)
+        if (lootAfterDeath == true && whoIsDamaging.gameObject!= null && whoIsDamaging.GetComponent<PlayerClass>() != null)
         {
             int rndLootCount = Random.Range(1, 3 * (int) gameObject.GetComponent<FractionIndexClass>().level);
 
@@ -251,7 +260,7 @@ public class SeekerClass : FractionIndexClass
                 //createdObject.GetComponent<Follower>().ownerToFollow = gameObject;
                 //createdObject.GetComponent<Follower>().followOwner = true;
                 createdObject.GetComponent<Follower>().moveToNextOwner = true;
-                //Destroy(createdObject, 10);
+                //Destroy(createdObject, 15 + i);
             }
         }
 

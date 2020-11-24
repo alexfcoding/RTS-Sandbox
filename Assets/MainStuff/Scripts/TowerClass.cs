@@ -8,6 +8,9 @@ public class TowerClass : SeekerClass
     //public float setHealth;
 
     // Start is called before the first frame update
+    public float healthBarTopPosition;
+    public float levelTopPosition;
+
     public override void Awake()
     {
         level = 1;
@@ -22,14 +25,14 @@ public class TowerClass : SeekerClass
         foundObject = false;
         //isVulnerable = true;
 
-        textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, 18, 0), Quaternion.Euler(0, 0, 0));
+        textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, levelTopPosition, 0), Quaternion.Euler(0, 0, 0));
         textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
         textHP.transform.parent = transform;
 
-        //healthBarScaleMultiplier = 0.5f;
-        //healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 50, 0), Quaternion.Euler(0, 0, 0));
-        //healthBar.transform.SetParent(gameObject.transform);
-        //healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
+        healthBarScaleMultiplier = 0.3f;
+        healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, healthBarTopPosition, 0), Quaternion.Euler(0, 0, 0));
+        healthBar.transform.SetParent(gameObject.transform);
+        healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.02f, 1);
     }
 
     public void Start()

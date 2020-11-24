@@ -24,12 +24,12 @@ public class FractionIndexClass : MonoBehaviour
     public virtual void Awake()
     {
         level = 1;
-        health = 1;
-        maxHP = 1;
+        health = 5000;
+        maxHP = 5000;
         healthBarScaleMultiplier = 0;
         healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
         healthBar.transform.SetParent(gameObject.transform);
-        healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
+        healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.02f, 1);
     }    
 
     public void SetFractionId(int fractionId)

@@ -16,7 +16,7 @@ public class ShipClass : SeekerClass
 
     public override void Awake()
     {
-        money = 30000;
+        money = 60000;
         health = 200000;
         maxHP = 200000;
         gameObject.tag = "Ship";
@@ -66,7 +66,7 @@ public class ShipClass : SeekerClass
 
         if (fractionId != 0)
         {
-            if (fractionBarracsList.Count > 0 && CountFractionWarriors(fractionId) <= fractionBarracsList.Count * 20 && money > 600)
+            if (fractionBarracsList.Count > 0 && CountFractionWarriors(fractionId) <= fractionBarracsList.Count * 30 && money > 600)
             {
                 //SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
                 //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
@@ -78,7 +78,7 @@ public class ShipClass : SeekerClass
                     spendMoney(300, startCreatingLightShip);
             }
 
-            if (fractionBarracsList.Count < 4 && money > 3000)
+            if (fractionBarracsList.Count < 3 && money > 3000)
             {
                 //SpendMoneyMethod SpendOnBarracsDelegate = startBarracsConstruction;
                 //SpendMoneyMethod SpendOnFactoryDelegate = startFactoryConstruction;
@@ -142,13 +142,13 @@ public class ShipClass : SeekerClass
             if (fractionId != 0)
             {
                 newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.shipObjectList[fractionId].transform.position
-                 + new Vector3(Random.Range(-250, 250), -GameMaster.GM.shipObjectList[fractionId].transform.position.y, Random.Range(-250, 250)),
+                 + new Vector3(Random.Range(-500, 500), -GameMaster.GM.shipObjectList[fractionId].transform.position.y, Random.Range(-500, 500)),
                   Quaternion.Euler(0, 0, 0), buildingName, GameMaster.GM.trooperBaseList);
             }
 
             if (fractionId == 0)
                 newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 25000),
-                    Quaternion.Euler(0, 0, 0), "Barracs", GameMaster.GM.trooperBaseList);
+                    Quaternion.Euler(0, 0, 0), buildingName, GameMaster.GM.trooperBaseList);
                 //newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 50000),
                 //Quaternion.Euler(0, 0, 0), "Barracs", GameMaster.GM.trooperBaseList);
 
@@ -190,7 +190,7 @@ public class ShipClass : SeekerClass
                         createdObject.GetComponent<SeekerClass>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.fractionId];
 
                         if (createdObject.GetComponent<FractionIndexClass>().fractionId != 0)
-                            AttackPlayerWithProbability(30, createdObject);
+                            AttackPlayerWithProbability(15, createdObject);
 
                         if (createdObject.GetComponent<TrooperClass>() != null)
                             createdObject.GetComponent<TrooperClass>().targetToChaseByPlayerCommand = createdObject.GetComponent<TrooperClass>().targetToChase;

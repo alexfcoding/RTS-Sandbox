@@ -16,14 +16,16 @@ public class Follower : FractionIndexClass
     public AudioSource audioPickEnemyCube;
     public AudioSource audioPickCubeToMe;
     public AudioSource audioPickShipCube;
+    int rndDestroyTime;
 
     public override void Awake()
     {
+        rndDestroyTime = Random.Range(0, 20);
         health = 50;
         maxHP = 50;
         gameObject.tag = "Follower";
         jumpPower = 25;
-        speed = 34;
+        speed = 50;
         followOwner = false;
         fractionId = 10;
         followOwnerCharger = false;
@@ -35,7 +37,7 @@ public class Follower : FractionIndexClass
     public void FixedUpdate()
     {
         MoveTo();
-        InvokeRepeating("CheckForDestroy", 20f, 1f);
+        InvokeRepeating("CheckForDestroy", 10f + rndDestroyTime, 1f);
     }
 
     public virtual void MoveTo()
@@ -68,8 +70,18 @@ public class Follower : FractionIndexClass
                     if (ownerToFollow.GetComponent<SeekerClass>().totallyDead == true) // ... и он мертв ...
                     {
                             gameObject.GetComponent<Renderer>().material.color = Color.white; // ... то изменить цвет куба на белый
-                    
-                            if (ownerToFollow.GetComponent<SeekerClass>().whoIsDamaging!=null)
+
+                            if (gameObject.GetComponentsInChildren<Light>() != null)
+                            {
+                                int lightsCount = gameObject.GetComponentsInChildren<Light>().Length;
+
+                                for (int i = 0; i < lightsCount; i++)
+                                {
+                                    gameObject.GetComponentsInChildren<Light>()[i].color = Color.white;
+                                }
+                            }
+
+                        if (ownerToFollow.GetComponent<SeekerClass>().whoIsDamaging!=null)
                             {
                                 ownerToFollow = ownerToFollow.GetComponent<SeekerClass>().whoIsDamaging;
                                 fractionId = 10; // Установить идентификатор FractionId
@@ -125,7 +137,7 @@ public class Follower : FractionIndexClass
 
     public void MoveAfterOwnerDeath ()
     {
-        speed = 34;
+        speed = 60;
 
         gameObject.GetComponent<Rigidbody>().mass = 5;
         gameObject.GetComponent<Rigidbody>().angularDrag = 1;
@@ -162,12 +174,12 @@ public class Follower : FractionIndexClass
 
     public virtual void OnCollisionEnter(Collision collisioninfo)
     {
-        //if (collisioninfo.gameObject.tag == "Terrain" && jumping == true)
-        //{
-        //    gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(0, Random.Range(4, jumpPower * 6), 0, ForceMode.Impulse);
-        //    gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(Random.Range(-jumpPower, jumpPower), 0, 0, ForceMode.Impulse);
-        //    gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(0, 0, Random.Range(-jumpPower, jumpPower), ForceMode.Impulse);
-        //}
+        if (collisioninfo.gameObject.tag == "Terrain" && jumping == true)
+        {
+            gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(0, Random.Range(4, jumpPower * 6), 0, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(Random.Range(-jumpPower, jumpPower), 0, 0, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().GetComponent<Rigidbody>().AddForce(0, 0, Random.Range(-jumpPower, jumpPower), ForceMode.Impulse);
+        }
 
         if (collisioninfo.gameObject.tag == "Seeker") // Если куб столкнулся с Seeker или Player ...
         { 
@@ -189,9 +201,21 @@ public class Follower : FractionIndexClass
                 ownerToFollow = collisioninfo.collider.gameObject; // Присвоить кубу владельца OwnerToFollow (Seeker или Player)
 
                 gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
+
+                if (gameObject.GetComponentsInChildren<Light>() != null)
+                {
+                    int lightsCount = gameObject.GetComponentsInChildren<Light>().Length;
+
+                    for (int i = 0; i < lightsCount; i++)
+                    {
+                        gameObject.GetComponentsInChildren<Light>()[i].color = GameMaster.GM.fractionColors[this.fractionId];
+                    }
+                }
+
                 gameObject.GetComponent<Follower>().followOwner = true; // Двигаться к владельцу = true
                 gameObject.GetComponent<Follower>().followOwnerCharger = false; // Двигаться к площадке = false
                 gameObject.tag = "OwnedFollower"; // Изменить тег куба на OwnedFollower (имеет владельца)
+                //gameObject.GetComponent<Rigidbody>().useGravity = false;
 
                 ContactPoint contact = collisioninfo.contacts[0];
                 Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
@@ -228,9 +252,21 @@ public class Follower : FractionIndexClass
             ownerToFollow = collisioninfo.collider.gameObject;
 
             gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
+
+            if (gameObject.GetComponentsInChildren<Light>() != null)
+            {
+                int lightsCount = gameObject.GetComponentsInChildren<Light>().Length;
+
+                for (int i = 0; i < lightsCount; i++)
+                {
+                    gameObject.GetComponentsInChildren<Light>()[i].color = GameMaster.GM.fractionColors[this.fractionId];
+                }
+            }
+
             gameObject.GetComponent<Follower>().followOwner = true; // Двигаться к владельцу = true
             gameObject.GetComponent<Follower>().followOwnerCharger = false; // Двигаться к площадке = false
             gameObject.tag = "OwnedFollower"; // Изменить тег куба на OwnedFollower (имеет владельца)
+            //gameObject.GetComponent<Rigidbody>().useGravity = false;
 
             ContactPoint contact = collisioninfo.contacts[0];
             Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
@@ -247,13 +283,24 @@ public class Follower : FractionIndexClass
                 if (ownerToFollow.GetComponent<SeekerClass>() != null) // Если владелец куба - Seeker ...
                 {
                     ownerToFollow.GetComponent<SeekerClass>().countOfItemsCollected--; // ... то вычесть счетчик--
-                    ownerToFollow.GetComponent<SeekerClass>().Heal(10);
+                    //ownerToFollow.GetComponent<SeekerClass>().Heal(10);
                 }
             }
             
             gameObject.transform.position = new Vector3(Random.Range(-700, 700), 200, Random.Range(-700, 700));
             fractionId = 10;
             gameObject.GetComponent<Renderer>().material.color = Color.white;
+
+            if (gameObject.GetComponentsInChildren<Light>() != null)
+            {
+                int lightsCount = gameObject.GetComponentsInChildren<Light>().Length;
+
+                for (int i = 0; i < lightsCount; i++)
+                {
+                    gameObject.GetComponentsInChildren<Light>()[i].color = Color.white;
+                }
+            }
+
             gameObject.GetComponent<Follower>().followOwner = false;
             gameObject.GetComponent<Follower>().followOwnerCharger = false;
             gameObject.transform.localScale += new Vector3(0f, 0f, 0f);
@@ -273,5 +320,4 @@ public class Follower : FractionIndexClass
         if (collisioninfo.gameObject.tag == "Ship" && gameObject.tag == "Follower")
             gameObject.transform.position = new Vector3(Random.Range(-900, 900), 50, Random.Range(-900, 900));
     }
-
 }

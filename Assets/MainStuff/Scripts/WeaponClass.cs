@@ -59,7 +59,7 @@ public class WeaponClass : MonoBehaviour
         {
             transform.Rotate(0, -5, 0);
         }
-
+        WeaponAction();
         //if (currentSeeker != null && currentSeeker.tag == "Tower")
         //{
 
@@ -74,27 +74,27 @@ public class WeaponClass : MonoBehaviour
 
     public void Update()
     {
-        WeaponAction();
+        
 
-        if (gameObject.tag == "PlayerWeapon")
-        {
-            GameObject LockedTarget = GameMaster.GM.player.GetComponent<PlayerClass>().targetToLock;
+        //if (gameObject.tag == "PlayerWeapon")
+        //{
+        //    GameObject LockedTarget = GameMaster.GM.player.GetComponent<PlayerClass>().targetToLock;
 
-            if (GameMaster.GM.player.GetComponent<PlayerClass>().targetLockedIn == true)
-            {
-                if (LockedTarget.gameObject != null && LockedTarget.GetComponent<SeekerClass>() != null)
-                {
-                    if (LockedTarget.gameObject.name == "Trooper")
-                        gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 4, 0));
-                    if (LockedTarget.gameObject.name == "Seeker")
-                        gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 2, 0));
-                    if (LockedTarget.gameObject.name == "LightShip")
-                        gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 0, 0));
-                }
-            }
-            else
-                gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
-        }
+        //    if (GameMaster.GM.player.GetComponent<PlayerClass>().targetLockedIn == true)
+        //    {
+        //        if (LockedTarget.gameObject != null && LockedTarget.GetComponent<SeekerClass>() != null)
+        //        {
+        //            if (LockedTarget.gameObject.name == "Trooper")
+        //                gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 4, 0));
+        //            if (LockedTarget.gameObject.name == "Seeker")
+        //                gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 2, 0));
+        //            if (LockedTarget.gameObject.name == "LightShip")
+        //                gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 0, 0));
+        //        }
+        //    }
+        //    else
+        //        gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
+        //}
 
     }
 
@@ -164,7 +164,7 @@ public class WeaponClass : MonoBehaviour
                         GameMaster.GM.shakeCamera = true;
                         reloadNow = true;
                         GameObject CreatedObject = GameMaster.GM.ConstructObject(PlayerClass.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
-                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0, 0, 4), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
+                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0 + (float) Random.Range(-3,3) / 6, 0 + (float) Random.Range(-3, 3) / 6, 2), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
                         "Rocket", GameMaster.GM.bulletObjectList, true);
                         CreatedObject.GetComponent<RocketShellClass>().playersBullet = true;
                         CreatedObject.GetComponent<RocketShellClass>().LaunchSound();
@@ -210,7 +210,7 @@ public class WeaponClass : MonoBehaviour
                             if (hit.transform.GetComponent<FractionIndexClass>() != null)
                             {
                                 hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
-                                ownerLevel = currentPlayer.transform.GetComponent<FractionIndexClass>().level;
+                                //ownerLevel = currentPlayer.transform.GetComponent<FractionIndexClass>().level;
                                 // hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
                                 hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
                             }
@@ -257,7 +257,7 @@ public class WeaponClass : MonoBehaviour
 
                 if (targetInSphere.tag == "TowerGun")
                 {
-                    transform.LookAt(targetInSphere.transform.position + new Vector3(0, 0, 0));
+                    transform.LookAt(targetInSphere.transform.position + new Vector3(0, 2, 0));
                 }
 
                 if (soundStop == false)
@@ -331,7 +331,7 @@ public class WeaponClass : MonoBehaviour
 
                     RaycastHit hit2;
 
-                    if (Physics.Raycast(transform.position, transform.forward, out hit2, 200, 1 << 8))
+                    if (Physics.Raycast(transform.position, transform.forward, out hit2, range, 1 << 8))
                     {
                         if (hit2.transform.GetComponent<ParticleSystem>() != null)
                            hit2.transform.GetComponent<ParticleSystem>().Play();
@@ -346,7 +346,7 @@ public class WeaponClass : MonoBehaviour
                             if (targetInSphere.transform.GetComponent<FractionIndexClass>() != null && objectToStick != null && targetInSphere.transform.GetComponent<FractionIndexClass>().dead == false)
                             {
                                 targetInSphere.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
-                                ownerLevel = currentSeeker.transform.GetComponent<FractionIndexClass>().level;
+                                //ownerLevel = currentSeeker.transform.GetComponent<FractionIndexClass>().level;
                                 //targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
                                 targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
                             }
@@ -370,7 +370,7 @@ public class WeaponClass : MonoBehaviour
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-        if (( collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<PlayerClass>() != null) && (collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon == false))
+        if ((collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<PlayerClass>() != null) && (collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon == false))
         {
             
             collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;
@@ -386,7 +386,7 @@ public class WeaponClass : MonoBehaviour
             gameObject.transform.eulerAngles = collision.gameObject.transform.eulerAngles;
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;
-            ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
+            //ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
         }
 
         if ((collision.gameObject.tag == "Seeker" || collision.gameObject.tag == "Trooper") && (collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon == false))
@@ -417,10 +417,10 @@ public class WeaponClass : MonoBehaviour
 
             if (collision.gameObject.name == "LightShip")
             {
-                transform.localPosition = new Vector3(0.4f, 5f, 7f); ;
+                transform.localPosition = new Vector3(0f, 0f, 10f); ;
             }
 
-            ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
+            //ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
         }
 
         if ((collision.gameObject.tag == "EnemyShip") && (collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon == false))

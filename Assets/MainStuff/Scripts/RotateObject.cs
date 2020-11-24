@@ -27,10 +27,11 @@ public class RotateObject : MonoBehaviour
         //if (gameObject.name == "art_5")
         //    transform.Rotate(0, 0.2f, 0);
         //else
-        //    transform.Rotate(x, y, z);
-        time = Time.deltaTime;
-        Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * time);
-        RD.MoveRotation(RD.rotation * deltaRotation);
+        //transform.Rotate(0, 20 * Time.deltaTime, 0);
+        //time = Time.deltaTime;
+        //Quaternion deltaRotation = Quaternion.Euler(m_EulerAngleVelocity * time);
+        //RD.MoveRotation(RD.rotation * deltaRotation);
 
+        transform.RotateAround(new Vector3(0, 0, 0), Vector3.up, 10 * Time.deltaTime);
     }
 }

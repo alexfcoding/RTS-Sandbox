@@ -68,6 +68,11 @@ public class GameMaster : MonoBehaviour
     /// Main camera
     /// </summary>
     public GameObject myCamera;
+    
+    /// <summary>
+    /// Spawn platform
+    /// </summary>
+    public GameObject spawnPlatform;
 
     /// <summary>
     /// Seeker prefab
@@ -234,7 +239,7 @@ public class GameMaster : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-        mainBaseCount = 4;
+        mainBaseCount = Settings.SET.mainBaseCount;
     }
 
     public void SetFractionColors ()
@@ -276,8 +281,7 @@ public class GameMaster : MonoBehaviour
         numCubes++;
         return CreatedObject;
     }
-
-
+    
     /// <summary>
     /// ConstructObject method overload for fixed Vector3 SpawnPosition.
     /// </summary>
@@ -290,6 +294,19 @@ public class GameMaster : MonoBehaviour
 
         if (CreatedObject.GetComponent<MeshRenderer>() != null)
             CreatedObject.GetComponent<MeshRenderer>().enabled = renderMesh;
+
+        Component[] renderer;
+
+        if(CreatedObject.GetComponentsInChildren<Renderer>() != null)
+        {
+            renderer = CreatedObject.GetComponentsInChildren<Renderer>();
+            
+            for (int i = 0; i < renderer.Length; i++)
+            {
+                if (renderer[i].gameObject.name == "Laser_Gun")
+                    renderer[i].GetComponent<Renderer>().enabled = renderMesh;
+            }
+        }
 
         return CreatedObject;        
     }
@@ -343,7 +360,7 @@ public class GameMaster : MonoBehaviour
          GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList, false);
 
         if (rnd <= 30)
-            GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList, false);
+            GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, objectPosition, Quaternion.Euler(0, 0, 0), "MachineGun", GameMaster.GM.weaponObjectList, false);
     }
     
     public void FixedUpdate()
