@@ -16,7 +16,7 @@ public class ShipClass : SeekerClass
 
     public override void Awake()
     {
-        money = 60000;
+        money = 60000 * GameMaster.GM.startMoney / 100;
         health = 200000;
         maxHP = 200000;
         gameObject.tag = "Ship";

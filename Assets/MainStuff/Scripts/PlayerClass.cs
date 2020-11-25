@@ -632,7 +632,7 @@ public class PlayerClass: FractionIndexClass
                 gameObject.GetComponent<AudioSource>().Play();
             }
 
-            RB.AddRelativeForce(Vector3.forward * 1.5f, ForceMode.VelocityChange);
+            RB.AddRelativeForce(Vector3.forward * 2f, ForceMode.VelocityChange);
             fire.Play();
             fire2.Play();
         }

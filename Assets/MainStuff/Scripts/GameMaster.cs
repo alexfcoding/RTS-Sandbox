@@ -21,6 +21,7 @@ public class GameMaster : MonoBehaviour
     /// Count of base ships (including player's)
     /// </summary>
     public int mainBaseCount;
+    public int startMoney;
 
     public List<Color> fractionColors;
 
@@ -239,7 +240,16 @@ public class GameMaster : MonoBehaviour
 
         DontDestroyOnLoad(this);
 
-        mainBaseCount = Settings.SET.mainBaseCount;
+        if (Settings.SET != null)
+        {
+            mainBaseCount = Settings.SET.mainBaseCount;
+            startMoney = Settings.SET.startMoney;
+        }          
+        else
+        {
+            mainBaseCount = 5;
+            startMoney = 50;
+        }            
     }
 
     public void SetFractionColors ()
@@ -259,6 +269,10 @@ public class GameMaster : MonoBehaviour
         }
 
         fractionColors[0] = new Color(0, 1, 1, 1f);
+        fractionColors[1] = new Color(0, 1, 0.2f, 1f);
+        fractionColors[2] = new Color(1, 1, 0, 1f);
+        fractionColors[3] = new Color(1, 0, 0, 1f);
+        fractionColors[4] = new Color(1, 0, 1, 1f);
     }
 
     /// <summary>

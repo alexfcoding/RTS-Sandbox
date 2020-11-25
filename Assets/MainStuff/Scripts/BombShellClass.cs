@@ -12,16 +12,13 @@ public class BombShellClass : RocketShellClass
 
         if (gameObject.GetComponent<Rigidbody>() != null)
         {
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, 1000, ForceMode.Impulse);
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 600, 0, ForceMode.Impulse);
-        }
-            
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(Random.Range(0, 200), Random.Range(0, 200), 1500, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, 0, ForceMode.Impulse);            
+        }            
     }
     public override void MoveBullet()
     {
         Timer += Time.deltaTime;
-
-
 
         if (playersBullet == true && isHoming == true)
             if (Physics.BoxCast(GameMaster.GM.player.transform.TransformPoint(0, 0, 0), new Vector3(20, 20, 2), transform.forward, out RaycastHit hitInfo2, Quaternion.Euler(0, 0, 0), 400, 1 << 8))
@@ -36,8 +33,7 @@ public class BombShellClass : RocketShellClass
         if (Timer > 3 && exploded == false)
         {
             explode();
-        }
-            
+        }            
     }
 
     public override void OnCollisionEnter(Collision collision)

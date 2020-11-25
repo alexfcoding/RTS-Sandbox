@@ -10,9 +10,9 @@ public class MoveMenuShips : MonoBehaviour
 
     void Start()
     {
-        timerX = Random.Range(0,10);
-        timerY = Random.Range(0, 10);
-        timerZ = Random.Range(0, 10);
+        timerX = Random.Range(0, 100);
+        timerY = Random.Range(0, 100);
+        timerZ = Random.Range(0, 100);
     }
       
     void FixedUpdate()

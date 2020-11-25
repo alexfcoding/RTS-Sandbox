@@ -164,7 +164,7 @@ public class WeaponClass : MonoBehaviour
                         GameMaster.GM.shakeCamera = true;
                         reloadNow = true;
                         GameObject CreatedObject = GameMaster.GM.ConstructObject(PlayerClass.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
-                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0 + (float) Random.Range(-3,3) / 6, 0 + (float) Random.Range(-3, 3) / 6, 2), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
+                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0 + (float) Random.Range(-3,3) / 6, 0 + (float) Random.Range(-3, 3) / 6, 4), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
                         "Rocket", GameMaster.GM.bulletObjectList, true);
                         CreatedObject.GetComponent<RocketShellClass>().playersBullet = true;
                         CreatedObject.GetComponent<RocketShellClass>().LaunchSound();
@@ -176,11 +176,13 @@ public class WeaponClass : MonoBehaviour
                         GameMaster.GM.shakeCamera = true;
                         reloadNow = true;
                         GameObject CreatedObject = GameMaster.GM.ConstructObject(PlayerClass.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
-                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0, 0, 4), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
+                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0, 0, 1), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
                         "Bomb", GameMaster.GM.bulletObjectList);
                         CreatedObject.GetComponent<RocketShellClass>().playersBullet = true;
+                        gameObject.GetComponent<AudioSource>().Play();
                         CreatedObject.GetComponent<RocketShellClass>().LaunchSound();
                         CreatedObject.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                        GameMaster.GM.player.gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, -500, -800, ForceMode.Impulse);                        
                     }
                 }
 
@@ -371,8 +373,7 @@ public class WeaponClass : MonoBehaviour
     public virtual void OnCollisionEnter(Collision collision)
     {
         if ((collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<PlayerClass>() != null) && (collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon == false))
-        {
-            
+        {            
             collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;
             collision.gameObject.GetComponent<PlayerClass>().currentWeapon = gameObject.GetComponent<WeaponClass>();
             gameObject.GetComponent<WeaponClass>().currentPlayer = collision.gameObject.GetComponent<PlayerClass>();
@@ -384,6 +385,12 @@ public class WeaponClass : MonoBehaviour
             gameObject.transform.SetParent(collision.transform);
             gameObject.transform.localPosition = weaponPositionOffset;
             gameObject.transform.eulerAngles = collision.gameObject.transform.eulerAngles;
+
+            if (gameObject.name == "BombLauncher")
+            {
+                gameObject.transform.localEulerAngles = new Vector3(-15, -5, 0);
+            }            
+
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;
             //ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;

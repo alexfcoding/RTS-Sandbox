@@ -13,7 +13,8 @@ public class Settings : MonoBehaviour
     /// Count of base ships (including player)
     /// </summary>
     public int mainBaseCount;
-       
+    public int startMoney;
+
     void Awake()
     {
         if (SET != null)
