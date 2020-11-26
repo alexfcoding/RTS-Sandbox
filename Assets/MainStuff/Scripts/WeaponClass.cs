@@ -59,6 +59,7 @@ public class WeaponClass : MonoBehaviour
         {
             transform.Rotate(0, -5, 0);
         }
+
         WeaponAction();
         //if (currentSeeker != null && currentSeeker.tag == "Tower")
         //{
@@ -68,14 +69,12 @@ public class WeaponClass : MonoBehaviour
         //        gameObject.transform.localEulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         //        transform.Rotate(0, -1, 0);
         //    }
-                
+
         //}
     }
 
     public void Update()
     {
-        
-
         //if (gameObject.tag == "PlayerWeapon")
         //{
         //    GameObject LockedTarget = GameMaster.GM.player.GetComponent<PlayerClass>().targetToLock;
@@ -159,7 +158,7 @@ public class WeaponClass : MonoBehaviour
             {
                 if (reloadNow == false)
                 {
-                    if (isRocket == true)
+                    if (isRocket == true && gameObject == GameMaster.GM.player.GetComponent<PlayerClass>().currentWeapon.gameObject)
                     {
                         GameMaster.GM.shakeCamera = true;
                         reloadNow = true;
@@ -171,7 +170,7 @@ public class WeaponClass : MonoBehaviour
                         CreatedObject.GetComponent<RocketShellClass>().weaponToStick = gameObject;
                     }
 
-                    if (isBombLauncher == true)
+                    if (isBombLauncher == true && gameObject == GameMaster.GM.player.GetComponent<PlayerClass>().currentWeapon.gameObject)
                     {
                         GameMaster.GM.shakeCamera = true;
                         reloadNow = true;
@@ -185,10 +184,9 @@ public class WeaponClass : MonoBehaviour
                         GameMaster.GM.player.gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, -500, -800, ForceMode.Impulse);                        
                     }
                 }
-
-
             }
-            if (Input.GetMouseButton(0) && isProjectile == false && Cursor.visible == false && objectToStick.GetComponent<PlayerClass>().tacticMode == false) // Если нажали мышь и оружие не стреляет объектами, а пулями 
+
+            if (Input.GetMouseButton(0) && isProjectile == false && Cursor.visible == false && objectToStick.GetComponent<PlayerClass>().tacticMode == false && gameObject == GameMaster.GM.player.GetComponent<PlayerClass>().currentWeapon.gameObject) // Если нажали мышь и оружие не стреляет объектами, а пулями 
             {
                 GameMaster.GM.myCamera.transform.localPosition = new Vector3(Random.Range(-30, 30), Random.Range(camY - 30, camY + 30), Random.Range(camZ - 30, camZ + 30));
 
@@ -220,7 +218,12 @@ public class WeaponClass : MonoBehaviour
                             if (hit.transform.GetComponent<RocketShellClass>() != null)
                             {
                                 //hit.transform.GetComponent<RocketShellClass>().damagedByBullet = true;
-                                hit.transform.GetComponent<RocketShellClass>().DestroyRocket();
+                                hit.transform.GetComponent<RocketShellClass>().Explode();
+                            }
+
+                            if (hit.transform.GetComponent<BombShellClass>() != null)
+                            {                               
+                                hit.transform.GetComponent<BombShellClass>().Explode();
                             }
                         }
                 }
@@ -373,9 +376,44 @@ public class WeaponClass : MonoBehaviour
     public virtual void OnCollisionEnter(Collision collision)
     {
         if ((collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<PlayerClass>() != null) && (collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon == false))
-        {            
-            collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;
+        {
+            //collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;
+            collision.gameObject.GetComponent<PlayerClass>().playerWeaponList.Add(this);
             collision.gameObject.GetComponent<PlayerClass>().currentWeapon = gameObject.GetComponent<WeaponClass>();
+
+            Component[] renderer;
+
+            for (int i = 0; i < collision.gameObject.GetComponent<PlayerClass>().playerWeaponList.Count; i++)
+            {
+                if (collision.gameObject.GetComponent<PlayerClass>().playerWeaponList[i].GetComponent<MeshRenderer>() != null)
+                    collision.gameObject.GetComponent<PlayerClass>().playerWeaponList[i].GetComponent<MeshRenderer>().enabled = false;
+
+                if (collision.gameObject.GetComponent<PlayerClass>().playerWeaponList[i].GetComponentsInChildren<Renderer>() != null)
+                {
+                    renderer = collision.gameObject.GetComponent<PlayerClass>().playerWeaponList[i].GetComponentsInChildren<Renderer>();
+
+                    for (int j = 0; j < renderer.Length; j++)
+                    {
+                        if (renderer[j].gameObject.name == "Laser_Gun")
+                            renderer[j].GetComponent<Renderer>().enabled = false;
+                    }
+                }
+            }
+                   
+            if (collision.gameObject.GetComponent<PlayerClass>().currentWeapon.GetComponent<MeshRenderer>() != null)
+                collision.gameObject.GetComponent<PlayerClass>().currentWeapon.GetComponent<MeshRenderer>().enabled = true;
+
+            if (collision.gameObject.GetComponent<PlayerClass>().currentWeapon.GetComponentsInChildren<Renderer>() != null)
+            {
+                renderer = collision.gameObject.GetComponent<PlayerClass>().currentWeapon.GetComponentsInChildren<Renderer>();
+
+                for (int j = 0; j < renderer.Length; j++)
+                {
+                    if (renderer[j].gameObject.name == "Laser_Gun")
+                        renderer[j].GetComponent<Renderer>().enabled = true;
+                }
+            }
+
             gameObject.GetComponent<WeaponClass>().currentPlayer = collision.gameObject.GetComponent<PlayerClass>();
 
             if (gameObject.GetComponent<WeaponClass>().rocketLauncherAmmoPrefab != null)

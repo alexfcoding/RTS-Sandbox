@@ -12,7 +12,7 @@ public class BombShellClass : RocketShellClass
 
         if (gameObject.GetComponent<Rigidbody>() != null)
         {
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(Random.Range(0, 200), Random.Range(0, 200), 1500, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(Random.Range(0, 200), Random.Range(0, 10), 1500, ForceMode.Impulse);
             gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, 0, ForceMode.Impulse);            
         }            
     }
@@ -32,7 +32,7 @@ public class BombShellClass : RocketShellClass
 
         if (Timer > 3 && exploded == false)
         {
-            explode();
+            Explode();
         }            
     }
 
@@ -41,11 +41,11 @@ public class BombShellClass : RocketShellClass
         if (collision.gameObject != null && (collision.gameObject.name != "Bomb" && collision.gameObject.name != "Terrain" && collision.gameObject.GetComponent<FractionIndexClass>() !=null && weaponToStick != null && collision.gameObject.GetComponent<FractionIndexClass>() != weaponToStick.GetComponent<WeaponClass>().objectToStick.GetComponent<FractionIndexClass>()))
             if (playersBullet == false && collision.gameObject.tag == "Player" || playersBullet == true && collision.gameObject.tag != "Player" || playersBullet == false && collision.gameObject.tag != "Player")
             {
-                explode();
+                Explode();
             }
     }
 
-    public void explode ()
+    public override void Explode()
     {
         audio2.Play();
 
@@ -66,7 +66,7 @@ public class BombShellClass : RocketShellClass
         foreach (Collider hit in colliders)
         {
             if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket"))
-                hit.GetComponent<Rigidbody>().AddExplosionForce(500, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
+                hit.GetComponent<Rigidbody>().AddExplosionForce(800, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
 
             if (hit.GetComponent<FractionIndexClass>() != null && hit.gameObject != null)
             {

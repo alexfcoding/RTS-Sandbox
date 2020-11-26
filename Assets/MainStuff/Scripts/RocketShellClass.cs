@@ -68,11 +68,11 @@ public class RocketShellClass : MonoBehaviour
                 GameObject Explosions = Instantiate(explosionRocketPrefab, pos, Quaternion.Euler(0, 0, 0));
                 Destroy(Explosions, 2f);
 
-                DestroyRocket();
+                Explode();
             }
     }
 
-    public void DestroyRocket()
+    public virtual void Explode()
     {
         audio2.Play();
 
@@ -82,33 +82,35 @@ public class RocketShellClass : MonoBehaviour
             GameObject.Destroy(child.gameObject);
         }
 
-        gameObject.transform.GetComponent<Collider>().enabled = false;
-        gameObject.transform.GetComponent<MeshRenderer>().enabled = false;
+        Collider ammoCollider = gameObject.transform.GetComponent<Collider>();
 
-        
-        
+        ammoCollider.enabled = false;
+        gameObject.transform.GetComponent<MeshRenderer>().enabled = false;
+                
         //ExplosionParticleSystem.Play();
         Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
 
         foreach (Collider hit in colliders)
         {
+            FractionIndexClass fractionHitObject = hit.GetComponent<FractionIndexClass>();
+
             if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket"))
                 hit.GetComponent<Rigidbody>().AddExplosionForce(500, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
 
-            if (hit.GetComponent<FractionIndexClass>() != null && hit.gameObject != null)
+            if (fractionHitObject != null && hit.gameObject != null)
             {
-                if (weaponToStick != null && hit.transform.GetComponent<FractionIndexClass>().dead == false)
-                    hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject;
+                if (weaponToStick != null && fractionHitObject.dead == false)
+                    fractionHitObject.whoIsDamaging = weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject;
 
                 if (weaponToStick != null && weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject.name == "Player")
                 {
-                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                    fractionHitObject.TakeDamage(damage);
                     //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
                 }
                 else if (weaponToStick != null)
                 {
                     //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
-                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                    fractionHitObject.TakeDamage(damage);
                 }
             }
 
@@ -121,8 +123,8 @@ public class RocketShellClass : MonoBehaviour
         if (gameObject.GetComponent<MeshRenderer>() != null)
             gameObject.GetComponent<MeshRenderer>().enabled = false;
 
-        if (gameObject.GetComponent<Collider>() != null)
-            gameObject.GetComponent<Collider>().enabled = false;
+        if (ammoCollider != null)
+            ammoCollider.enabled = false;
 
         foreach (Transform child in transform)
         {

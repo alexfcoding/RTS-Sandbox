@@ -11,11 +11,11 @@ public class Main : MonoBehaviour
     public Vector3 warriorPosition;
     public Vector3 randomSpawnPosition;
     public GameObject spawnPlatform;
-
+    public Text statsText;
     void Start()
     {
         spawnPlatform = GameMaster.GM.ConstructObject(GameMaster.GM.spawnPlatform, new Vector3(0, 0, 0), Quaternion.Euler(0, 0, 0), "SpawnPlatform", GameMaster.GM.globalObjectList);
-        InvokeRepeating("GenerateCubes", 0f, 0.2f);
+        InvokeRepeating("GenerateCubes", 0f, 0.3f);
         //InvokeRepeating("GenerateRollerBalls", 0f, 10f);
         GameMaster.GM.SetFractionColors();
 
@@ -186,8 +186,13 @@ public class Main : MonoBehaviour
     }
         
     public void GenerateCubes ()
-    {        
-        Debug.Log("Troopers:" + GameObject.FindGameObjectsWithTag("Trooper").Length.ToString() + " Cubes: " + GameObject.FindGameObjectsWithTag("Follower").Length.ToString() + " Rockets: " + GameObject.FindGameObjectsWithTag("RocketAmmo").Length.ToString() + " TowerGun: " + GameObject.FindGameObjectsWithTag("TowerGun").Length.ToString() + " TowerRocket: " + GameObject.FindGameObjectsWithTag("Tower").Length.ToString());
+    {
+        //Debug.Log("Troopers:" + GameObject.FindGameObjectsWithTag("Trooper").Length.ToString() + " Cubes: " + GameObject.FindGameObjectsWithTag("Follower").Length.ToString() + " Rockets: " + GameObject.FindGameObjectsWithTag("RocketAmmo").Length.ToString() + " TowerGun: " + GameObject.FindGameObjectsWithTag("TowerGun").Length.ToString() + " TowerRocket: " + GameObject.FindGameObjectsWithTag("Tower").Length.ToString());
+
+        statsText.text = "Ships: " + GameObject.FindGameObjectsWithTag("Ship").Length.ToString() + "\n" + "Seekers: " + GameObject.FindGameObjectsWithTag("Seeker").Length.ToString() + "\n" + "Units: " + GameObject.FindGameObjectsWithTag("Trooper").Length.ToString() + "\n" + "Cubes: " + (GameObject.FindGameObjectsWithTag("Follower").Length + GameObject.FindGameObjectsWithTag("OwnedFollower").Length).ToString() + "\n" + "Rockets: " + GameObject.FindGameObjectsWithTag("RocketAmmo").Length.ToString() + "\n" + "Gun-Towers: " + GameObject.FindGameObjectsWithTag("TowerGun").Length.ToString() + "\n" + "Rocket-Towers: " + GameObject.FindGameObjectsWithTag("Tower").Length.ToString() + "\n";
+        statsText.text += "Total Objects: " + (GameObject.FindGameObjectsWithTag("Ship").Length + GameObject.FindGameObjectsWithTag("Seeker").Length + GameObject.FindGameObjectsWithTag("Trooper").Length + GameObject.FindGameObjectsWithTag("Follower").Length + GameObject.FindGameObjectsWithTag("OwnedFollower").Length + GameObject.FindGameObjectsWithTag("RocketAmmo").Length + GameObject.FindGameObjectsWithTag("TowerGun").Length + GameObject.FindGameObjectsWithTag("Tower").Length).ToString();
+
+
         int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
         //GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], new Vector3(Random.Range(0, 200), 10, Random.Range(0, 200)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
         GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], new Vector3(spawnPlatform.transform.position.x + Random.Range(-100, 100), 20, spawnPlatform.transform.position.z + Random.Range(-100, 100)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);

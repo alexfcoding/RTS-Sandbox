@@ -17,8 +17,8 @@ public class ShipClass : SeekerClass
     public override void Awake()
     {
         money = 60000 * GameMaster.GM.startMoney / 100;
-        health = 200000;
-        maxHP = 200000;
+        health = 20000;
+        maxHP = 20000;
         gameObject.tag = "Ship";
         countOfItemsCollected = 0;
         isVulnerable = true;
@@ -190,7 +190,7 @@ public class ShipClass : SeekerClass
                         createdObject.GetComponent<SeekerClass>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.fractionId];
 
                         if (createdObject.GetComponent<FractionIndexClass>().fractionId != 0)
-                            AttackPlayerWithProbability(15, createdObject);
+                            AttackPlayerWithProbability(20, createdObject);
 
                         if (createdObject.GetComponent<TrooperClass>() != null)
                             createdObject.GetComponent<TrooperClass>().targetToChaseByPlayerCommand = createdObject.GetComponent<TrooperClass>().targetToChase;
@@ -304,13 +304,13 @@ public class ShipClass : SeekerClass
         GameMaster.GM.enemyMoneyText.text = "";
 
         if (fractionId == 0)
-            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString() + "$";
+            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString() + " Cr.";
 
         for (int i = 1; i < GameMaster.GM.shipObjectList.Count; i++)
         {
             if (GameMaster.GM.shipObjectList[i] != null)
                 GameMaster.GM.enemyMoneyText.text +=
-                 "Enemy #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<ShipClass>().money.ToString() + " $" + "\n";
+                 "Enemy #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<ShipClass>().money.ToString() + " Cr." + "\n";
         }
     }
 
@@ -327,13 +327,13 @@ public class ShipClass : SeekerClass
         GameMaster.GM.enemyMoneyText.text = "";
 
         if (fractionId == 0)
-            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString() + "$";
+            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString() + " Cr.";
 
         for (int i = 1; i < GameMaster.GM.shipObjectList.Count; i++)
         {
             if (GameMaster.GM.shipObjectList[i] != null)
                 GameMaster.GM.enemyMoneyText.text +=
-                 "Enemy #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<ShipClass>().money.ToString() + " $" + "\n";
+                 "Enemy #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<ShipClass>().money.ToString() + " Cr." + "\n";
         }
     }
 

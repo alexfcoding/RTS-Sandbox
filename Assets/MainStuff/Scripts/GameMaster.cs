@@ -255,6 +255,13 @@ public class GameMaster : MonoBehaviour
     public void SetFractionColors ()
     {
         fractionColors = new List<Color>();
+        List<Color> importantColors = new List<Color>();
+
+        importantColors.Add(new Color(0, 1, 1, 1f));
+        importantColors.Add(new Color(0, 1, 0.2f, 1f));
+        importantColors.Add(new Color(1, 1, 0, 1f));
+        importantColors.Add(new Color(1, 0, 0, 1f));
+        importantColors.Add(new Color(1, 0, 1, 1f));
 
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
         {
@@ -268,11 +275,10 @@ public class GameMaster : MonoBehaviour
             fractionColors.Add(newRandomColor);
         }
 
-        fractionColors[0] = new Color(0, 1, 1, 1f);
-        fractionColors[1] = new Color(0, 1, 0.2f, 1f);
-        fractionColors[2] = new Color(1, 1, 0, 1f);
-        fractionColors[3] = new Color(1, 0, 0, 1f);
-        fractionColors[4] = new Color(1, 0, 1, 1f);
+        for (int i = 0; i < fractionColors.Count; i++)
+        {
+            fractionColors[i] = importantColors[i];
+        }
     }
 
     /// <summary>

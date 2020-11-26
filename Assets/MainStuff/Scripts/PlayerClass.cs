@@ -59,6 +59,7 @@ public class PlayerClass: FractionIndexClass
     public AudioSource playerDeath;
     public AudioSource damageSound;
     public AudioSource voice1, voice2, voice3;
+    public AudioSource left, right, forward, backwards, up, down;
     public Transform lookCube;
     public float fx, fy, fz;
     public TextMesh playerHealth3dText;
@@ -66,10 +67,15 @@ public class PlayerClass: FractionIndexClass
     public bool spectatorMode;
     public bool isTimeToGiveCommand;
 
+    public List<WeaponClass> playerWeaponList;
+    int currentWeaponNumber;
+
     public void Start()
     {
         playerHealth3dText.text = $"HP: {health}";
         //GameMaster.GM.MyCamera.transform.localPosition = new Vector3(CamX - 140, CamY - 140, CamZ - 140);
+        playerWeaponList = new List<WeaponClass>();
+        currentWeaponNumber = 0;
     }
     
     public override void TakeDamage(float damage)
@@ -340,7 +346,6 @@ public class PlayerClass: FractionIndexClass
             currentWeapon.GetComponent<WeaponClass>().soundStop = false;
             currentWeapon.GetComponent<Collider>().enabled = true;
             alreadyHaveWeapon = false;
-
         }
 
         if (Input.GetKey("g"))
@@ -383,86 +388,176 @@ public class PlayerClass: FractionIndexClass
 
         if (Input.GetKey("w"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            if (forward.isPlaying == false)
             {
-                gameObject.GetComponent<AudioSource>().Play();
+                forward.Play();
             }
         }       
 
         if (Input.GetKeyUp("w"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
+            if (forward.isPlaying == true)
+            {
+                IEnumerator fadeSound1 = FadeAudioSource.FadeOut(forward, 0.5f);
+                StartCoroutine(fadeSound1);
+                //StopCoroutine(fadeSound1);
+            }
+                
+            //gameObject.GetComponent<AudioSource>().Stop();
         }
 
         if (Input.GetKey("s"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            if (backwards.isPlaying == false)
             {
-                gameObject.GetComponent<AudioSource>().Play();
+                backwards.Play();
             }
         }       
 
         if (Input.GetKeyUp("s"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
+            if (backwards.isPlaying == true)
+            {
+                IEnumerator fadeSound1 = FadeAudioSource.FadeOut(backwards, 0.5f);
+                StartCoroutine(fadeSound1);
+            }
+                //gameObject.GetComponent<AudioSource>().Stop();
         }
 
         if (Input.GetKey("d"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            if (right.isPlaying == false)
             {
-                gameObject.GetComponent<AudioSource>().Play();
+                right.Play();
             }
         }
 
         if (Input.GetKeyUp("d"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
+            if (right.isPlaying == true)
+            {
+                IEnumerator fadeSound1 = FadeAudioSource.FadeOut(right, 0.5f);
+                StartCoroutine(fadeSound1);
+            }
+                //gameObject.GetComponent<AudioSource>().Stop();
         }
 
         if (Input.GetKey("a"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            if (left.isPlaying == false)
             {
-                gameObject.GetComponent<AudioSource>().Play();
+                left.Play();
             }      
         }
 
         if (Input.GetKeyUp("a"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
+            if (left.isPlaying == true)
+            {
+                IEnumerator fadeSound1 = FadeAudioSource.FadeOut(left, 0.5f);
+                StartCoroutine(fadeSound1);
+            }
+                //gameObject.GetComponent<AudioSource>().Stop();
         }
 
         if (Input.GetKey("q"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            if (down.isPlaying == false)
             {
-                gameObject.GetComponent<AudioSource>().Play();
+                down.Play();
             }
         }
         
         if (Input.GetKeyUp("q"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
+            if (down.isPlaying == true)
+            {
+                IEnumerator fadeSound1 = FadeAudioSource.FadeOut(down, 0.5f);
+                StartCoroutine(fadeSound1);
+            }
         }
 
         if (Input.GetKey("e"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
+            if (up.isPlaying == false)
             {
-                gameObject.GetComponent<AudioSource>().Play();
+                up.Play();
             }    
         }       
 
         if (Input.GetKeyUp("e"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
+            if (up.isPlaying == true)
+            {
+                IEnumerator fadeSound1 = FadeAudioSource.FadeOut(up, 0.5f);
+                StartCoroutine(fadeSound1);
+            }
+        }
+
+        // Debug.Log(Input.GetAxisRaw("Mouse ScrollWheel"));
+
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            currentWeaponNumber += 1;
+
+            if (currentWeaponNumber > playerWeaponList.Count - 1)
+            {
+                currentWeaponNumber = 0;
+            }
+
+            Debug.Log(currentWeaponNumber);
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            currentWeaponNumber -= 1;
+
+            if (currentWeaponNumber < 0)
+            {
+                currentWeaponNumber = playerWeaponList.Count - 1;
+            }
+            Debug.Log(currentWeaponNumber);
+        }
+
+        if (Input.GetAxis("Mouse ScrollWheel") != 0)
+        {
+            if (playerWeaponList.Count > 0)
+            {
+                Component[] renderer;
+
+                for (int i = 0; i < playerWeaponList.Count; i++)
+                {
+                    if (playerWeaponList[i].GetComponent<MeshRenderer>() != null)
+                        playerWeaponList[i].GetComponent<MeshRenderer>().enabled = false;
+
+                    if (playerWeaponList[i].GetComponentsInChildren<Renderer>() != null)
+                    {
+                        renderer = playerWeaponList[i].GetComponentsInChildren<Renderer>();
+
+                        for (int j = 0; j < renderer.Length; j++)
+                        {
+                            if (renderer[j].gameObject.name == "Laser_Gun")
+                                renderer[j].GetComponent<Renderer>().enabled = false;
+                        }
+                    }
+                }
+
+                currentWeapon = playerWeaponList[currentWeaponNumber];
+
+                if (currentWeapon.GetComponent<MeshRenderer>() != null)
+                    currentWeapon.GetComponent<MeshRenderer>().enabled = true;
+
+                if (currentWeapon.GetComponentsInChildren<Renderer>() != null)
+                {
+                    renderer = currentWeapon.GetComponentsInChildren<Renderer>();
+
+                    for (int j = 0; j < renderer.Length; j++)
+                    {
+                        if (renderer[j].gameObject.name == "Laser_Gun")
+                            renderer[j].GetComponent<Renderer>().enabled = true;
+                    }
+                }
+            }
         }
     }
 
@@ -565,7 +660,6 @@ public class PlayerClass: FractionIndexClass
             {
                 if (teamMate != null && teamMate.GetComponent<TrooperClass>() != null && teamMate.GetComponent<TrooperClass>().teamSelectMark != null)
                     Destroy(teamMate.GetComponent<TrooperClass>().teamSelectMark);
-
             }
 
             //GameMaster.GM.myCamera.transform.localPosition = new Vector3(cameraX, cameraY, cameraZ);
@@ -627,11 +721,6 @@ public class PlayerClass: FractionIndexClass
     {
         if (Input.GetKey("w"))
         {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
-            {
-                gameObject.GetComponent<AudioSource>().Play();
-            }
-
             RB.AddRelativeForce(Vector3.forward * 2f, ForceMode.VelocityChange);
             fire.Play();
             fire2.Play();
@@ -640,21 +729,10 @@ public class PlayerClass: FractionIndexClass
         {
             fire.Stop();
             fire2.Stop();
-        }
-
-        if (Input.GetKeyUp("w"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
-        }
+        }   
 
         if (Input.GetKey("s"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
-            {
-                gameObject.GetComponent<AudioSource>().Play();
-            }
-
+        {    
             RB.AddRelativeForce(-Vector3.forward * 1.5f, ForceMode.VelocityChange);
             fire5.Play();
             fire6.Play();
@@ -666,21 +744,13 @@ public class PlayerClass: FractionIndexClass
         }
 
         if (Input.GetKeyUp("s"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
-
+        {     
             fire5.Stop();
             fire6.Stop();
         }
 
         if (Input.GetKey("d"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
-            {
-                gameObject.GetComponent<AudioSource>().Play();
-            }
-
+        {     
             RB.AddRelativeForce(Vector3.right * 1.5f, ForceMode.VelocityChange);
             fire3.Play();
         }
@@ -688,20 +758,9 @@ public class PlayerClass: FractionIndexClass
         {
             fire3.Stop();
         }
-
-        if (Input.GetKeyUp("d"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
-        }
-
+            
         if (Input.GetKey("a"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
-            {
-                gameObject.GetComponent<AudioSource>().Play();
-            }
-
+        {           
             RB.AddRelativeForce(-Vector3.right * 1.5f, ForceMode.VelocityChange);
             fire4.Play();
         }
@@ -709,21 +768,9 @@ public class PlayerClass: FractionIndexClass
         {
             fire4.Stop();
         }
-
-        if (Input.GetKeyUp("a"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
-        }
-
+            
         if (Input.GetKey("q"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
-            {
-                gameObject.GetComponent<AudioSource>().Play();
-            }
-
-
+        {     
             RB.AddRelativeForce(Vector3.up * (-1.5f), ForceMode.VelocityChange);
             fire7.Play();
             fire8.Play();
@@ -733,20 +780,9 @@ public class PlayerClass: FractionIndexClass
             fire7.Stop();
             fire8.Stop();
         }
-
-        if (Input.GetKeyUp("q"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
-        }
-
+             
         if (Input.GetKey("e"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == false)
-            {
-                gameObject.GetComponent<AudioSource>().Play();
-            }
-
+        {      
             //if (transform.position.y < 20)
             // if (spectatorMode == true)
             RB.AddRelativeForce(Vector3.up * 1.5f, ForceMode.VelocityChange);
@@ -759,13 +795,7 @@ public class PlayerClass: FractionIndexClass
             fire9.Stop();
             fire10.Stop();
         }
-
-        if (Input.GetKeyUp("e"))
-        {
-            if (gameObject.GetComponent<AudioSource>().isPlaying == true)
-                gameObject.GetComponent<AudioSource>().Stop();
-        }
-
+               
         if (Input.GetKey("x"))
         {
             GameMaster.GM.myCamera.GetComponent<Camera>().fieldOfView -= 0.5f;
@@ -775,6 +805,7 @@ public class PlayerClass: FractionIndexClass
         {
             GameMaster.GM.myCamera.GetComponent<Camera>().fieldOfView = 45f;
         }
+                 
     }
 
 }
