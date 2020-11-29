@@ -17,7 +17,7 @@ public class MainMenu : MonoBehaviour
 
     public void Start()
     {
-        //Application.targetFrameRate = 30;
+        //Application.targetFrameRate = 10;
         shipsList = new List<GameObject>();
         SetBaseCount();
         SetMoneyCount();

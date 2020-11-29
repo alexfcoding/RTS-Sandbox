@@ -277,7 +277,8 @@ public class GameMaster : MonoBehaviour
 
         for (int i = 0; i < fractionColors.Count; i++)
         {
-            fractionColors[i] = importantColors[i];
+            if (i <= 4)
+                fractionColors[i] = importantColors[i];
         }
     }
 

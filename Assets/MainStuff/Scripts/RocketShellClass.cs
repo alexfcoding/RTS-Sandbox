@@ -88,13 +88,13 @@ public class RocketShellClass : MonoBehaviour
         gameObject.transform.GetComponent<MeshRenderer>().enabled = false;
                 
         //ExplosionParticleSystem.Play();
-        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
+        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 35);
 
         foreach (Collider hit in colliders)
         {
             FractionIndexClass fractionHitObject = hit.GetComponent<FractionIndexClass>();
 
-            if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket"))
+            if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket") && (hit.name != "Bomb"))
                 hit.GetComponent<Rigidbody>().AddExplosionForce(500, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
 
             if (fractionHitObject != null && hit.gameObject != null)
@@ -104,13 +104,19 @@ public class RocketShellClass : MonoBehaviour
 
                 if (weaponToStick != null && weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject.name == "Player")
                 {
-                    fractionHitObject.TakeDamage(damage);
+                    if (fractionHitObject.transform.tag != "Ship")
+                        fractionHitObject.TakeDamage(damage * 2f);
+                    else
+                        fractionHitObject.TakeDamage(damage / 10);
                     //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
                 }
-                else if (weaponToStick != null)
+                else if (weaponToStick != null )
                 {
                     //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
-                    fractionHitObject.TakeDamage(damage);
+                    if(fractionHitObject.transform.tag != "Ship")
+                        fractionHitObject.TakeDamage(damage);
+                    else
+                        fractionHitObject.TakeDamage(damage / 10);
                 }
             }
 

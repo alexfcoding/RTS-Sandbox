@@ -4,24 +4,34 @@ using UnityEngine;
 
 public class FighterClass : TrooperClass
 {
-    float randomY;    
-    
+    float randomY;
+    Rigidbody rb;
+
     public void Start()
     {
         //randomY = Random.Range(0, 10); 
         timer = Random.Range(0, 100);
-        health = 1000;
-        maxHP = 1000;
+        health = 1500;
+        maxHP = 1500;
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     public override void Update()
     {
         FindItemsAround(GameMaster.GM.globalObjectList, GameMaster.GM.platformObjectList);
 
+        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
+
+        foreach (Collider hit in colliders)
+        {
+            if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<PlayerClass>() == null && hit.GetComponent<FighterClass>() != null)
+                hit.GetComponent<Rigidbody>().AddExplosionForce(100, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
+        }
+
         if (dead == false)
             FlyAnimation();
         else
-            gameObject.GetComponent<Rigidbody>().useGravity = true;
+            rb.useGravity = true;
     }
 
     public void FlyAnimation ()
@@ -35,9 +45,9 @@ public class FighterClass : TrooperClass
                 transform.position.z + Mathf.Sin(timer * 2f) * 0.1f);
         
         if (transform.position.y < 5)
-            gameObject.GetComponent<Rigidbody>().AddForce(0, 300, 0, ForceMode.Impulse);
+            rb.AddForce(0, 300, 0, ForceMode.Impulse);
 
-        gameObject.GetComponent<Rigidbody>().MovePosition(moveSin);
+        rb.MovePosition(moveSin);
     }
 
     public override void OnCollisionStay(Collision collisioninfo)

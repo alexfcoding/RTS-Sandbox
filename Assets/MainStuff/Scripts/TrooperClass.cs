@@ -25,6 +25,8 @@ public class TrooperClass : SeekerClass
     public float trooperSpeed;
     public float distToLerp;
     public float timer;
+
+    public GameObject body;
     
     public Rigidbody rbTrooper;
 
@@ -33,8 +35,8 @@ public class TrooperClass : SeekerClass
         level = 1;
         attackTargetId = Random.Range(0, 6);
         targetIsShip = true;
-        health = 1000;
-        maxHP = 1000;
+        health = 1500;
+        maxHP = 1500;
         destinationPass = false;
         foundTargetToAttack = false;
         wait = false;
@@ -61,10 +63,17 @@ public class TrooperClass : SeekerClass
     {
         FindItemsAround(GameMaster.GM.globalObjectList, GameMaster.GM.platformObjectList);
 
-        //Vector3 MoveSin = new Vector3(transform.position.x, 0.2f, transform.position.z);
-        //    gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
+        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 70);
 
-        //HealthBar.transform.LookAt(Camera.main.transform.position, -Vector3.up);
+        foreach (Collider hit in colliders)
+        {
+            if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<PlayerClass>() == null && hit.GetComponent<TrooperClass>() != null)
+                hit.GetComponent<Rigidbody>().AddExplosionForce(1000, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
+        }
+            //Vector3 MoveSin = new Vector3(transform.position.x, 0.2f, transform.position.z);
+            //    gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
+
+            //HealthBar.transform.LookAt(Camera.main.transform.position, -Vector3.up);
     }
 
     public override void FindItemsAround(List<GameObject> _GlobalObjectList, List<GameObject> _PlatformList)
@@ -91,8 +100,8 @@ public class TrooperClass : SeekerClass
 
                 if (fractionId != 0 && GameMaster.GM.shipObjectList[rnDShip] != null)
                     targetToChase = GameMaster.GM.shipObjectList[rnDShip];
-                //else
-                //    targetToChase = GameMaster.GM.player.gameObject;
+                else
+                    targetToChase = GameMaster.GM.player.gameObject;
             }
            
             if (targetToChase != null && targetToChase.GetComponent<ShipClass>() != null)
@@ -107,16 +116,20 @@ public class TrooperClass : SeekerClass
                 {
                     if (gameObject.name == "LightShip")
                     {
-                        Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
-                        transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+                        //Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
+                        //transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+                        body.transform.LookAt(enemyToLook.transform.position);
+                        //body.transform.eulerAngles = new Vector3(0,0,-90);                  }
+                        body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
+                        wait = true;
                     }
-                        
-                    wait = true;
                 }
                 else if (enemyToLook.GetComponent<ShipClass>() == null)
                 {
-                    Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+                    //Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
+                    //transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+                    body.transform.LookAt(enemyToLook.transform.position);
+                    body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
                     wait = true;
                 }
             }

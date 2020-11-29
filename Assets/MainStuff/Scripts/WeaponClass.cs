@@ -31,7 +31,7 @@ public class WeaponClass : MonoBehaviour
     public bool rotatable;
     public bool foundTargetToShoot;
     public bool playerFollowingCommand;
-
+    public bool canBePickedUp;
 
     public SeekerClass currentSeeker;
     public PlayerClass currentPlayer;
@@ -51,6 +51,8 @@ public class WeaponClass : MonoBehaviour
         camX = GameMaster.GM.myCamera.transform.localPosition.x;
         camY = GameMaster.GM.myCamera.transform.localPosition.y;
         camZ = GameMaster.GM.myCamera.transform.localPosition.z;
+
+        timer += (float) Random.Range(0, 1000) / 1000;
     }
 
     public void FixedUpdate()
@@ -60,7 +62,7 @@ public class WeaponClass : MonoBehaviour
             transform.Rotate(0, -5, 0);
         }
 
-        WeaponAction();
+        
         //if (currentSeeker != null && currentSeeker.tag == "Tower")
         //{
 
@@ -75,6 +77,7 @@ public class WeaponClass : MonoBehaviour
 
     public void Update()
     {
+        WeaponAction();
         //if (gameObject.tag == "PlayerWeapon")
         //{
         //    GameObject LockedTarget = GameMaster.GM.player.GetComponent<PlayerClass>().targetToLock;
@@ -199,7 +202,7 @@ public class WeaponClass : MonoBehaviour
                     RaycastHit hit;
 
                     if (Physics.Raycast(transform.position, transform.forward, out hit, 600))
-                        if (hit.transform.tag != "Player" )
+                        if (hit.transform.tag != "Player")
                         {
                             GameObject BulletPlayer = Instantiate(bulletEffectPlayer, hit.point, Quaternion.LookRotation(hit.normal));
                             Destroy(BulletPlayer, 2f);
@@ -212,7 +215,10 @@ public class WeaponClass : MonoBehaviour
                                 hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
                                 //ownerLevel = currentPlayer.transform.GetComponent<FractionIndexClass>().level;
                                 // hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
-                                hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
+                                if (hit.transform.tag != "Ship")
+                                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * 2f);
+                                else
+                                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet / 10);
                             }
 
                             if (hit.transform.GetComponent<RocketShellClass>() != null)
@@ -375,9 +381,10 @@ public class WeaponClass : MonoBehaviour
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-        if ((collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<PlayerClass>() != null) && (collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon == false))
+        if ((collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<PlayerClass>() != null) && canBePickedUp)
         {
-            //collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;
+           // collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;
+            collision.gameObject.GetComponent<PlayerClass>().pickup.Play();
             collision.gameObject.GetComponent<PlayerClass>().playerWeaponList.Add(this);
             collision.gameObject.GetComponent<PlayerClass>().currentWeapon = gameObject.GetComponent<WeaponClass>();
 
@@ -434,7 +441,7 @@ public class WeaponClass : MonoBehaviour
             //ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
         }
 
-        if ((collision.gameObject.tag == "Seeker" || collision.gameObject.tag == "Trooper") && (collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon == false))
+        if ((collision.gameObject.tag == "Seeker" || collision.gameObject.tag == "Trooper") && (collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon == false) && canBePickedUp)
         {
             collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon = true;
             collision.gameObject.GetComponent<SeekerClass>().currentWeapon = gameObject.GetComponent<WeaponClass>();
@@ -451,7 +458,7 @@ public class WeaponClass : MonoBehaviour
 
             if (collision.gameObject.name == "Trooper")
             { 
-                transform.localPosition = new Vector3(0.4f, 1.34f, 1.315f); ;
+                transform.localPosition = new Vector3(0.1f, 4f, 5f); ;
 
                 if (transform.GetComponent<MeshRenderer>() != null)
                     transform.GetComponent<MeshRenderer>().enabled = false;

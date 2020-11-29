@@ -60,6 +60,7 @@ public class PlayerClass: FractionIndexClass
     public AudioSource damageSound;
     public AudioSource voice1, voice2, voice3;
     public AudioSource left, right, forward, backwards, up, down;
+    public AudioSource pickup, changeWeapon;
     public Transform lookCube;
     public float fx, fy, fz;
     public TextMesh playerHealth3dText;
@@ -256,8 +257,8 @@ public class PlayerClass: FractionIndexClass
         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 16,
         //   transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
 
-        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 1f) * 0.02f,
-            transform.position.z + Mathf.Sin(timer * 1f) * 0.02f);
+        Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 2f) * 0.03f, transform.position.y + Mathf.Sin(timer * 1f) * 0.03f,
+            transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
 
         gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
 
@@ -298,31 +299,31 @@ public class PlayerClass: FractionIndexClass
             stopCamControls = true;
         }
 
-        if (Input.GetKeyUp("0"))
-        {
-            foreach (GameObject teamMate in teamMateList)
-            {
-                if (teamMate != null)
-                {
-                    if (teamMate.GetComponent<TrooperClass>() != null)
-                        teamMate.GetComponent<TrooperClass>().attackTargetId = 0;
-                }
-            }
+        //if (Input.GetKeyUp("0"))
+        //{
+        //    foreach (GameObject teamMate in teamMateList)
+        //    {
+        //        if (teamMate != null)
+        //        {
+        //            if (teamMate.GetComponent<TrooperClass>() != null)
+        //                teamMate.GetComponent<TrooperClass>().attackTargetId = 0;
+        //        }
+        //    }
 
-            int Rnd = Random.Range(0, 2);
-            switch (Rnd)
-            {
-                case 0:
-                    voice1.Play();
-                    break;
-                case 1:
-                    voice2.Play();
-                    break;
-                case 2:
-                    voice3.Play();
-                    break;
-            }
-        }
+        //    int Rnd = Random.Range(0, 2);
+        //    switch (Rnd)
+        //    {
+        //        case 0:
+        //            voice1.Play();
+        //            break;
+        //        case 1:
+        //            voice2.Play();
+        //            break;
+        //        case 2:
+        //            voice3.Play();
+        //            break;
+        //    }
+        //}
 
         if (Input.GetKey("f"))
         {
@@ -521,6 +522,8 @@ public class PlayerClass: FractionIndexClass
 
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
+            changeWeapon.Play();
+            
             if (playerWeaponList.Count > 0)
             {
                 Component[] renderer;

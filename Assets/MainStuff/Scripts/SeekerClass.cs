@@ -62,7 +62,7 @@ public class SeekerClass : FractionIndexClass
                 if (whoIsDamaging != null && whoIsDamaging.GetComponent<FractionIndexClass>().fractionId != GetComponent<FractionIndexClass>().fractionId)
                     health -= damage;
 
-                //textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
+                textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
 
                 if (healthBar != null)
                     healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.02f, 1);
@@ -209,6 +209,7 @@ public class SeekerClass : FractionIndexClass
     IEnumerator Dying()
     {
         yield return new WaitForSeconds(0f);
+
         if (whoIsDamaging != null)
             if (whoIsDamaging.GetComponent<FractionIndexClass>().level < 5)
             {
@@ -218,7 +219,6 @@ public class SeekerClass : FractionIndexClass
                     whoIsDamaging.GetComponent<SeekerClass>().textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
             }
                 
-
         if (whoIsDamaging != null && (whoIsDamaging.tag == "Trooper" || whoIsDamaging.tag == "Seeker"))
         {
             whoIsDamaging.GetComponent<FractionIndexClass>().health += 1000;

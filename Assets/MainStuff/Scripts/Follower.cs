@@ -51,7 +51,7 @@ public class Follower : FractionIndexClass
             if (ownerToFollow != null)
             {
                 if (ownerToFollow.GetComponent<PlayerClass>() != null) // Если владелец куба - игрок ...
-                    normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 0, -8000) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади игрока
+                    normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 0, -10000) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади игрока
                 else // Если владелец куба - не игрок ...
                     normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 5, -100) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади владельца
 

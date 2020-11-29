@@ -17,8 +17,8 @@ public class ShipClass : SeekerClass
     public override void Awake()
     {
         money = 60000 * GameMaster.GM.startMoney / 100;
-        health = 20000;
-        maxHP = 20000;
+        health = 200000;
+        maxHP = 200000;
         gameObject.tag = "Ship";
         countOfItemsCollected = 0;
         isVulnerable = true;
@@ -29,9 +29,9 @@ public class ShipClass : SeekerClass
         healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
         healthBar.transform.SetParent(gameObject.transform);
         healthBar.transform.eulerAngles = transform.eulerAngles - new Vector3 (0,90,0);
-        healthBarScaleMultiplier = 100;
+        healthBarScaleMultiplier = 300;
 
-        healthBar.transform.localScale = new Vector3(health / 30000 * healthBarScaleMultiplier, 10, 10);
+        healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 10, 10);
         textHP.transform.localScale = new Vector3(10, 10, 10);
         
         textHP.transform.localPosition = new Vector3(0, 1000, 400);
@@ -72,10 +72,10 @@ public class ShipClass : SeekerClass
                 //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
                 rndUnit = Random.Range(0, 100);
 
-                if (rndUnit < 30)
-                    spendMoney(600, startCreatingTrooper);
+                if (rndUnit < 90)
+                    spendMoney(600, startCreatingLightShip);
                 else
-                    spendMoney(300, startCreatingLightShip);
+                    spendMoney(300, startCreatingTrooper);
             }
 
             if (fractionBarracsList.Count < 3 && money > 3000)
@@ -172,7 +172,7 @@ public class ShipClass : SeekerClass
                 if (fractionBarracsList.Count > 0)
                     if (fractionBarracsList[rndBaseSpawnTrooper].gameObject != null)
                     {
-                        createdObject = GameMaster.GM.ConstructObject(unitPrefab, fractionBarracsList[rndBaseSpawnTrooper].transform.position + new Vector3(Random.Range(-50, 50), 0, Random.Range(-50, 50)), Quaternion.Euler(0, 0, 0), UnitName, GameMaster.GM.unitList);
+                        createdObject = GameMaster.GM.ConstructObject(unitPrefab, fractionBarracsList[rndBaseSpawnTrooper].transform.position + new Vector3(Random.Range(-80, 80), 0, Random.Range(-80, 80)), Quaternion.Euler(0, 0, 0), UnitName, GameMaster.GM.unitList);
                         createdObject.GetComponent<FractionIndexClass>().SetFractionId(fractionId);
                         Vector3 warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);
                         GameMaster.GM.GiveWeaponToObject(warriorPosition);
@@ -181,8 +181,8 @@ public class ShipClass : SeekerClass
                             createdObject.GetComponent<TrooperClass>().targetIsShip = false;
                             //createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.shipObjectList[ChooseRandomTarget(GameMaster.GM.shipObjectList)];
                             if (fractionId == 0)
-                                //createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.player.gameObject;
-                                createdObject.GetComponent<TrooperClass>().targetToChase = fractionBarracsList[rndBaseSpawnTrooper].gameObject;
+                                createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.player.gameObject;
+                                //createdObject.GetComponent<TrooperClass>().targetToChase = fractionBarracsList[rndBaseSpawnTrooper].gameObject;
                         }
                        
                         //float randomScale = Random.Range(1f, 2f); // Рандомизируем размеры пехоты
@@ -258,7 +258,7 @@ public class ShipClass : SeekerClass
         {
             health -= damage;
                
-            healthBar.transform.localScale = new Vector3(health / 100000 * healthBarScaleMultiplier, 10, 10);
+            healthBar.transform.localScale = new Vector3(health / 200000 * healthBarScaleMultiplier, 10, 10);
             textHP.gameObject.GetComponent<TextMesh>().text = GetComponent<SeekerClass>().health.ToString();
         }
         else
@@ -281,6 +281,20 @@ public class ShipClass : SeekerClass
             GetComponent<Rigidbody>().useGravity = true;
             totallyDead = true;
             GameMaster.GM.RecursiveDestroy(transform, gameObject, 3);
+
+            for (int i = 0; i < GameMaster.GM.globalObjectList.Count; i++)
+            {
+                if (GameMaster.GM.globalObjectList[i] != null && GameMaster.GM.globalObjectList[i].gameObject.tag == "Seeker" && GameMaster.GM.globalObjectList[i].gameObject.GetComponent<FractionIndexClass>().fractionId == fractionId)
+                {
+                    GameObject Explode = Instantiate(GameMaster.GM.globalObjectList[i].gameObject.GetComponent<FractionIndexClass>().deathEffect, GameMaster.GM.globalObjectList[i].gameObject.transform.position, Quaternion.Euler(0, 0, 0));
+
+                    Destroy(Explode, 2f);
+
+                    Destroy(GameMaster.GM.globalObjectList[i].gameObject);
+
+                    GameMaster.GM.globalObjectList.RemoveAt(i);
+                }                    
+            }
         }
     }
 

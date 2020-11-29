@@ -75,13 +75,20 @@ public class BombShellClass : RocketShellClass
 
                 if (weaponToStick != null && weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject.name == "Player")
                 {
-                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                    if (hit.transform.GetComponent<FractionIndexClass>().transform.tag != "Ship")
+                        hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * 2f);
+                    else
+                        hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage / 10);
+                  
                     //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
                 }
                 else if (weaponToStick != null)
                 {
                     //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
-                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                    if (hit.transform.GetComponent<FractionIndexClass>().transform.tag != "Ship")
+                        hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                    else
+                        hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage / 10);
                 }
             }
 
