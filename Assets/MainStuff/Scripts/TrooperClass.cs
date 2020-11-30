@@ -30,6 +30,8 @@ public class TrooperClass : SeekerClass
     
     public Rigidbody rbTrooper;
 
+    public bool rotateBody;
+
     public override void Awake()
     {
         level = 1;
@@ -48,12 +50,12 @@ public class TrooperClass : SeekerClass
         foundObject = false;
         isVulnerable = true;
 
-        textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, 10, 0), Quaternion.Euler(0, 0, 0));
+        textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, textHpHeight, 0), Quaternion.Euler(0, 0, 0));
         textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
         textHP.transform.parent = transform;
 
         healthBarScaleMultiplier = 0.8f;
-        healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 5, 0), Quaternion.Euler(0, 0, 0));
+        healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, healthBarHeight, 0), Quaternion.Euler(0, 0, 0));
         healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
         healthBar.transform.SetParent(gameObject.transform);
         pointFromShootingRandomize.Set(Random.Range(-40, 40), 0, Random.Range(-40, 40));
@@ -62,14 +64,7 @@ public class TrooperClass : SeekerClass
     public override void Update()
     {
         FindItemsAround(GameMaster.GM.globalObjectList, GameMaster.GM.platformObjectList);
-
-        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 70);
-
-        foreach (Collider hit in colliders)
-        {
-            if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<PlayerClass>() == null && hit.GetComponent<TrooperClass>() != null)
-                hit.GetComponent<Rigidbody>().AddExplosionForce(1000, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
-        }
+               
             //Vector3 MoveSin = new Vector3(transform.position.x, 0.2f, transform.position.z);
             //    gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
 
@@ -78,6 +73,19 @@ public class TrooperClass : SeekerClass
 
     public override void FindItemsAround(List<GameObject> _GlobalObjectList, List<GameObject> _PlatformList)
     {
+        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
+
+        foreach (Collider hit in colliders)
+        {
+            if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<PlayerClass>() == null && hit.GetComponent<TrooperClass>() != null)
+            {
+                if (hit.name == "LightShip")
+                    hit.GetComponent<Rigidbody>().AddExplosionForce(100, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
+                if (hit.name == "Trooper")
+                    hit.GetComponent<Rigidbody>().AddExplosionForce(700, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
+            }
+        }
+
         if (dead == false && stopDoing == false)
         {
             if (targetToChase != null)
@@ -88,8 +96,15 @@ public class TrooperClass : SeekerClass
                 }
                 else
                 {
-                    pointFromShooting = targetToChase.transform.position;
+                    if (targetToChase.GetComponent<PlayerClass>() != null)
+                        pointFromShooting = new Vector3(targetToChase.transform.position.x, transform.position.y, targetToChase.transform.position.z);
+                    else
+                    {
+                        pointFromShooting = new Vector3(targetToChase.transform.position.x, transform.position.y, targetToChase.transform.position.z);
+                    }
                 }
+
+                
             }
             else
             {
@@ -112,26 +127,32 @@ public class TrooperClass : SeekerClass
 
             if ((currentWeapon != null && enemyToLook != null) || (currentWeapon != null && enemyToLook != null) )
             {
-                if (enemyToLook.GetComponent<ShipClass>() != null)
-                {
-                    if (gameObject.name == "LightShip")
-                    {
-                        //Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
-                        //transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
-                        body.transform.LookAt(enemyToLook.transform.position);
-                        //body.transform.eulerAngles = new Vector3(0,0,-90);                  }
-                        body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
-                        wait = true;
-                    }
-                }
-                else if (enemyToLook.GetComponent<ShipClass>() == null)
+                if (gameObject.name != "LightShip")
                 {
                     //Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
                     //transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
                     body.transform.LookAt(enemyToLook.transform.position);
-                    body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
+                    //body.transform.eulerAngles = new Vector3(0,0,-90);                  }
+                    if (rotateBody)
+                        body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
+                    //else
+                        //  body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
+
                     wait = true;
                 }
+                else
+                {
+                    Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+                    //body.transform.LookAt(enemyToLook.transform.position);
+                    //body.transform.eulerAngles = new Vector3(0,0,-90);                  }
+                    if (rotateBody)
+                        body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
+                    //else
+                    //  body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
+
+                    wait = true;
+                }    
             }
             else
             {
@@ -142,34 +163,38 @@ public class TrooperClass : SeekerClass
             if (enemyToLook != null && enemyToLook.GetComponent<SeekerClass>() != null && enemyToLook.GetComponent<SeekerClass>().dead == true && currentWeapon.GetComponent<WeaponClass>().playerFollowingCommand == true)
                 wait = false;
                             
-           if ( ((Vector3.Distance(transform.position, pointFromShooting)) > 80) && (wait == false) )
-                {
+            if ( ((Vector3.Distance(transform.position, pointFromShooting)) > 80) && (wait == false) )
+            {
+                Quaternion lookOnLook = Quaternion.LookRotation(pointFromShooting - transform.position);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+                
+                rbTrooper.AddRelativeForce(Vector3.forward * trooperSpeed * Time.deltaTime * 40, ForceMode.VelocityChange); //* Time.deltaTime * 30
 
-                    Quaternion lookOnLook = Quaternion.LookRotation(pointFromShooting - transform.position);
-                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
-
-                    rbTrooper.AddRelativeForce(Vector3.forward * trooperSpeed * Time.deltaTime * 40, ForceMode.VelocityChange);//* Time.deltaTime * 30
-                    if (gameObject.GetComponent<Animator>() != null)
-                        gameObject.GetComponent<Animator>().Play("Run_Guard");
-                }
+                if (gameObject.GetComponent<Animator>() != null)
+                    gameObject.GetComponent<Animator>().Play("Run_Guard");
+            }
             else
-                {
-                    wait = true;
-                    if (gameObject.GetComponent<Animator>() != null)
-                        gameObject.GetComponent<Animator>().Play("Idle");
-                }
+            {
+                wait = true;
+
+                if (gameObject.GetComponent<Animator>() != null)
+                    gameObject.GetComponent<Animator>().Play("Idle");
+            }
 
             if (((Vector3.Distance(transform.position, pointFromShooting)) > 120))
-                {
-                    wait = false;
-                }
+            {
+                wait = false;
+            }
         }
 
         // Анимация смерти
         if (dead == true && stopDoing == false)
         {
             if (gameObject.GetComponent<Animator>() != null)
-                gameObject.GetComponent<Animator>().Play("Die");
+                gameObject.GetComponent<Animator>().Play("Idle");
+
+            //if (gameObject.GetComponent<Animator>() != null)
+            //    gameObject.GetComponent<Animator>().Play("Die");
 
             stopDoing = true;
         }
@@ -177,9 +202,9 @@ public class TrooperClass : SeekerClass
 
     public virtual void OnCollisionStay(Collision collisioninfo)
     {
-        if (collisioninfo.gameObject.GetComponent<BuildingClass>() != null)
+        if (collisioninfo.gameObject.GetComponent<BuildingClass>() != null || collisioninfo.gameObject.GetComponent<TowerClass>() != null)
         {
-            gameObject.GetComponent<Rigidbody>().AddForce(0, 30, 0, ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().AddForce(Random.Range(-350, 350), 0, Random.Range(-350, 350), ForceMode.Impulse);
         }
     }
 }

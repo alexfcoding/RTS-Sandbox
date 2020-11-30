@@ -350,6 +350,9 @@ public class GameMaster : MonoBehaviour
             if (child.GetComponent<MeshRenderer>() != null)
                 child.GetComponent<MeshRenderer>().enabled = false;
 
+            if (child.GetComponent<SkinnedMeshRenderer>() != null)
+                child.GetComponent<SkinnedMeshRenderer>().enabled = false;
+
             if (child.GetComponent<Collider>() != null)
                 child.GetComponent<Collider>().enabled = false;
 

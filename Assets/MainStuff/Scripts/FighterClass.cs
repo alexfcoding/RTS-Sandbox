@@ -20,13 +20,13 @@ public class FighterClass : TrooperClass
     {
         FindItemsAround(GameMaster.GM.globalObjectList, GameMaster.GM.platformObjectList);
 
-        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
+        //Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
 
-        foreach (Collider hit in colliders)
-        {
-            if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<PlayerClass>() == null && hit.GetComponent<FighterClass>() != null)
-                hit.GetComponent<Rigidbody>().AddExplosionForce(100, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
-        }
+        //foreach (Collider hit in colliders)
+        //{
+        //    if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<PlayerClass>() == null && hit.GetComponent<FighterClass>() != null)
+        //        hit.GetComponent<Rigidbody>().AddExplosionForce(100, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
+        //}
 
         if (dead == false)
             FlyAnimation();
@@ -44,7 +44,7 @@ public class FighterClass : TrooperClass
             transform.position.y + Mathf.Sin(timer * 2f) * 0.1f,
                 transform.position.z + Mathf.Sin(timer * 2f) * 0.1f);
         
-        if (transform.position.y < 5)
+        if (transform.position.y < 15)
             rb.AddForce(0, 300, 0, ForceMode.Impulse);
 
         rb.MovePosition(moveSin);

@@ -35,7 +35,9 @@ public class WeaponClass : MonoBehaviour
 
     public SeekerClass currentSeeker;
     public PlayerClass currentPlayer;
-    
+
+    Vector3 randomShootPosition;
+
     public virtual void Awake()
     {
         autoTarget = false;
@@ -198,13 +200,19 @@ public class WeaponClass : MonoBehaviour
                     GameMaster.GM.myCamera.transform.localPosition = new Vector3(Random.Range(-30, 30), Random.Range(camY - 30, camY + 30), Random.Range(camZ - 30, camZ + 30));
                     reloadNow = true;
                     gameObject.GetComponent<AudioSource>().Play();
-                    gameObject.transform.GetComponent<ParticleSystem>().Play();
+                                        
                     RaycastHit hit;
 
-                    if (Physics.Raycast(transform.position, transform.forward, out hit, 600))
+                    Vector3 randomizedSpray = new Vector3(Random.Range(-500, 500) / 120, Random.Range(-500, 500) / 120, Random.Range(-500, 500) / 120);
+                                        
+                    gameObject.transform.localPosition = randomShootPosition + randomizedSpray * 5;
+                    gameObject.transform.GetComponent<ParticleSystem>().Play();
+                    
+                    if (Physics.Raycast(transform.position + randomizedSpray, transform.forward, out hit, 2000))
                         if (hit.transform.tag != "Player")
                         {
-                            GameObject BulletPlayer = Instantiate(bulletEffectPlayer, hit.point, Quaternion.LookRotation(hit.normal));
+                            GameObject BulletPlayer = Instantiate(bulletEffectPlayer, hit.point + randomizedSpray, Quaternion.LookRotation(hit.normal));
+                            BulletPlayer.transform.GetComponent<ParticleSystem>().Play();
                             Destroy(BulletPlayer, 2f);
 
                             if (hit.rigidbody != null && hit.transform.GetComponent<SeekerClass>() == null)
@@ -216,7 +224,7 @@ public class WeaponClass : MonoBehaviour
                                 //ownerLevel = currentPlayer.transform.GetComponent<FractionIndexClass>().level;
                                 // hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
                                 if (hit.transform.tag != "Ship")
-                                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * 2f);
+                                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * 1.5f);
                                 else
                                     hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet / 10);
                             }
@@ -231,7 +239,7 @@ public class WeaponClass : MonoBehaviour
                             {                               
                                 hit.transform.GetComponent<BombShellClass>().Explode();
                             }
-                        }
+                        }           
                 }
             }
 
@@ -431,6 +439,8 @@ public class WeaponClass : MonoBehaviour
             gameObject.transform.localPosition = weaponPositionOffset;
             gameObject.transform.eulerAngles = collision.gameObject.transform.eulerAngles;
 
+            randomShootPosition = gameObject.transform.localPosition;
+
             if (gameObject.name == "BombLauncher")
             {
                 gameObject.transform.localEulerAngles = new Vector3(-15, -5, 0);
@@ -451,14 +461,19 @@ public class WeaponClass : MonoBehaviour
             objectToStick = collision.gameObject.transform;
             weaponPositionOffset.Set(0, 4, 0);
             Destroy(gameObject.GetComponent<Rigidbody>());
-            gameObject.transform.SetParent(collision.transform);
+            
+            if (collision.gameObject.tag == "Trooper")
+                gameObject.transform.SetParent(collision.gameObject.GetComponent<TrooperClass>().body.transform);
+
+            if (collision.gameObject.tag == "Seeker")
+                gameObject.transform.SetParent(collision.transform);
 
             if (collision.gameObject.name == "Seeker")
                 transform.localPosition = new Vector3(0, -30f, 0);
 
             if (collision.gameObject.name == "Trooper")
             { 
-                transform.localPosition = new Vector3(0.1f, 4f, 5f); ;
+                transform.localPosition = new Vector3(-0.015f, 00.001f, 0.04f); ;
 
                 if (transform.GetComponent<MeshRenderer>() != null)
                     transform.GetComponent<MeshRenderer>().enabled = false;

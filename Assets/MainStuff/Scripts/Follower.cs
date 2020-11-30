@@ -69,7 +69,7 @@ public class Follower : FractionIndexClass
                 if (ownerToFollow.GetComponent<SeekerClass>() != null) // Если владелец - Seeker ...
                     if (ownerToFollow.GetComponent<SeekerClass>().totallyDead == true) // ... и он мертв ...
                     {
-                            gameObject.GetComponent<Renderer>().material.color = Color.white; // ... то изменить цвет куба на белый
+                            //gameObject.GetComponent<Renderer>().material.color = Color.white; // ... то изменить цвет куба на белый
 
                             if (gameObject.GetComponentsInChildren<Light>() != null)
                             {
@@ -77,7 +77,7 @@ public class Follower : FractionIndexClass
 
                                 for (int i = 0; i < lightsCount; i++)
                                 {
-                                    gameObject.GetComponentsInChildren<Light>()[i].color = Color.white;
+                                    //gameObject.GetComponentsInChildren<Light>()[i].color = Color.white;
                                 }
                             }
 
@@ -200,7 +200,7 @@ public class Follower : FractionIndexClass
 
                 ownerToFollow = collisioninfo.collider.gameObject; // Присвоить кубу владельца OwnerToFollow (Seeker или Player)
 
-                gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
+                //gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
 
                 if (gameObject.GetComponentsInChildren<Light>() != null)
                 {
@@ -251,7 +251,7 @@ public class Follower : FractionIndexClass
             gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId);
             ownerToFollow = collisioninfo.collider.gameObject;
 
-            gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
+            //gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
 
             if (gameObject.GetComponentsInChildren<Light>() != null)
             {
@@ -289,7 +289,7 @@ public class Follower : FractionIndexClass
             
             gameObject.transform.position = new Vector3(Random.Range(-700, 700), 200, Random.Range(-700, 700));
             fractionId = 10;
-            gameObject.GetComponent<Renderer>().material.color = Color.white;
+            //gameObject.GetComponent<Renderer>().material.color = Color.white;
 
             if (gameObject.GetComponentsInChildren<Light>() != null)
             {

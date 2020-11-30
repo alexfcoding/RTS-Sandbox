@@ -78,10 +78,7 @@ public class Main : MonoBehaviour
 
                 createdObject.GetComponent<SeekerClass>().SetFractionId(i);
                 createdObject.GetComponent<SeekerClass>().textHP.gameObject.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[i];
-
-                if (createdObject.GetComponent<FractionIndexClass>().fractionId == 0)
-                    createdObject.GetComponent<SeekerClass>().textHP.gameObject.GetComponent<TextMesh>().text = createdObject.GetComponent<SeekerClass>().level.ToString() + " *";
-                
+                   
                 warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);
                 GameMaster.GM.GiveWeaponToObject(warriorPosition);
             }

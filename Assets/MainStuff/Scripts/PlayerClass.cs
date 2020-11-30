@@ -801,7 +801,7 @@ public class PlayerClass: FractionIndexClass
                
         if (Input.GetKey("x"))
         {
-            GameMaster.GM.myCamera.GetComponent<Camera>().fieldOfView -= 0.5f;
+            GameMaster.GM.myCamera.GetComponent<Camera>().fieldOfView -= 0.8f;
         }
 
         if (Input.GetKey("c"))

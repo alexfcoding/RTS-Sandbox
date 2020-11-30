@@ -7,6 +7,7 @@ public class SeekerClass : FractionIndexClass
     public float minDistance;
     public int minDistNum;
     public int countOfItemsCollected;
+    public int lootMinCount;
 
     public Vector3 currentTarget;
     
@@ -38,12 +39,12 @@ public class SeekerClass : FractionIndexClass
         foundObject = false;
         isVulnerable = true;
 
-        textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, 18, 0), Quaternion.Euler(0, 0, 0));
+        textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, textHpHeight, 0), Quaternion.Euler(0, 0, 0));
         textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
         textHP.transform.parent = transform;
 
         healthBarScaleMultiplier = 10;
-        healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
+        healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, healthBarHeight, 0), Quaternion.Euler(0, 0, 0));
         healthBar.transform.SetParent(gameObject.transform);
         healthBar.transform.localScale = new Vector3(health/maxHP * healthBarScaleMultiplier, 0.05f, 1);
     }
@@ -87,8 +88,7 @@ public class SeekerClass : FractionIndexClass
                 dead = true;
                 health -= damage;
             }
-        }
-        
+        }        
     }
 
     public void Heal(float healpoints)
@@ -225,7 +225,6 @@ public class SeekerClass : FractionIndexClass
             maxHP += 1000;
         }
            
-
         totallyDead = true;
 
         if (GetComponent<AudioSource>() != null)
@@ -237,13 +236,13 @@ public class SeekerClass : FractionIndexClass
 
         if (lootAfterDeath == true && whoIsDamaging.gameObject!= null && whoIsDamaging.GetComponent<PlayerClass>() != null)
         {
-            int rndLootCount = Random.Range(1, 3 * (int) gameObject.GetComponent<FractionIndexClass>().level);
+            int rndLootCount = Random.Range(lootMinCount, lootMinCount + (int) gameObject.GetComponent<FractionIndexClass>().level);
 
             for (int i = 0; i < rndLootCount; i++)
             {
                 int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
 
-                GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], transform.position + new Vector3(Random.Range(0, 4), Random.Range(0, 4), Random.Range(0, 4)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
+                GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], transform.position + new Vector3(Random.Range(-4, 4), Random.Range(0, 7), Random.Range(-4, 4)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
 
                 if (createdObject.GetComponent<Rigidbody>() == null)
                 {
@@ -269,10 +268,10 @@ public class SeekerClass : FractionIndexClass
         foreach (Collider hit in colliders)
         {
             if ((hit.GetComponent<Rigidbody>() != null) && (hit.tag != "Rocket"))
-                hit.GetComponent<Rigidbody>().AddExplosionForce(1, gameObject.transform.position + new Vector3(0, 0, 0), 150, 1, ForceMode.Impulse);
+                hit.GetComponent<Rigidbody>().AddExplosionForce(300, gameObject.transform.position, 100, Random.Range(0, 1), ForceMode.Impulse);
         }
         
-        GameMaster.GM.RecursiveDestroy(transform, gameObject, 1);
+        GameMaster.GM.RecursiveDestroy(transform, gameObject, 3);
 
         for (int i = 0; i < 3; i++)
         {

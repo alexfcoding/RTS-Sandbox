@@ -72,7 +72,7 @@ public class ShipClass : SeekerClass
                 //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
                 rndUnit = Random.Range(0, 100);
 
-                if (rndUnit < 90)
+                if (rndUnit < 70)
                     spendMoney(600, startCreatingLightShip);
                 else
                     spendMoney(300, startCreatingTrooper);
@@ -318,13 +318,16 @@ public class ShipClass : SeekerClass
         GameMaster.GM.enemyMoneyText.text = "";
 
         if (fractionId == 0)
-            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString() + " Cr.";
+        {
+            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString();
+        }
+           
 
         for (int i = 1; i < GameMaster.GM.shipObjectList.Count; i++)
         {
             if (GameMaster.GM.shipObjectList[i] != null)
                 GameMaster.GM.enemyMoneyText.text +=
-                 "Enemy #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<ShipClass>().money.ToString() + " Cr." + "\n";
+                 "Enemy #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<ShipClass>().money.ToString() + "\n";
         }
     }
 
@@ -347,7 +350,7 @@ public class ShipClass : SeekerClass
         {
             if (GameMaster.GM.shipObjectList[i] != null)
                 GameMaster.GM.enemyMoneyText.text +=
-                 "Enemy #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<ShipClass>().money.ToString() + " Cr." + "\n";
+                 "Enemy #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<ShipClass>().money.ToString() + "\n";
         }
     }
 
