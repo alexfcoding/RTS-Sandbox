@@ -32,6 +32,8 @@ public class TrooperClass : SeekerClass
 
     public bool rotateBody;
 
+    float randomSpeedDeviation;
+
     public override void Awake()
     {
         level = 1;
@@ -59,6 +61,12 @@ public class TrooperClass : SeekerClass
         healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
         healthBar.transform.SetParent(gameObject.transform);
         pointFromShootingRandomize.Set(Random.Range(-40, 40), 0, Random.Range(-40, 40));
+    }
+
+    public void Start()
+    {
+        randomSpeedDeviation = (float) Random.Range(0, 1000) / 1000 / 8;
+        trooperSpeed += randomSpeedDeviation;        
     }
     
     public override void Update()
@@ -103,8 +111,6 @@ public class TrooperClass : SeekerClass
                         pointFromShooting = new Vector3(targetToChase.transform.position.x, transform.position.y, targetToChase.transform.position.z);
                     }
                 }
-
-                
             }
             else
             {
@@ -171,7 +177,11 @@ public class TrooperClass : SeekerClass
                 rbTrooper.AddRelativeForce(Vector3.forward * trooperSpeed * Time.deltaTime * 40, ForceMode.VelocityChange); //* Time.deltaTime * 30
 
                 if (gameObject.GetComponent<Animator>() != null)
+                {
                     gameObject.GetComponent<Animator>().Play("Run_Guard");
+                    gameObject.GetComponent<Animator>().speed = 1 + randomSpeedDeviation;
+                }
+                    
             }
             else
             {
@@ -202,9 +212,9 @@ public class TrooperClass : SeekerClass
 
     public virtual void OnCollisionStay(Collision collisioninfo)
     {
-        if (collisioninfo.gameObject.GetComponent<BuildingClass>() != null || collisioninfo.gameObject.GetComponent<TowerClass>() != null)
+        if (collisioninfo.gameObject.GetComponent<BuildingClass>() != null || collisioninfo.gameObject.GetComponent<TowerClass>() != null || collisioninfo.gameObject.GetComponent<SeekerClass>() != null)
         {
-            gameObject.GetComponent<Rigidbody>().AddForce(Random.Range(-350, 350), 0, Random.Range(-350, 350), ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().AddForce(Random.Range(-500, 500), 0, Random.Range(-500, 500), ForceMode.Impulse);
         }
     }
 }

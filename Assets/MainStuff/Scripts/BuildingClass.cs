@@ -25,7 +25,7 @@ public class BuildingClass : FractionIndexClass
         if (beginConstruction != null && fractionId == 0)
             beginConstruction.Play();
 
-        InvokeRepeating("ConstructBuilding", 0f, 0.1f); // 0.1f = Max TickBuilding (10)/(10sec/0.1)
+        InvokeRepeating("ConstructBuilding", 0f, 0.05f); // 0.1f = Max TickBuilding (10)/(10sec/0.1)
         //isVulnerable = true;
         //lootAfterDeath = false;
         healthBarScaleMultiplier = 1;
@@ -38,7 +38,7 @@ public class BuildingClass : FractionIndexClass
         healthBar.transform.LookAt(Camera.main.transform.position);
     }
 
-    public void ConstructBuilding ()
+    public void ConstructBuilding()
     {
         if (tickBuilding < buildingHeightScale)
         {
@@ -49,8 +49,8 @@ public class BuildingClass : FractionIndexClass
         {
             healthBar.transform.localPosition += new Vector3(0, 4, 0);
 
-            if (fractionId == 0)
-                constructionComplete.Play();
+            //if (fractionId == 0)
+            //    constructionComplete.Play();
 
             CancelInvoke("ConstructBuilding");
         }

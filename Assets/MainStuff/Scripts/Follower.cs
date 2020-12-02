@@ -51,7 +51,7 @@ public class Follower : FractionIndexClass
             if (ownerToFollow != null)
             {
                 if (ownerToFollow.GetComponent<PlayerClass>() != null) // Если владелец куба - игрок ...
-                    normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 0, -10000) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади игрока
+                    normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 0, -12000) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади игрока
                 else // Если владелец куба - не игрок ...
                     normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 5, -100) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади владельца
 
@@ -141,7 +141,7 @@ public class Follower : FractionIndexClass
 
         gameObject.GetComponent<Rigidbody>().mass = 5;
         gameObject.GetComponent<Rigidbody>().angularDrag = 1;
-        gameObject.GetComponent<Rigidbody>().useGravity = false;
+        //gameObject.GetComponent<Rigidbody>().useGravity = false;
         Vector3 normalizeDirection;
 
         if (ownerToFollow != null)
@@ -157,7 +157,7 @@ public class Follower : FractionIndexClass
         yield return new WaitForSeconds(0);
         moveToNextOwner = false;
         speed = 50;
-        gameObject.GetComponent<Rigidbody>().useGravity = true;
+        //gameObject.GetComponent<Rigidbody>().useGravity = true;
         gameObject.GetComponent<Rigidbody>().mass = 5;
 
         if (fractionId == 10)

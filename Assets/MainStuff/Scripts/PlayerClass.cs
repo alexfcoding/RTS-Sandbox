@@ -62,6 +62,8 @@ public class PlayerClass: FractionIndexClass
     public AudioSource left, right, forward, backwards, up, down;
     public AudioSource pickup, changeWeapon;
     public Transform lookCube;
+    public AudioSource buildTower;
+
     public float fx, fy, fz;
     public TextMesh playerHealth3dText;
 
@@ -77,6 +79,8 @@ public class PlayerClass: FractionIndexClass
         //GameMaster.GM.MyCamera.transform.localPosition = new Vector3(CamX - 140, CamY - 140, CamZ - 140);
         playerWeaponList = new List<WeaponClass>();
         currentWeaponNumber = 0;
+
+        GameMaster.GM.myCamera.transform.localPosition = new Vector3(800000, 250000, -300000);
     }
     
     public override void TakeDamage(float damage)
@@ -271,7 +275,12 @@ public class PlayerClass: FractionIndexClass
             GameMaster.GM.myCamera.transform.localPosition = new Vector3(camX + Mathf.Sin(timer * fx) * 2f, camY + Mathf.Sin(timer * fy) * 1f,
             camZ + Mathf.Sin(timer * fz) * 2f);
             lookCube.transform.localPosition = new Vector3(0, 1000, 3000);
-            GameMaster.GM.myCamera.transform.localPosition = Vector3.Lerp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(cameraX, cameraY, cameraZ), 0.1f);
+
+            float smoothTime = 0.3F;
+            Vector3 velocity = Vector3.zero;
+
+            //GameMaster.GM.myCamera.transform.localPosition = Vector3.SmoothDamp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(cameraX, cameraY, cameraZ), ref velocity, smoothTime);
+            GameMaster.GM.myCamera.transform.localPosition = Vector3.Lerp(GameMaster.GM.myCamera.transform.localPosition, new Vector3(cameraX, cameraY, cameraZ), 0.04f);
         }
 
         Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50, 1 << 9);
@@ -280,7 +289,7 @@ public class PlayerClass: FractionIndexClass
             if (hit.tag == "Follower" && dead == false)
             {
                 Vector3 normalizeDirection = (gameObject.transform.position - hit.transform.position).normalized;
-                hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed;
+                hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed * 2;
             }
 
         timer += Time.deltaTime;
@@ -380,11 +389,13 @@ public class PlayerClass: FractionIndexClass
         if (Input.GetKeyDown("3"))
         {
             CallCreatingGunTower();
+            buildTower.Play();
         }
 
         if (Input.GetKeyUp("4"))
         {
             CallCreatingTower();
+            buildTower.Play();
         }
 
         if (Input.GetKey("w"))
@@ -664,6 +675,7 @@ public class PlayerClass: FractionIndexClass
                 if (teamMate != null && teamMate.GetComponent<TrooperClass>() != null && teamMate.GetComponent<TrooperClass>().teamSelectMark != null)
                     Destroy(teamMate.GetComponent<TrooperClass>().teamSelectMark);
             }
+
 
             //GameMaster.GM.myCamera.transform.localPosition = new Vector3(cameraX, cameraY, cameraZ);
         }

@@ -45,14 +45,15 @@ public class WeaponClass : MonoBehaviour
         reloadNow = false;
         soundStop = false;
         rotatable = true;
+
+        camX = GameMaster.GM.myCamera.transform.localPosition.x;
+        camY = GameMaster.GM.myCamera.transform.localPosition.y;
+        camZ = GameMaster.GM.myCamera.transform.localPosition.z;
     }
 
     public void Start()
     {
         InvokeRepeating("CheckForEnemyInSphere", 0, 1f);
-        camX = GameMaster.GM.myCamera.transform.localPosition.x;
-        camY = GameMaster.GM.myCamera.transform.localPosition.y;
-        camZ = GameMaster.GM.myCamera.transform.localPosition.z;
 
         timer += (float) Random.Range(0, 1000) / 1000;
     }
@@ -332,8 +333,15 @@ public class WeaponClass : MonoBehaviour
         {
             if (foundTargetToShoot == true && targetInSphere != null)
             {
-                transform.LookAt(targetInSphere.transform.position + new Vector3(0,0,0));
-
+                if (targetInSphere.name == "Trooper")
+                {
+                    transform.LookAt(targetInSphere.transform.position + new Vector3(0, 12, 0));
+                }
+                else
+                {
+                    transform.LookAt(targetInSphere.transform.position + new Vector3(0, 0, 0));
+                }
+                
                 if (objectToStick.transform.GetComponent<TrooperClass>() != null)
                     objectToStick.transform.GetComponent<TrooperClass>().enemyToLook = targetInSphere.gameObject;
 

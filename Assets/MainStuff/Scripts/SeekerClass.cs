@@ -139,12 +139,12 @@ public class SeekerClass : FractionIndexClass
                 minDistNum = Random.Range(0, objectList.Count);
             }
 
-            if (objectList[minDistNum] == null || objectList[minDistNum].GetComponent<FractionIndexClass>().fractionId != 0 && objectList[minDistNum].GetComponent<FractionIndexClass>().fractionId != fractionId)
+            if (objectList[minDistNum] == null || objectList[minDistNum].GetComponent<FractionIndexClass>().fractionId != 0 && objectList[minDistNum].GetComponent<FractionIndexClass>().fractionId != fractionId || currentTargetObject.gameObject == null)
             {
                 findNextObject = true;
             }
 
-            if (objectList[minDistNum]!=null)
+            if (objectList[minDistNum] != null)
             {
                 if ((objectList[minDistNum].gameObject.tag == "Follower" && objectList[minDistNum].GetComponent<Follower>().followOwner == false) || (goingToBase == false && objectList[minDistNum].gameObject.name == "Roller" && objectList[minDistNum].gameObject.GetComponent<RollerEnemyBase>() != null))
                     foundObject = true;
@@ -165,8 +165,7 @@ public class SeekerClass : FractionIndexClass
                     }                       
                     else
                         minDistNum = Random.Range(0, objectList.Count);
-                    
-                   
+                                       
                     Quaternion lookOnLook = Quaternion.LookRotation(new Vector3(currentTarget.x, transform.position.y, currentTarget.z) - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 3f);
                     Vector3 normalizeDirection = (objectList[minDistNum].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
@@ -250,7 +249,7 @@ public class SeekerClass : FractionIndexClass
                 }
 
                 createdObject.GetComponent<Rigidbody>().mass = 5;
-                //createdObject.GetComponent<Rigidbody>().useGravity = false;
+                createdObject.GetComponent<Rigidbody>().useGravity = true;
                 createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
                 createdObject.GetComponent<Rigidbody>().drag = 1f;
                 if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)

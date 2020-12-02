@@ -66,7 +66,7 @@ public class BombShellClass : RocketShellClass
         foreach (Collider hit in colliders)
         {
             if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket"))
-                hit.GetComponent<Rigidbody>().AddExplosionForce(800, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
+                hit.GetComponent<Rigidbody>().AddExplosionForce(800, gameObject.transform.position + new Vector3(0, 0, 0), 30, 1, ForceMode.Impulse);
 
             if (hit.GetComponent<FractionIndexClass>() != null && hit.gameObject != null)
             {
