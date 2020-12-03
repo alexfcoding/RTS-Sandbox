@@ -49,8 +49,8 @@ public class Building : FactionIndex
         {
             healthBar.transform.localPosition += new Vector3(0, 4, 0);
 
-            //if (fractionId == 0)
-            //    constructionComplete.Play();
+            if (fractionId == 0)
+                constructionComplete.Play();
 
             CancelInvoke("ConstructBuilding");
         }

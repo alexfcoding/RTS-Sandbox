@@ -46,7 +46,7 @@ public class Player: FactionIndex
     public GameObject selector;    
     public GameObject currentShipTarget;
     public GameObject clickedObject;
-    public GameObject targetUI;
+    public GameObject targetUI, followUI;
     public GameObject targetSpritePrefab;
     public GameObject targetToLock;
     public GameObject trooperBase;
@@ -73,6 +73,8 @@ public class Player: FactionIndex
     public List<Weapon> playerWeaponList;
     int currentWeaponNumber;
 
+    public Sprite targetSprite, followSprite;
+
     public void Start()
     {
         playerHealth3dText.text = $"HP: {health}";
@@ -81,6 +83,9 @@ public class Player: FactionIndex
         currentWeaponNumber = 0;
 
         GameMaster.GM.myCamera.transform.localPosition = new Vector3(800000, 250000, -300000);
+
+        targetSprite = targetUI.GetComponent<Image>().sprite;
+        followSprite = followUI.GetComponent<Image>().sprite;
     }
     
     public override void TakeDamage(float damage)
@@ -603,16 +608,22 @@ public class Player: FactionIndex
             {
                 if (hit.transform.GetComponent<Seeker>() != null || hit.transform.GetComponent<Player>() != null)
                 {
-                    targetUI.GetComponent<Image>().enabled = true;
-                    targetUI.GetComponent<Image>().transform.position = Input.mousePosition;
+                    targetUI.GetComponent<Image>().enabled = true;                    
 
                     if (hit.transform.GetComponent<FactionIndex>().fractionId != 0)
                     {
-
-                        targetUI.GetComponent<Image>().color = Color.red;
+                        targetUI.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+                        targetUI.GetComponent<Image>().sprite = targetSprite;
+                        targetUI.GetComponent<Image>().transform.position = Input.mousePosition;
+                        targetUI.GetComponent<Image>().color = GameMaster.GM.fractionColors[hit.transform.GetComponent<FactionIndex>().fractionId];
                     }
                     else
-                        targetUI.GetComponent<Image>().color = Color.green;
+                    {
+                        targetUI.transform.localScale = new Vector3(0.4f, 0.5f, 0.5f);
+                        targetUI.GetComponent<Image>().sprite = followSprite;
+                        targetUI.GetComponent<Image>().transform.position = Input.mousePosition + new Vector3(0, 40, 0);
+                        targetUI.GetComponent<Image>().color = GameMaster.GM.fractionColors[hit.transform.GetComponent<FactionIndex>().fractionId];
+                    }                        
                 }
                 else
                     targetUI.GetComponent<Image>().enabled = false;
@@ -621,8 +632,7 @@ public class Player: FactionIndex
 
         if (Input.GetKeyUp(KeyCode.Mouse0) && isTimeToGiveCommand == true) // Левая кнопка мыши
         {
-            isTimeToGiveCommand = false;
-
+            isTimeToGiveCommand = false;            
             targetUI.GetComponent<Image>().enabled = false;
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
@@ -634,7 +644,7 @@ public class Player: FactionIndex
             {
                 if (hit2.transform.GetComponent<Seeker>() != null || hit2.transform.GetComponent<Player>() != null)
                     clickedObject = hit2.transform.gameObject;
-
+                                
                 foreach (GameObject teamMate in teamMateList)
                 {
                     if (teamMate != null)
@@ -683,15 +693,15 @@ public class Player: FactionIndex
                     Destroy(teamMate.GetComponent<Trooper>().teamSelectMark);
             }
 
-
-            //GameMaster.GM.myCamera.transform.localPosition = new Vector3(cameraX, cameraY, cameraZ);
+            GameMaster.GM.myCamera.GetComponent<Camera>().fieldOfView = 45f;
+            //GameMaster.GM.myCamera.transform.localPosition = new Vector3(cameraX, cameraY, cameraZ);            
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
-            stopCamControls = false;
+            stopCamControls = false;            
         }
             
     }

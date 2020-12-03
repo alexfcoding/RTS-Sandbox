@@ -33,6 +33,7 @@ public class Trooper : Seeker
     public bool rotateBody;
 
     float randomSpeedDeviation;
+    public int randomCollisionStuckDirection;
 
     public override void Awake()
     {
@@ -66,7 +67,14 @@ public class Trooper : Seeker
     public void Start()
     {
         randomSpeedDeviation = (float) Random.Range(0, 1000) / 1000 / 8;
-        trooperSpeed += randomSpeedDeviation;        
+        trooperSpeed += randomSpeedDeviation;
+
+        randomCollisionStuckDirection = Random.Range(0, 2);
+
+        if (randomCollisionStuckDirection == 0)
+            randomCollisionStuckDirection = -1;
+        if (randomCollisionStuckDirection == 1)
+            randomCollisionStuckDirection = 1;
     }
     
     public override void Update()
@@ -88,7 +96,7 @@ public class Trooper : Seeker
             if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<Player>() == null && hit.GetComponent<Trooper>() != null)
             {
                 if (hit.name == "LightShip")
-                    hit.GetComponent<Rigidbody>().AddExplosionForce(100, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
+                    hit.GetComponent<Rigidbody>().AddExplosionForce(70, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
                 if (hit.name == "Trooper")
                     hit.GetComponent<Rigidbody>().AddExplosionForce(700, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
             }
@@ -214,7 +222,7 @@ public class Trooper : Seeker
     {
         if (collisioninfo.gameObject.GetComponent<Building>() != null || collisioninfo.gameObject.GetComponent<Tower>() != null || collisioninfo.gameObject.GetComponent<Seeker>() != null)
         {
-            gameObject.GetComponent<Rigidbody>().AddForce(Random.Range(-500, 500), 0, Random.Range(-500, 500), ForceMode.Impulse);
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(Vector3.left * 120 * randomCollisionStuckDirection, ForceMode.Impulse);            
         }
     }
 }

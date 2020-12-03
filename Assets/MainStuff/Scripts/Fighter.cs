@@ -11,9 +11,16 @@ public class Fighter : Trooper
     {
         //randomY = Random.Range(0, 10); 
         timer = Random.Range(0, 100);
-        health = 1500;
-        maxHP = 1500;
+        health = 800;
+        maxHP = 800;
         rb = gameObject.GetComponent<Rigidbody>();
+
+        randomCollisionStuckDirection = Random.Range(0, 2);
+
+        if (randomCollisionStuckDirection == 0)
+            randomCollisionStuckDirection = -1;
+        if (randomCollisionStuckDirection == 1)
+            randomCollisionStuckDirection = 1;
     }
 
     public override void Update()
@@ -52,6 +59,9 @@ public class Fighter : Trooper
 
     public override void OnCollisionStay(Collision collisioninfo)
     {
-        
+        if (collisioninfo.gameObject.GetComponent<Building>() != null || collisioninfo.gameObject.GetComponent<Tower>() != null || collisioninfo.gameObject.GetComponent<Seeker>() != null)
+        {
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(100 * randomCollisionStuckDirection, 30, 0), ForceMode.Impulse);
+        }
     }
 }
