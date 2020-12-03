@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FractionIndexClass : MonoBehaviour
+public class FactionIndex : MonoBehaviour
 {
     public int fractionId;
 
@@ -28,8 +28,8 @@ public class FractionIndexClass : MonoBehaviour
     public virtual void Awake()
     {
         level = 1;
-        health = 5000;
-        maxHP = 5000;
+        health = 150;
+        maxHP = 150;
         healthBarScaleMultiplier = 0;
         healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, healthBarHeight, 0), Quaternion.Euler(0, 0, 0));
         healthBar.transform.SetParent(gameObject.transform);
@@ -87,12 +87,19 @@ public class FractionIndexClass : MonoBehaviour
                     if (deathEffect != null)
                     {
                         GameObject deadBoom = Instantiate(deathEffect, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
-                        Destroy(deadBoom, 2f);
-                    }
-                        
+                        Destroy(deadBoom, 5f);
+                    }                        
 
                     if (deathSound != null)
                         deathSound.Play();
+
+                    Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 35);
+
+                    foreach (Collider hit in colliders)
+                    {                      
+                        if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<Seeker>() == null && hit.GetComponent<Trooper>() == null) && (hit.name != "Rocket") && (hit.name != "Bomb"))
+                            hit.GetComponent<Rigidbody>().AddExplosionForce(700, gameObject.transform.position + new Vector3(0, 0, 0), 10, 1, ForceMode.Impulse);
+                    }
 
                     if (lootAfterDeath == true)
                     {
@@ -112,7 +119,7 @@ public class FractionIndexClass : MonoBehaviour
 
                 dead = true;
                 health -= damage;
-                GameMaster.GM.RecursiveDestroy(transform, gameObject, 0);
+                GameMaster.GM.RecursiveDestroy(transform, gameObject, 5);
             }
         }
     }

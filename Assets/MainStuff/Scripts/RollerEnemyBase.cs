@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class RollerEnemyBase : TrooperClass
+public class RollerEnemyBase : Trooper
 {
     // Start is called before the first frame update
     public override void Awake()
@@ -47,7 +47,7 @@ public class RollerEnemyBase : TrooperClass
         {
             if (targetToChase != null)
             {
-                if (targetToChase.GetComponent<ShipClass>() != null)
+                if (targetToChase.GetComponent<Ship>() != null)
                 {
                     pointFromShooting = targetToChase.transform.position - new Vector3(0, targetToChase.transform.position.y, 0);
                 }
@@ -69,21 +69,21 @@ public class RollerEnemyBase : TrooperClass
                     targetToChase = GameMaster.GM.player.gameObject;
             }
 
-            if (targetToChase != null && targetToChase.GetComponent<ShipClass>() != null)
+            if (targetToChase != null && targetToChase.GetComponent<Ship>() != null)
                 pointFromShooting = pointFromShooting + pointFromShootingRandomize * 4;
 
-            if (targetToChase != null && targetToChase.GetComponent<ShipClass>() == null)
+            if (targetToChase != null && targetToChase.GetComponent<Ship>() == null)
                 pointFromShooting = pointFromShooting + pointFromShootingRandomize;
 
             if ((currentWeapon != null && enemyToLook != null) || (currentWeapon != null && enemyToLook != null))
             {
-                if (enemyToLook.GetComponent<ShipClass>() != null)
+                if (enemyToLook.GetComponent<Ship>() != null)
                 {
                    // if (gameObject.name == "LightShip")
                    //     gameObject.transform.LookAt(enemyToLook.transform.position);
                     wait = true;
                 }
-                else if (enemyToLook.GetComponent<ShipClass>() == null)
+                else if (enemyToLook.GetComponent<Ship>() == null)
                 {
                     //gameObject.transform.LookAt(enemyToLook.transform.position);
                     wait = true;
@@ -96,7 +96,7 @@ public class RollerEnemyBase : TrooperClass
             }
 
             // если враг мертв, то двигаться дальше
-            if (enemyToLook != null && enemyToLook.GetComponent<SeekerClass>() != null && enemyToLook.GetComponent<SeekerClass>().dead == true && currentWeapon.GetComponent<WeaponClass>().playerFollowingCommand == true)
+            if (enemyToLook != null && enemyToLook.GetComponent<Seeker>() != null && enemyToLook.GetComponent<Seeker>().dead == true && currentWeapon.GetComponent<Weapon>().playerFollowingCommand == true)
                 wait = false;
 
             if (((Vector3.Distance(transform.position, pointFromShooting)) > 80) && (wait == false))

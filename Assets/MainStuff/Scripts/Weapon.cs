@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponClass : MonoBehaviour
+public class Weapon : MonoBehaviour
 {
     public Transform objectToStick;
     
@@ -33,8 +33,8 @@ public class WeaponClass : MonoBehaviour
     public bool playerFollowingCommand;
     public bool canBePickedUp;
 
-    public SeekerClass currentSeeker;
-    public PlayerClass currentPlayer;
+    public Seeker currentSeeker;
+    public Player currentPlayer;
 
     Vector3 randomShootPosition;
 
@@ -120,11 +120,11 @@ public class WeaponClass : MonoBehaviour
             Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, range, layerMask);
             for (int i = 0; i < colliders.Length; i++)
             {
-                if ((colliders[i].GetComponent<FractionIndexClass>() != null && objectToStick != null && colliders[i].gameObject != null
-                && colliders[i].GetComponent<FractionIndexClass>().fractionId != objectToStick.GetComponent<FractionIndexClass>().fractionId
-                && currentSeeker.GetComponent<FractionIndexClass>().dead == false
-                && colliders[i].GetComponent<FractionIndexClass>().isSimpleFollower == false
-                && colliders[i].GetComponent<FractionIndexClass>().dead == false) 
+                if ((colliders[i].GetComponent<FactionIndex>() != null && objectToStick != null && colliders[i].gameObject != null
+                && colliders[i].GetComponent<FactionIndex>().fractionId != objectToStick.GetComponent<FactionIndex>().fractionId
+                && currentSeeker.GetComponent<FactionIndex>().dead == false
+                && colliders[i].GetComponent<FactionIndex>().isSimpleFollower == false
+                && colliders[i].GetComponent<FactionIndex>().dead == false) 
                  
                 //(
                 //colliders[i].GetComponent<FractionIndexClass>() != null && objectToStick != null && colliders[i].gameObject != null
@@ -139,16 +139,16 @@ public class WeaponClass : MonoBehaviour
                 {
                     foundTargetToShoot = true;
                     targetInSphere = colliders[i].gameObject;
-                    if (objectToStick.transform.GetComponent<TrooperClass>() != null)
-                        objectToStick.transform.GetComponent<TrooperClass>().enemyToLook = targetInSphere.gameObject;
+                    if (objectToStick.transform.GetComponent<Trooper>() != null)
+                        objectToStick.transform.GetComponent<Trooper>().enemyToLook = targetInSphere.gameObject;
                     break;
                 }
             }
 
             if (foundTargetToShoot == false)
-                if (objectToStick.transform.GetComponent<TrooperClass>() != null)
+                if (objectToStick.transform.GetComponent<Trooper>() != null)
                 { 
-                    objectToStick.transform.GetComponent<TrooperClass>().enemyToLook = null;
+                    objectToStick.transform.GetComponent<Trooper>().enemyToLook = null;
                     
                 }
         }
@@ -160,39 +160,39 @@ public class WeaponClass : MonoBehaviour
     {
         if (gameObject.tag == "PlayerWeapon")
         {
-            if (Input.GetMouseButton(0) && isProjectile == true && Cursor.visible == false && objectToStick.GetComponent<PlayerClass>().tacticMode == false) 
+            if (Input.GetMouseButton(0) && isProjectile == true && Cursor.visible == false && objectToStick.GetComponent<Player>().tacticMode == false) 
             {
                 if (reloadNow == false)
                 {
-                    if (isRocket == true && gameObject == GameMaster.GM.player.GetComponent<PlayerClass>().currentWeapon.gameObject)
+                    if (isRocket == true && gameObject == GameMaster.GM.player.GetComponent<Player>().currentWeapon.gameObject)
                     {
                         GameMaster.GM.shakeCamera = true;
                         reloadNow = true;
-                        GameObject CreatedObject = GameMaster.GM.ConstructObject(PlayerClass.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
-                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0 + (float) Random.Range(-3,3) / 6, 0 + (float) Random.Range(-3, 3) / 6, 4), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
+                        GameObject CreatedObject = GameMaster.GM.ConstructObject(Player.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
+                        Player.mainPlayer.currentWeapon.transform.TransformPoint(0 + (float) Random.Range(-3,3) / 6, 0 + (float) Random.Range(-3, 3) / 6, 4), Player.mainPlayer.currentWeapon.transform.rotation,
                         "Rocket", GameMaster.GM.bulletObjectList, true);
-                        CreatedObject.GetComponent<RocketShellClass>().playersBullet = true;
-                        CreatedObject.GetComponent<RocketShellClass>().LaunchSound();
-                        CreatedObject.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                        CreatedObject.GetComponent<RocketShell>().playersBullet = true;
+                        CreatedObject.GetComponent<RocketShell>().LaunchSound();
+                        CreatedObject.GetComponent<RocketShell>().weaponToStick = gameObject;
                     }
 
-                    if (isBombLauncher == true && gameObject == GameMaster.GM.player.GetComponent<PlayerClass>().currentWeapon.gameObject)
+                    if (isBombLauncher == true && gameObject == GameMaster.GM.player.GetComponent<Player>().currentWeapon.gameObject)
                     {
                         GameMaster.GM.shakeCamera = true;
                         reloadNow = true;
-                        GameObject CreatedObject = GameMaster.GM.ConstructObject(PlayerClass.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
-                        PlayerClass.mainPlayer.currentWeapon.transform.TransformPoint(0, 0, 1), PlayerClass.mainPlayer.currentWeapon.transform.rotation,
+                        GameObject CreatedObject = GameMaster.GM.ConstructObject(Player.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
+                        Player.mainPlayer.currentWeapon.transform.TransformPoint(0, 0, 1), Player.mainPlayer.currentWeapon.transform.rotation,
                         "Bomb", GameMaster.GM.bulletObjectList);
-                        CreatedObject.GetComponent<RocketShellClass>().playersBullet = true;
+                        CreatedObject.GetComponent<RocketShell>().playersBullet = true;
                         gameObject.GetComponent<AudioSource>().Play();
-                        CreatedObject.GetComponent<RocketShellClass>().LaunchSound();
-                        CreatedObject.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                        CreatedObject.GetComponent<RocketShell>().LaunchSound();
+                        CreatedObject.GetComponent<RocketShell>().weaponToStick = gameObject;
                         GameMaster.GM.player.gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, -500, -800, ForceMode.Impulse);                        
                     }
                 }
             }
 
-            if (Input.GetMouseButton(0) && isProjectile == false && Cursor.visible == false && objectToStick.GetComponent<PlayerClass>().tacticMode == false && gameObject == GameMaster.GM.player.GetComponent<PlayerClass>().currentWeapon.gameObject) // Если нажали мышь и оружие не стреляет объектами, а пулями 
+            if (Input.GetMouseButton(0) && isProjectile == false && Cursor.visible == false && objectToStick.GetComponent<Player>().tacticMode == false && gameObject == GameMaster.GM.player.GetComponent<Player>().currentWeapon.gameObject) // Если нажали мышь и оружие не стреляет объектами, а пулями 
             {
                 GameMaster.GM.myCamera.transform.localPosition = new Vector3(Random.Range(-30, 30), Random.Range(camY - 30, camY + 30), Random.Range(camZ - 30, camZ + 30));
 
@@ -216,29 +216,29 @@ public class WeaponClass : MonoBehaviour
                             BulletPlayer.transform.GetComponent<ParticleSystem>().Play();
                             Destroy(BulletPlayer, 2f);
 
-                            if (hit.rigidbody != null && hit.transform.GetComponent<SeekerClass>() == null)
+                            if (hit.rigidbody != null && hit.transform.GetComponent<Seeker>() == null)
                                 hit.rigidbody.AddForce(-hit.normal * 500, ForceMode.Impulse);
 
-                            if (hit.transform.GetComponent<FractionIndexClass>() != null)
+                            if (hit.transform.GetComponent<FactionIndex>() != null)
                             {
-                                hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
+                                hit.transform.GetComponent<FactionIndex>().whoIsDamaging = objectToStick.gameObject;
                                 //ownerLevel = currentPlayer.transform.GetComponent<FractionIndexClass>().level;
                                 // hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
                                 if (hit.transform.tag != "Ship")
-                                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * 1.5f);
+                                    hit.transform.GetComponent<FactionIndex>().TakeDamage(damageBullet * 1.5f);
                                 else
-                                    hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet / 10);
+                                    hit.transform.GetComponent<FactionIndex>().TakeDamage(damageBullet / 10);
                             }
 
-                            if (hit.transform.GetComponent<RocketShellClass>() != null)
+                            if (hit.transform.GetComponent<RocketShell>() != null)
                             {
                                 //hit.transform.GetComponent<RocketShellClass>().damagedByBullet = true;
-                                hit.transform.GetComponent<RocketShellClass>().Explode();
+                                hit.transform.GetComponent<RocketShell>().Explode();
                             }
 
-                            if (hit.transform.GetComponent<BombShellClass>() != null)
+                            if (hit.transform.GetComponent<BombShell>() != null)
                             {                               
-                                hit.transform.GetComponent<BombShellClass>().Explode();
+                                hit.transform.GetComponent<BombShell>().Explode();
                             }
                         }           
                 }
@@ -299,8 +299,8 @@ public class WeaponClass : MonoBehaviour
                         }
                            
 
-                        createdBullet.GetComponent<RocketShellClass>().LaunchSound();
-                        createdBullet.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                        createdBullet.GetComponent<RocketShell>().LaunchSound();
+                        createdBullet.GetComponent<RocketShell>().weaponToStick = gameObject;
                     }
 
                     if (isBombLauncher == true)
@@ -311,8 +311,8 @@ public class WeaponClass : MonoBehaviour
                         else
                             createdBullet = GameMaster.GM.ConstructObject(rocketLauncherAmmoPrefab, transform.TransformPoint(new Vector3(0, 0.3f, 0.7f)) + new Vector3(sprayShoot, sprayShoot, sprayShoot), transform.rotation, "Bomb", GameMaster.GM.bulletObjectList);
 
-                        createdBullet.GetComponent<RocketShellClass>().LaunchSound();
-                        createdBullet.GetComponent<RocketShellClass>().weaponToStick = gameObject;
+                        createdBullet.GetComponent<RocketShell>().LaunchSound();
+                        createdBullet.GetComponent<RocketShell>().weaponToStick = gameObject;
                     }
                 }
 
@@ -342,8 +342,8 @@ public class WeaponClass : MonoBehaviour
                     transform.LookAt(targetInSphere.transform.position + new Vector3(0, 0, 0));
                 }
                 
-                if (objectToStick.transform.GetComponent<TrooperClass>() != null)
-                    objectToStick.transform.GetComponent<TrooperClass>().enemyToLook = targetInSphere.gameObject;
+                if (objectToStick.transform.GetComponent<Trooper>() != null)
+                    objectToStick.transform.GetComponent<Trooper>().enemyToLook = targetInSphere.gameObject;
 
                 if (soundStop == false)
                 {
@@ -363,19 +363,19 @@ public class WeaponClass : MonoBehaviour
                         if (hit2.transform.GetComponent<ParticleSystem>() != null)
                            hit2.transform.GetComponent<ParticleSystem>().Play();
 
-                        if (hit2.transform.GetComponent<PlayerClass>() != null)
+                        if (hit2.transform.GetComponent<Player>() != null)
                         {
                             GameObject BulletAI = Instantiate(bulletEffectAI, hit2.point, Quaternion.LookRotation(hit2.normal));
                             Destroy(BulletAI, 2f);
                         }
 
                         if (gameObject != null)
-                            if (targetInSphere.transform.GetComponent<FractionIndexClass>() != null && objectToStick != null && targetInSphere.transform.GetComponent<FractionIndexClass>().dead == false)
+                            if (targetInSphere.transform.GetComponent<FactionIndex>() != null && objectToStick != null && targetInSphere.transform.GetComponent<FactionIndex>().dead == false)
                             {
-                                targetInSphere.transform.GetComponent<FractionIndexClass>().whoIsDamaging = objectToStick.gameObject;
+                                targetInSphere.transform.GetComponent<FactionIndex>().whoIsDamaging = objectToStick.gameObject;
                                 //ownerLevel = currentSeeker.transform.GetComponent<FractionIndexClass>().level;
                                 //targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
-                                targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet);
+                                targetInSphere.transform.GetComponent<FactionIndex>().TakeDamage(damageBullet);
                             }
                     }
                 }
@@ -397,23 +397,23 @@ public class WeaponClass : MonoBehaviour
 
     public virtual void OnCollisionEnter(Collision collision)
     {
-        if ((collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<PlayerClass>() != null) && canBePickedUp)
+        if ((collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<Player>() != null) && canBePickedUp)
         {
            // collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;
-            collision.gameObject.GetComponent<PlayerClass>().pickup.Play();
-            collision.gameObject.GetComponent<PlayerClass>().playerWeaponList.Add(this);
-            collision.gameObject.GetComponent<PlayerClass>().currentWeapon = gameObject.GetComponent<WeaponClass>();
+            collision.gameObject.GetComponent<Player>().pickup.Play();
+            collision.gameObject.GetComponent<Player>().playerWeaponList.Add(this);
+            collision.gameObject.GetComponent<Player>().currentWeapon = gameObject.GetComponent<Weapon>();
 
             Component[] renderer;
 
-            for (int i = 0; i < collision.gameObject.GetComponent<PlayerClass>().playerWeaponList.Count; i++)
+            for (int i = 0; i < collision.gameObject.GetComponent<Player>().playerWeaponList.Count; i++)
             {
-                if (collision.gameObject.GetComponent<PlayerClass>().playerWeaponList[i].GetComponent<MeshRenderer>() != null)
-                    collision.gameObject.GetComponent<PlayerClass>().playerWeaponList[i].GetComponent<MeshRenderer>().enabled = false;
+                if (collision.gameObject.GetComponent<Player>().playerWeaponList[i].GetComponent<MeshRenderer>() != null)
+                    collision.gameObject.GetComponent<Player>().playerWeaponList[i].GetComponent<MeshRenderer>().enabled = false;
 
-                if (collision.gameObject.GetComponent<PlayerClass>().playerWeaponList[i].GetComponentsInChildren<Renderer>() != null)
+                if (collision.gameObject.GetComponent<Player>().playerWeaponList[i].GetComponentsInChildren<Renderer>() != null)
                 {
-                    renderer = collision.gameObject.GetComponent<PlayerClass>().playerWeaponList[i].GetComponentsInChildren<Renderer>();
+                    renderer = collision.gameObject.GetComponent<Player>().playerWeaponList[i].GetComponentsInChildren<Renderer>();
 
                     for (int j = 0; j < renderer.Length; j++)
                     {
@@ -423,12 +423,12 @@ public class WeaponClass : MonoBehaviour
                 }
             }
                    
-            if (collision.gameObject.GetComponent<PlayerClass>().currentWeapon.GetComponent<MeshRenderer>() != null)
-                collision.gameObject.GetComponent<PlayerClass>().currentWeapon.GetComponent<MeshRenderer>().enabled = true;
+            if (collision.gameObject.GetComponent<Player>().currentWeapon.GetComponent<MeshRenderer>() != null)
+                collision.gameObject.GetComponent<Player>().currentWeapon.GetComponent<MeshRenderer>().enabled = true;
 
-            if (collision.gameObject.GetComponent<PlayerClass>().currentWeapon.GetComponentsInChildren<Renderer>() != null)
+            if (collision.gameObject.GetComponent<Player>().currentWeapon.GetComponentsInChildren<Renderer>() != null)
             {
-                renderer = collision.gameObject.GetComponent<PlayerClass>().currentWeapon.GetComponentsInChildren<Renderer>();
+                renderer = collision.gameObject.GetComponent<Player>().currentWeapon.GetComponentsInChildren<Renderer>();
 
                 for (int j = 0; j < renderer.Length; j++)
                 {
@@ -437,10 +437,10 @@ public class WeaponClass : MonoBehaviour
                 }
             }
 
-            gameObject.GetComponent<WeaponClass>().currentPlayer = collision.gameObject.GetComponent<PlayerClass>();
+            gameObject.GetComponent<Weapon>().currentPlayer = collision.gameObject.GetComponent<Player>();
 
-            if (gameObject.GetComponent<WeaponClass>().rocketLauncherAmmoPrefab != null)
-                gameObject.GetComponent<WeaponClass>().rocketLauncherAmmoPrefab.GetComponent<RocketShellClass>().playersBullet = true;
+            if (gameObject.GetComponent<Weapon>().rocketLauncherAmmoPrefab != null)
+                gameObject.GetComponent<Weapon>().rocketLauncherAmmoPrefab.GetComponent<RocketShell>().playersBullet = true;
 
             gameObject.tag = "PlayerWeapon";
             gameObject.transform.SetParent(collision.transform);
@@ -459,11 +459,11 @@ public class WeaponClass : MonoBehaviour
             //ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
         }
 
-        if ((collision.gameObject.tag == "Seeker" || collision.gameObject.tag == "Trooper") && (collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon == false) && canBePickedUp)
+        if ((collision.gameObject.tag == "Seeker" || collision.gameObject.tag == "Trooper") && (collision.gameObject.GetComponent<Seeker>().alreadyHaveWeapon == false) && canBePickedUp)
         {
-            collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon = true;
-            collision.gameObject.GetComponent<SeekerClass>().currentWeapon = gameObject.GetComponent<WeaponClass>();
-            gameObject.GetComponent<WeaponClass>().currentSeeker = collision.gameObject.GetComponent<SeekerClass>();
+            collision.gameObject.GetComponent<Seeker>().alreadyHaveWeapon = true;
+            collision.gameObject.GetComponent<Seeker>().currentWeapon = gameObject.GetComponent<Weapon>();
+            gameObject.GetComponent<Weapon>().currentSeeker = collision.gameObject.GetComponent<Seeker>();
             gameObject.tag = "EnemyWeapon";
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;
@@ -471,7 +471,7 @@ public class WeaponClass : MonoBehaviour
             Destroy(gameObject.GetComponent<Rigidbody>());
             
             if (collision.gameObject.tag == "Trooper")
-                gameObject.transform.SetParent(collision.gameObject.GetComponent<TrooperClass>().body.transform);
+                gameObject.transform.SetParent(collision.gameObject.GetComponent<Trooper>().body.transform);
 
             if (collision.gameObject.tag == "Seeker")
                 gameObject.transform.SetParent(collision.transform);
@@ -498,11 +498,11 @@ public class WeaponClass : MonoBehaviour
             //ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
         }
 
-        if ((collision.gameObject.tag == "EnemyShip") && (collision.gameObject.GetComponent<SeekerClass>().alreadyHaveWeapon == false))
+        if ((collision.gameObject.tag == "EnemyShip") && (collision.gameObject.GetComponent<Seeker>().alreadyHaveWeapon == false))
         {
-            collision.gameObject.GetComponent<ShipClass>().alreadyHaveWeapon = true;
-            collision.gameObject.GetComponent<ShipClass>().currentWeapon = gameObject.GetComponent<WeaponClass>();
-            gameObject.GetComponent<WeaponClass>().currentSeeker = collision.gameObject.GetComponent<SeekerClass>();
+            collision.gameObject.GetComponent<Ship>().alreadyHaveWeapon = true;
+            collision.gameObject.GetComponent<Ship>().currentWeapon = gameObject.GetComponent<Weapon>();
+            gameObject.GetComponent<Weapon>().currentSeeker = collision.gameObject.GetComponent<Seeker>();
             gameObject.tag = "EnemyWeapon";
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;

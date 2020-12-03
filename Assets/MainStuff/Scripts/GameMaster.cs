@@ -356,6 +356,9 @@ public class GameMaster : MonoBehaviour
             if (child.GetComponent<Collider>() != null)
                 child.GetComponent<Collider>().enabled = false;
 
+            if (child.GetComponent<Light>() != null)
+                child.GetComponent<Light>().enabled = false;
+
             if (child.GetComponent<ParticleSystem>() != null)
                 child.GetComponent<ParticleSystem>().Stop();
 
@@ -365,7 +368,7 @@ public class GameMaster : MonoBehaviour
         if (gameObj.GetComponent<MeshRenderer>() != null)
             gameObj.GetComponent<MeshRenderer>().enabled = false;
 
-        if (gameObj.GetComponent<PlayerClass>() == null)
+        if (gameObj.GetComponent<Player>() == null)
            Destroy(gameObj, timeToDestroy);
     }
 

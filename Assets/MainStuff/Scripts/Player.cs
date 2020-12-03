@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 public delegate void SpendMoneyMethod();
 
-public class PlayerClass: FractionIndexClass
+public class Player: FactionIndex
 {
-    public static PlayerClass mainPlayer;
+    public static Player mainPlayer;
 
     public Rigidbody RB;
-    public WeaponClass currentWeapon;
+    public Weapon currentWeapon;
 
     public bool alreadyHaveWeapon;
     public bool reload;
@@ -70,14 +70,14 @@ public class PlayerClass: FractionIndexClass
     public bool spectatorMode;
     public bool isTimeToGiveCommand;
 
-    public List<WeaponClass> playerWeaponList;
+    public List<Weapon> playerWeaponList;
     int currentWeaponNumber;
 
     public void Start()
     {
         playerHealth3dText.text = $"HP: {health}";
         //GameMaster.GM.MyCamera.transform.localPosition = new Vector3(CamX - 140, CamY - 140, CamZ - 140);
-        playerWeaponList = new List<WeaponClass>();
+        playerWeaponList = new List<Weapon>();
         currentWeaponNumber = 0;
 
         GameMaster.GM.myCamera.transform.localPosition = new Vector3(800000, 250000, -300000);
@@ -111,14 +111,14 @@ public class PlayerClass: FractionIndexClass
             }
         }        
 
-        GameMaster.GM.playerHp.text = "PlayerHP: " + PlayerClass.mainPlayer.health.ToString();
+        GameMaster.GM.playerHp.text = "PlayerHP: " + Player.mainPlayer.health.ToString();
         playerHealth3dText.text = $"HP: {health}";
     }
 
     public void Heal (float healpoints)
     {
         health += healpoints;
-        GameMaster.GM.playerHp.text = "PlayerHP: " + PlayerClass.mainPlayer.health.ToString();
+        GameMaster.GM.playerHp.text = "PlayerHP: " + Player.mainPlayer.health.ToString();
         playerHealth3dText.text = $"HP: {health}";
     }
 
@@ -181,8 +181,8 @@ public class PlayerClass: FractionIndexClass
 
             foreach (GameObject teamMate in teamMateList)
             {
-                if (teamMate != null && teamMate.GetComponent<TrooperClass>() != null && teamMate.GetComponent<TrooperClass>().teamSelectMark != null)
-                    Destroy(teamMate.GetComponent<TrooperClass>().teamSelectMark);
+                if (teamMate != null && teamMate.GetComponent<Trooper>() != null && teamMate.GetComponent<Trooper>().teamSelectMark != null)
+                    Destroy(teamMate.GetComponent<Trooper>().teamSelectMark);
             }
 
             teamMateList.Clear();
@@ -191,23 +191,23 @@ public class PlayerClass: FractionIndexClass
             Collider[] team = Physics.OverlapBox(selector.transform.position, new Vector3(selectorScale / 1.5f, 9999, selectorScale / 1.5f), Quaternion.identity, 1 << 8);
 
             foreach (Collider teamMate in team)
-                if (teamMate.tag == "Trooper" && teamMate.gameObject.GetComponent<FractionIndexClass>().fractionId == 0)
+                if (teamMate.tag == "Trooper" && teamMate.gameObject.GetComponent<FactionIndex>().fractionId == 0)
                 {
                     teamMateList.Add(teamMate.gameObject);
-                    teamMate.GetComponent<TrooperClass>().teamSelectMark = Instantiate(GameMaster.GM.teamMarker, teamMate.transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
+                    teamMate.GetComponent<Trooper>().teamSelectMark = Instantiate(GameMaster.GM.teamMarker, teamMate.transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
                     if (teamMate.name == "LightShip")
                     {
-                        teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.position = new Vector3(teamMate.GetComponent<TrooperClass>().transform.position.x, teamMate.GetComponent<TrooperClass>().transform.position.y - 3, teamMate.GetComponent<TrooperClass>().transform.position.z);
+                        teamMate.GetComponent<Trooper>().teamSelectMark.transform.position = new Vector3(teamMate.GetComponent<Trooper>().transform.position.x, teamMate.GetComponent<Trooper>().transform.position.y - 3, teamMate.GetComponent<Trooper>().transform.position.z);
                     }
 
                     if (teamMate.name == "Trooper")
                     {
-                        teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.position = new Vector3(teamMate.GetComponent<TrooperClass>().transform.position.x, 0.4f, teamMate.GetComponent<TrooperClass>().transform.position.z);
+                        teamMate.GetComponent<Trooper>().teamSelectMark.transform.position = new Vector3(teamMate.GetComponent<Trooper>().transform.position.x, 0.4f, teamMate.GetComponent<Trooper>().transform.position.z);
                     }
 
-                    teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.Rotate(90, 0, 0);
-                    teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.localScale = new Vector3(4, 4, 4);
-                    teamMate.GetComponent<TrooperClass>().teamSelectMark.transform.SetParent(teamMate.gameObject.transform);                    
+                    teamMate.GetComponent<Trooper>().teamSelectMark.transform.Rotate(90, 0, 0);
+                    teamMate.GetComponent<Trooper>().teamSelectMark.transform.localScale = new Vector3(4, 4, 4);
+                    teamMate.GetComponent<Trooper>().teamSelectMark.transform.SetParent(teamMate.gameObject.transform);                    
                 }
 
             CheckTacticMode();
@@ -347,13 +347,13 @@ public class PlayerClass: FractionIndexClass
         if (Input.GetKey("j"))
         {
             currentWeapon.GetComponent<Transform>().position = gameObject.transform.TransformPoint(0, 0, 6000);
-            currentWeapon.GetComponent<WeaponClass>().tag = "WithoutUser";
+            currentWeapon.GetComponent<Weapon>().tag = "WithoutUser";
             currentWeapon.transform.parent = null;
             currentWeapon.objectToStick = null;
-            currentWeapon.GetComponent<WeaponClass>().tick = 0f;
-            currentWeapon.GetComponent<WeaponClass>().timer = 0;
-            currentWeapon.GetComponent<WeaponClass>().reloadNow = true;
-            currentWeapon.GetComponent<WeaponClass>().soundStop = false;
+            currentWeapon.GetComponent<Weapon>().tick = 0f;
+            currentWeapon.GetComponent<Weapon>().timer = 0;
+            currentWeapon.GetComponent<Weapon>().reloadNow = true;
+            currentWeapon.GetComponent<Weapon>().soundStop = false;
             currentWeapon.GetComponent<Collider>().enabled = true;
             alreadyHaveWeapon = false;
         }
@@ -376,14 +376,21 @@ public class PlayerClass: FractionIndexClass
             CallBarracsConstruction();
         }
 
+        if (Input.GetKeyUp("9"))
+        {
+            CallFactoryConstruction();
+        }
+
         if (Input.GetKeyUp("1"))
         {
             CallCreatingTrooper();
+            buildTower.Play();
         }
 
         if (Input.GetKeyUp("2"))
         {
             CallCreatingLightShip();
+            buildTower.Play();
         }
 
         if (Input.GetKeyDown("3"))
@@ -517,7 +524,7 @@ public class PlayerClass: FractionIndexClass
                 currentWeaponNumber = 0;
             }
 
-            Debug.Log(currentWeaponNumber);
+            //Debug.Log(currentWeaponNumber);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
@@ -594,12 +601,12 @@ public class PlayerClass: FractionIndexClass
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 5000))
             {
-                if (hit.transform.GetComponent<SeekerClass>() != null || hit.transform.GetComponent<PlayerClass>() != null)
+                if (hit.transform.GetComponent<Seeker>() != null || hit.transform.GetComponent<Player>() != null)
                 {
                     targetUI.GetComponent<Image>().enabled = true;
                     targetUI.GetComponent<Image>().transform.position = Input.mousePosition;
 
-                    if (hit.transform.GetComponent<FractionIndexClass>().fractionId != 0)
+                    if (hit.transform.GetComponent<FactionIndex>().fractionId != 0)
                     {
 
                         targetUI.GetComponent<Image>().color = Color.red;
@@ -625,25 +632,25 @@ public class PlayerClass: FractionIndexClass
 
             if (Physics.Raycast(ray2, out hit2, 5000))
             {
-                if (hit2.transform.GetComponent<SeekerClass>() != null || hit2.transform.GetComponent<PlayerClass>() != null)
+                if (hit2.transform.GetComponent<Seeker>() != null || hit2.transform.GetComponent<Player>() != null)
                     clickedObject = hit2.transform.gameObject;
 
                 foreach (GameObject teamMate in teamMateList)
                 {
                     if (teamMate != null)
                     {
-                        if (teamMate.GetComponent<TrooperClass>() != null)
+                        if (teamMate.GetComponent<Trooper>() != null)
                         {
-                            if (teamMate.GetComponent<TrooperClass>().currentWeapon != null)
+                            if (teamMate.GetComponent<Trooper>().currentWeapon != null)
                             {
-                                teamMate.GetComponent<TrooperClass>().currentWeapon.GetComponent<WeaponClass>().playerFollowingCommand = true;
-                                StartCoroutine(cancelIgnoringEnemies(teamMate.GetComponent<TrooperClass>().currentWeapon.gameObject));
+                                teamMate.GetComponent<Trooper>().currentWeapon.GetComponent<Weapon>().playerFollowingCommand = true;
+                                StartCoroutine(cancelIgnoringEnemies(teamMate.GetComponent<Trooper>().currentWeapon.gameObject));
                             }
 
-                            teamMate.GetComponent<TrooperClass>().targetToChase = clickedObject;
-                            teamMate.GetComponent<TrooperClass>().targetToChaseByPlayerCommand = clickedObject;
-                            teamMate.GetComponent<TrooperClass>().wait = false;
-                            teamMate.GetComponent<TrooperClass>().enemyToLook = null;
+                            teamMate.GetComponent<Trooper>().targetToChase = clickedObject;
+                            teamMate.GetComponent<Trooper>().targetToChaseByPlayerCommand = clickedObject;
+                            teamMate.GetComponent<Trooper>().wait = false;
+                            teamMate.GetComponent<Trooper>().enemyToLook = null;
                         }
 
                     }
@@ -672,8 +679,8 @@ public class PlayerClass: FractionIndexClass
             // Убираем метки с юнитов
             foreach (GameObject teamMate in teamMateList)
             {
-                if (teamMate != null && teamMate.GetComponent<TrooperClass>() != null && teamMate.GetComponent<TrooperClass>().teamSelectMark != null)
-                    Destroy(teamMate.GetComponent<TrooperClass>().teamSelectMark);
+                if (teamMate != null && teamMate.GetComponent<Trooper>() != null && teamMate.GetComponent<Trooper>().teamSelectMark != null)
+                    Destroy(teamMate.GetComponent<Trooper>().teamSelectMark);
             }
 
 
@@ -691,45 +698,45 @@ public class PlayerClass: FractionIndexClass
     
     public void CallBarracsConstruction()
     {
-        SpendMoneyMethod spendOnBarracsDelegate = GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().startBarracsConstruction;
-        GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().spendMoney(2000, spendOnBarracsDelegate);
+        SpendMoneyMethod spendOnBarracsDelegate = GameMaster.GM.shipObjectList[0].GetComponent<Ship>().startBarracsConstruction;
+        GameMaster.GM.shipObjectList[0].GetComponent<Ship>().spendMoney(2000, spendOnBarracsDelegate);
     }
 
     public void CallFactoryConstruction()
     {
-        SpendMoneyMethod spendOnFactoryDelegate = GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().startFactoryConstruction;
-        GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().spendMoney(3000, spendOnFactoryDelegate);
+        SpendMoneyMethod spendOnFactoryDelegate = GameMaster.GM.shipObjectList[0].GetComponent<Ship>().startFactoryConstruction;
+        GameMaster.GM.shipObjectList[0].GetComponent<Ship>().spendMoney(3000, spendOnFactoryDelegate);
     }
 
     public void CallCreatingTrooper()
     {
-        SpendMoneyMethod spendOnTrooperDelegate = GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().startCreatingTrooper;
-        GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().spendMoney(300, spendOnTrooperDelegate);
+        SpendMoneyMethod spendOnTrooperDelegate = GameMaster.GM.shipObjectList[0].GetComponent<Ship>().startCreatingTrooper;
+        GameMaster.GM.shipObjectList[0].GetComponent<Ship>().spendMoney(300, spendOnTrooperDelegate);
     }
 
     public void CallCreatingLightShip()
     {
-        SpendMoneyMethod spendOnLightShipDelegate = GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().startCreatingLightShip;
-        GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().spendMoney(600, spendOnLightShipDelegate);
+        SpendMoneyMethod spendOnLightShipDelegate = GameMaster.GM.shipObjectList[0].GetComponent<Ship>().startCreatingLightShip;
+        GameMaster.GM.shipObjectList[0].GetComponent<Ship>().spendMoney(600, spendOnLightShipDelegate);
     }
 
     public void CallCreatingTower()
     {
-        SpendMoneyMethod spendOnTowerDelegate = GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().startCreatingTower;
-        GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().spendMoney(600, spendOnTowerDelegate);
+        SpendMoneyMethod spendOnTowerDelegate = GameMaster.GM.shipObjectList[0].GetComponent<Ship>().startCreatingTower;
+        GameMaster.GM.shipObjectList[0].GetComponent<Ship>().spendMoney(600, spendOnTowerDelegate);
     }
 
     public void CallCreatingGunTower()
     {
-        SpendMoneyMethod spendOnGunTowerDelegate = GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().startCreatingGunTower;
-        GameMaster.GM.shipObjectList[0].GetComponent<ShipClass>().spendMoney(600, spendOnGunTowerDelegate);
+        SpendMoneyMethod spendOnGunTowerDelegate = GameMaster.GM.shipObjectList[0].GetComponent<Ship>().startCreatingGunTower;
+        GameMaster.GM.shipObjectList[0].GetComponent<Ship>().spendMoney(600, spendOnGunTowerDelegate);
     }
     
     IEnumerator cancelIgnoringEnemies (GameObject weaponToControl)
     {
         yield return new WaitForSeconds(10);
         if (weaponToControl != null)
-        weaponToControl.GetComponent<WeaponClass>().playerFollowingCommand = false;
+        weaponToControl.GetComponent<Weapon>().playerFollowingCommand = false;
     }
 
     public void FixedUpdate()

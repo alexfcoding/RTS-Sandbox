@@ -11,7 +11,7 @@ public class switchColor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        id = gameObject.GetComponentInParent<FractionIndexClass>().fractionId;
+        id = gameObject.GetComponentInParent<FactionIndex>().fractionId;
         InvokeRepeating("SwitchColor", 0f, 0.5f);
     }
     // Update is called once per frame

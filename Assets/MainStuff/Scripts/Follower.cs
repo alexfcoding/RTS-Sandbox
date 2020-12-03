@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Follower : FractionIndexClass
+public class Follower : FactionIndex
 {
     public float speed;
     public float jumpPower;
@@ -50,7 +50,7 @@ public class Follower : FractionIndexClass
 
             if (ownerToFollow != null)
             {
-                if (ownerToFollow.GetComponent<PlayerClass>() != null) // Если владелец куба - игрок ...
+                if (ownerToFollow.GetComponent<Player>() != null) // Если владелец куба - игрок ...
                     normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 0, -12000) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади игрока
                 else // Если владелец куба - не игрок ...
                     normalizeDirection = (ownerToFollow.transform.TransformPoint(0, 5, -100) - gameObject.GetComponent<Transform>().transform.position + new Vector3(0, 3, 0)).normalized; // ... то двигаться к точке позади владельца
@@ -66,8 +66,8 @@ public class Follower : FractionIndexClass
             }
 
             if (ownerToFollow != null)
-                if (ownerToFollow.GetComponent<SeekerClass>() != null) // Если владелец - Seeker ...
-                    if (ownerToFollow.GetComponent<SeekerClass>().totallyDead == true) // ... и он мертв ...
+                if (ownerToFollow.GetComponent<Seeker>() != null) // Если владелец - Seeker ...
+                    if (ownerToFollow.GetComponent<Seeker>().totallyDead == true) // ... и он мертв ...
                     {
                             //gameObject.GetComponent<Renderer>().material.color = Color.white; // ... то изменить цвет куба на белый
 
@@ -81,9 +81,9 @@ public class Follower : FractionIndexClass
                                 }
                             }
 
-                        if (ownerToFollow.GetComponent<SeekerClass>().whoIsDamaging!=null)
+                        if (ownerToFollow.GetComponent<Seeker>().whoIsDamaging!=null)
                             {
-                                ownerToFollow = ownerToFollow.GetComponent<SeekerClass>().whoIsDamaging;
+                                ownerToFollow = ownerToFollow.GetComponent<Seeker>().whoIsDamaging;
                                 fractionId = 10; // Установить идентификатор FractionId
                                 moveToNextOwner = true;
                                 StartCoroutine(MoveToNextOwnerTrigger());
@@ -183,13 +183,13 @@ public class Follower : FractionIndexClass
 
         if (collisioninfo.gameObject.tag == "Seeker") // Если куб столкнулся с Seeker или Player ...
         { 
-            if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10) // ... и его индекс равен 10 (свободный)
+            if (gameObject.GetComponent<FactionIndex>().fractionId == 10) // ... и его индекс равен 10 (свободный)
             {
-                gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId); // установить  индекс равный Seeker или Player
+                gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FactionIndex>().fractionId); // установить  индекс равный Seeker или Player
 
-                if (collisioninfo.gameObject.GetComponent<SeekerClass>() != null) // Если столкновение с Seeker, то ...
+                if (collisioninfo.gameObject.GetComponent<Seeker>() != null) // Если столкновение с Seeker, то ...
                 {
-                    SeekerClass Seeker = collisioninfo.gameObject.GetComponent<SeekerClass>();
+                    Seeker Seeker = collisioninfo.gameObject.GetComponent<Seeker>();
                     Seeker.findNextObject = true; // Команда Seeker для поиска нового куба
                     //Seeker.Heal(1); // Лечение Seeker
                     Seeker.countOfItemsCollected++; // Счетчик подобранных кубов++
@@ -237,18 +237,18 @@ public class Follower : FractionIndexClass
         //    GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
         //}
 
-        else if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10 && collisioninfo.gameObject.tag == "Player")
+        else if (gameObject.GetComponent<FactionIndex>().fractionId == 10 && collisioninfo.gameObject.tag == "Player")
         {
             gameObject.GetComponent<ParticleSystem>().Play();
             audioPickEnemyCube.Play();
             //collisioninfo.gameObject.transform.localScale += new Vector3(0.5f, 0.5f, 0.5f);
            // collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 100;
            // collisioninfo.gameObject.GetComponent<FractionIndexClass>().level += 1;
-            if (collisioninfo.gameObject.GetComponent<SeekerClass>() != null && collisioninfo.gameObject.GetComponent<SeekerClass>().currentWeapon != null)
-                collisioninfo.gameObject.GetComponent<SeekerClass>().currentWeapon.ownerLevel = level;
+            if (collisioninfo.gameObject.GetComponent<Seeker>() != null && collisioninfo.gameObject.GetComponent<Seeker>().currentWeapon != null)
+                collisioninfo.gameObject.GetComponent<Seeker>().currentWeapon.ownerLevel = level;
             // GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
 
-            gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId);
+            gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FactionIndex>().fractionId);
             ownerToFollow = collisioninfo.collider.gameObject;
 
             //gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
@@ -280,9 +280,9 @@ public class Follower : FractionIndexClass
         {
             if (ownerToFollow != null)
             {
-                if (ownerToFollow.GetComponent<SeekerClass>() != null) // Если владелец куба - Seeker ...
+                if (ownerToFollow.GetComponent<Seeker>() != null) // Если владелец куба - Seeker ...
                 {
-                    ownerToFollow.GetComponent<SeekerClass>().countOfItemsCollected--; // ... то вычесть счетчик--
+                    ownerToFollow.GetComponent<Seeker>().countOfItemsCollected--; // ... то вычесть счетчик--
                     //ownerToFollow.GetComponent<SeekerClass>().Heal(10);
                 }
             }
@@ -308,8 +308,8 @@ public class Follower : FractionIndexClass
             
             if (collisioninfo.gameObject != null)
             {
-                collisioninfo.gameObject.GetComponent<ShipClass>().EarnMoney(500);
-                collisioninfo.gameObject.GetComponent<ShipClass>().Heal(1000);
+                collisioninfo.gameObject.GetComponent<Ship>().EarnMoney(500);
+                collisioninfo.gameObject.GetComponent<Ship>().Heal(1000);
             }
                 
 

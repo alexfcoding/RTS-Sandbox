@@ -32,8 +32,8 @@ public class CamControl : MonoBehaviour
         mouseY = Mathf.Clamp(mouseY, -60, 60);
 
         //transform.LookAt(TRG);
-        if (player.GetComponent<PlayerClass>().spectatorMode == false)
-            if (player.GetComponent<PlayerClass>().stopCamControls == false)
+        if (player.GetComponent<Player>().spectatorMode == false)
+            if (player.GetComponent<Player>().stopCamControls == false)
                 player.rotation = Quaternion.Euler(mouseY, mouseX - 70, 0);
         
     }

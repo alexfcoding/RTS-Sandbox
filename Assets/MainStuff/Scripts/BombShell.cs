@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BombShellClass : RocketShellClass
+public class BombShell : RocketShell
 {
     bool exploded;
     public override void Awake()
@@ -22,7 +22,7 @@ public class BombShellClass : RocketShellClass
 
         if (playersBullet == true && isHoming == true)
             if (Physics.BoxCast(GameMaster.GM.player.transform.TransformPoint(0, 0, 0), new Vector3(20, 20, 2), transform.forward, out RaycastHit hitInfo2, Quaternion.Euler(0, 0, 0), 400, 1 << 8))
-                if ((hitInfo2.transform.tag == "Seeker" || hitInfo2.transform.tag == "Trooper") && (hitInfo2.transform.GetComponent<FractionIndexClass>().fractionId != 0))
+                if ((hitInfo2.transform.tag == "Seeker" || hitInfo2.transform.tag == "Trooper") && (hitInfo2.transform.GetComponent<FactionIndex>().fractionId != 0))
                 {
                     gameObject.transform.LookAt(hitInfo2.transform.position + new Vector3(0, 1, 0));
                     Vector3 normalizeDirection = (hitInfo2.transform.position + new Vector3(0, 1, 0) - gameObject.transform.position).normalized;
@@ -38,7 +38,7 @@ public class BombShellClass : RocketShellClass
 
     public override void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject != null && (collision.gameObject.name != "Bomb" && collision.gameObject.name != "Terrain" && collision.gameObject.GetComponent<FractionIndexClass>() !=null && weaponToStick != null && collision.gameObject.GetComponent<FractionIndexClass>() != weaponToStick.GetComponent<WeaponClass>().objectToStick.GetComponent<FractionIndexClass>()))
+        if (collision.gameObject != null && (collision.gameObject.name != "Bomb" && collision.gameObject.name != "Terrain" && collision.gameObject.GetComponent<FactionIndex>() !=null && weaponToStick != null && collision.gameObject.GetComponent<FactionIndex>() != weaponToStick.GetComponent<Weapon>().objectToStick.GetComponent<FactionIndex>()))
             if (playersBullet == false && collision.gameObject.tag == "Player" || playersBullet == true && collision.gameObject.tag != "Player" || playersBullet == false && collision.gameObject.tag != "Player")
             {
                 Explode();
@@ -65,36 +65,36 @@ public class BombShellClass : RocketShellClass
 
         foreach (Collider hit in colliders)
         {
-            if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket"))
+            if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<Seeker>() == null && hit.GetComponent<Trooper>() == null) && (hit.name != "Rocket"))
                 hit.GetComponent<Rigidbody>().AddExplosionForce(800, gameObject.transform.position + new Vector3(0, 0, 0), 30, 1, ForceMode.Impulse);
 
-            if (hit.GetComponent<FractionIndexClass>() != null && hit.gameObject != null)
+            if (hit.GetComponent<FactionIndex>() != null && hit.gameObject != null)
             {
-                if (weaponToStick != null && hit.transform.GetComponent<FractionIndexClass>().dead == false)
-                    hit.transform.GetComponent<FractionIndexClass>().whoIsDamaging = weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject;
+                if (weaponToStick != null && hit.transform.GetComponent<FactionIndex>().dead == false)
+                    hit.transform.GetComponent<FactionIndex>().whoIsDamaging = weaponToStick.GetComponent<Weapon>().objectToStick.gameObject;
 
-                if (weaponToStick != null && weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject.name == "Player")
+                if (weaponToStick != null && weaponToStick.GetComponent<Weapon>().objectToStick.gameObject.name == "Player")
                 {
-                    if (hit.transform.GetComponent<FractionIndexClass>().transform.tag != "Ship")
-                        hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * 2f);
+                    if (hit.transform.GetComponent<FactionIndex>().transform.tag != "Ship")
+                        hit.transform.GetComponent<FactionIndex>().TakeDamage(damage * 2f);
                     else
-                        hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage / 10);
+                        hit.transform.GetComponent<FactionIndex>().TakeDamage(damage / 10);
                   
                     //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
                 }
                 else if (weaponToStick != null)
                 {
                     //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
-                    if (hit.transform.GetComponent<FractionIndexClass>().transform.tag != "Ship")
-                        hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage);
+                    if (hit.transform.GetComponent<FactionIndex>().transform.tag != "Ship")
+                        hit.transform.GetComponent<FactionIndex>().TakeDamage(damage);
                     else
-                        hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage / 10);
+                        hit.transform.GetComponent<FactionIndex>().TakeDamage(damage / 10);
                 }
             }
 
-            if (hit.GetComponent<PlayerClass>() != null)
+            if (hit.GetComponent<Player>() != null)
             {
-                hit.GetComponent<PlayerClass>().TakeDamage(damage);
+                hit.GetComponent<Player>().TakeDamage(damage);
             }
         }
 

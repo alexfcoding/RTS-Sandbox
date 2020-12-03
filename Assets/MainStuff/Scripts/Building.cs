@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BuildingClass : FractionIndexClass
+public class Building : FactionIndex
 {
     public float tickBuilding;
     public float buildingHeightScale;
@@ -18,8 +18,8 @@ public class BuildingClass : FractionIndexClass
 
     public void Start()
     {
-        //health = 5000;
-        //maxHP = 5000;
+        health = 5000;
+        maxHP = 5000;
         tickBuilding = 0.05f;
 
         if (beginConstruction != null && fractionId == 0)

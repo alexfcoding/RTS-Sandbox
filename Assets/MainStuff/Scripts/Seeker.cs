@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SeekerClass : FractionIndexClass
+public class Seeker : FactionIndex
 {
     public float minDistance;
     public int minDistNum;
@@ -20,7 +20,7 @@ public class SeekerClass : FractionIndexClass
     public GameObject textHP;
     public GameObject smoke;
     public GameObject currentTargetObject;
-    public WeaponClass currentWeapon;
+    public Weapon currentWeapon;
 
     public float timer2;
 
@@ -60,7 +60,7 @@ public class SeekerClass : FractionIndexClass
         {
             if (health > damage)
             {
-                if (whoIsDamaging != null && whoIsDamaging.GetComponent<FractionIndexClass>().fractionId != GetComponent<FractionIndexClass>().fractionId)
+                if (whoIsDamaging != null && whoIsDamaging.GetComponent<FactionIndex>().fractionId != GetComponent<FactionIndex>().fractionId)
                     health -= damage;
 
                 textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
@@ -79,7 +79,7 @@ public class SeekerClass : FractionIndexClass
                     //smoke.transform.parent = gameObject.transform;
                     //Destroy(smoke, 2f);
 
-                    if (gameObject.GetComponent<TrooperClass>() == null && gameObject.GetComponent<Rigidbody>() != null)
+                    if (gameObject.GetComponent<Trooper>() == null && gameObject.GetComponent<Rigidbody>() != null)
                         gameObject.GetComponent<Rigidbody>().AddForce(0, 800, 0, ForceMode.Impulse);
 
                     StartCoroutine(Dying());
@@ -139,7 +139,9 @@ public class SeekerClass : FractionIndexClass
                 minDistNum = Random.Range(0, objectList.Count);
             }
 
-            if (objectList[minDistNum] == null || objectList[minDistNum].GetComponent<FractionIndexClass>().fractionId != 0 && objectList[minDistNum].GetComponent<FractionIndexClass>().fractionId != fractionId || currentTargetObject.gameObject == null)
+            //Debug.Log(objectList[minDistNum].name);
+
+            if (objectList[minDistNum] == null || objectList[minDistNum].GetComponent<FactionIndex>().fractionId != 0 && objectList[minDistNum].GetComponent<FactionIndex>().fractionId != fractionId || currentTargetObject.gameObject == null)
             {
                 findNextObject = true;
             }
@@ -188,14 +190,16 @@ public class SeekerClass : FractionIndexClass
                 goingToBase = true;
             else if (countOfItemsCollected == 0)
                 goingToBase = false;
+            else if (countOfItemsCollected != 0 && currentTargetObject == null)
+                goingToBase = false;
 
-            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50, 1 << 9);
+            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 80, 1 << 9);
 
             foreach (Collider hit in colliders)
                 if (gameObject.tag == "Seeker" && hit.tag == "Follower" && dead == false)
                 {
                     Vector3 normalizeDirection = (gameObject.transform.position - hit.transform.position).normalized;
-                    hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed;
+                    hit.transform.position += normalizeDirection * Time.deltaTime * hit.GetComponent<Follower>().speed * 2;
                 }
 
             if (findNextObject == false && foundObject == false)
@@ -210,17 +214,17 @@ public class SeekerClass : FractionIndexClass
         yield return new WaitForSeconds(0f);
 
         if (whoIsDamaging != null)
-            if (whoIsDamaging.GetComponent<FractionIndexClass>().level < 5)
+            if (whoIsDamaging.GetComponent<FactionIndex>().level < 5)
             {
-                whoIsDamaging.GetComponent<FractionIndexClass>().level += 1;
+                whoIsDamaging.GetComponent<FactionIndex>().level += 1;
 
-                if (whoIsDamaging.GetComponent<SeekerClass>() != null)
-                    whoIsDamaging.GetComponent<SeekerClass>().textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
+                if (whoIsDamaging.GetComponent<Seeker>() != null)
+                    whoIsDamaging.GetComponent<Seeker>().textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
             }
                 
         if (whoIsDamaging != null && (whoIsDamaging.tag == "Trooper" || whoIsDamaging.tag == "Seeker"))
         {
-            whoIsDamaging.GetComponent<FractionIndexClass>().health += 1000;
+            whoIsDamaging.GetComponent<FactionIndex>().health += 1000;
             maxHP += 1000;
         }
            
@@ -233,9 +237,9 @@ public class SeekerClass : FractionIndexClass
 
         Destroy(Explode, 2f);
 
-        if (lootAfterDeath == true && whoIsDamaging.gameObject!= null && whoIsDamaging.GetComponent<PlayerClass>() != null)
+        if (lootAfterDeath == true && whoIsDamaging.gameObject!= null && whoIsDamaging.GetComponent<Player>() != null)
         {
-            int rndLootCount = Random.Range(lootMinCount, lootMinCount + (int) gameObject.GetComponent<FractionIndexClass>().level);
+            int rndLootCount = Random.Range(lootMinCount, lootMinCount + (int) gameObject.GetComponent<FactionIndex>().level);
 
             for (int i = 0; i < rndLootCount; i++)
             {
@@ -270,7 +274,7 @@ public class SeekerClass : FractionIndexClass
                 hit.GetComponent<Rigidbody>().AddExplosionForce(300, gameObject.transform.position, 100, Random.Range(0, 1), ForceMode.Impulse);
         }
         
-        GameMaster.GM.RecursiveDestroy(transform, gameObject, 3);
+        GameMaster.GM.RecursiveDestroy(transform, gameObject, 4);
 
         for (int i = 0; i < 3; i++)
         {

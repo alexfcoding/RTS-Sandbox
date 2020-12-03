@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class TowerClass : SeekerClass
+public class Tower : Seeker
 {
     //public float setHealth;
 

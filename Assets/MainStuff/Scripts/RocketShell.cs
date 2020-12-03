@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RocketShellClass : MonoBehaviour
+public class RocketShell : MonoBehaviour
 {
     public GameObject weaponToStick;
     public GameObject explosionRocketPrefab;
@@ -39,7 +39,7 @@ public class RocketShellClass : MonoBehaviour
         
         if (playersBullet == true && isHoming == true)
             if (Physics.BoxCast(GameMaster.GM.player.transform.TransformPoint(0, 0, 0), new Vector3(20, 20, 2), transform.forward, out RaycastHit hitInfo2, Quaternion.Euler(0, 0, 0), 400, 1 << 8))
-                if ((hitInfo2.transform.tag == "Seeker" || hitInfo2.transform.tag == "Trooper")&&(hitInfo2.transform.GetComponent<FractionIndexClass>().fractionId != 0))
+                if ((hitInfo2.transform.tag == "Seeker" || hitInfo2.transform.tag == "Trooper")&&(hitInfo2.transform.GetComponent<FactionIndex>().fractionId != 0))
                 {
                     gameObject.transform.LookAt(hitInfo2.transform.position + new Vector3(0, 1, 0));
                     Vector3 normalizeDirection = (hitInfo2.transform.position + new Vector3(0, 1, 0) - gameObject.transform.position).normalized;
@@ -92,17 +92,17 @@ public class RocketShellClass : MonoBehaviour
 
         foreach (Collider hit in colliders)
         {
-            FractionIndexClass fractionHitObject = hit.GetComponent<FractionIndexClass>();
+            FactionIndex fractionHitObject = hit.GetComponent<FactionIndex>();
 
-            if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<SeekerClass>() == null && hit.GetComponent<TrooperClass>() == null) && (hit.name != "Rocket") && (hit.name != "Bomb"))
+            if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<Seeker>() == null && hit.GetComponent<Trooper>() == null) && (hit.name != "Rocket") && (hit.name != "Bomb"))
                 hit.GetComponent<Rigidbody>().AddExplosionForce(500, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
 
             if (fractionHitObject != null && hit.gameObject != null)
             {
                 if (weaponToStick != null && fractionHitObject.dead == false)
-                    fractionHitObject.whoIsDamaging = weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject;
+                    fractionHitObject.whoIsDamaging = weaponToStick.GetComponent<Weapon>().objectToStick.gameObject;
 
-                if (weaponToStick != null && weaponToStick.GetComponent<WeaponClass>().objectToStick.gameObject.name == "Player")
+                if (weaponToStick != null && weaponToStick.GetComponent<Weapon>().objectToStick.gameObject.name == "Player")
                 {
                     if (fractionHitObject.transform.tag != "Ship")
                         fractionHitObject.TakeDamage(damage * 2f);
@@ -120,9 +120,9 @@ public class RocketShellClass : MonoBehaviour
                 }
             }
 
-            if (hit.GetComponent<PlayerClass>() != null)
+            if (hit.GetComponent<Player>() != null)
             {
-                hit.GetComponent<PlayerClass>().TakeDamage(damage);
+                hit.GetComponent<Player>().TakeDamage(damage);
             }
         }
 

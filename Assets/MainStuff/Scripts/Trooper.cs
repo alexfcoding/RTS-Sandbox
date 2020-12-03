@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrooperClass : SeekerClass
+public class Trooper : Seeker
 {
     public Vector3 pointFromShooting;
     public Vector3 pointFromShootingRandomize;
@@ -85,7 +85,7 @@ public class TrooperClass : SeekerClass
 
         foreach (Collider hit in colliders)
         {
-            if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<PlayerClass>() == null && hit.GetComponent<TrooperClass>() != null)
+            if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<Player>() == null && hit.GetComponent<Trooper>() != null)
             {
                 if (hit.name == "LightShip")
                     hit.GetComponent<Rigidbody>().AddExplosionForce(100, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
@@ -98,13 +98,13 @@ public class TrooperClass : SeekerClass
         {
             if (targetToChase != null)
             {
-                if (targetToChase.GetComponent<ShipClass>() != null)
+                if (targetToChase.GetComponent<Ship>() != null)
                 {
                     pointFromShooting = targetToChase.transform.position - new Vector3(0, targetToChase.transform.position.y, 0);
                 }
                 else
                 {
-                    if (targetToChase.GetComponent<PlayerClass>() != null)
+                    if (targetToChase.GetComponent<Player>() != null)
                         pointFromShooting = new Vector3(targetToChase.transform.position.x, transform.position.y, targetToChase.transform.position.z);
                     else
                     {
@@ -125,10 +125,10 @@ public class TrooperClass : SeekerClass
                     targetToChase = GameMaster.GM.player.gameObject;
             }
            
-            if (targetToChase != null && targetToChase.GetComponent<ShipClass>() != null)
+            if (targetToChase != null && targetToChase.GetComponent<Ship>() != null)
                 pointFromShooting = pointFromShooting + pointFromShootingRandomize * 4;
 
-            if (targetToChase != null && targetToChase.GetComponent<ShipClass>() == null)
+            if (targetToChase != null && targetToChase.GetComponent<Ship>() == null)
                 pointFromShooting = pointFromShooting + pointFromShootingRandomize;
 
             if ((currentWeapon != null && enemyToLook != null) || (currentWeapon != null && enemyToLook != null) )
@@ -166,7 +166,7 @@ public class TrooperClass : SeekerClass
             }
 
             // если враг мертв, то двигаться дальше
-            if (enemyToLook != null && enemyToLook.GetComponent<SeekerClass>() != null && enemyToLook.GetComponent<SeekerClass>().dead == true && currentWeapon.GetComponent<WeaponClass>().playerFollowingCommand == true)
+            if (enemyToLook != null && enemyToLook.GetComponent<Seeker>() != null && enemyToLook.GetComponent<Seeker>().dead == true && currentWeapon.GetComponent<Weapon>().playerFollowingCommand == true)
                 wait = false;
                             
             if ( ((Vector3.Distance(transform.position, pointFromShooting)) > 80) && (wait == false) )
@@ -212,7 +212,7 @@ public class TrooperClass : SeekerClass
 
     public virtual void OnCollisionStay(Collision collisioninfo)
     {
-        if (collisioninfo.gameObject.GetComponent<BuildingClass>() != null || collisioninfo.gameObject.GetComponent<TowerClass>() != null || collisioninfo.gameObject.GetComponent<SeekerClass>() != null)
+        if (collisioninfo.gameObject.GetComponent<Building>() != null || collisioninfo.gameObject.GetComponent<Tower>() != null || collisioninfo.gameObject.GetComponent<Seeker>() != null)
         {
             gameObject.GetComponent<Rigidbody>().AddForce(Random.Range(-500, 500), 0, Random.Range(-500, 500), ForceMode.Impulse);
         }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FighterClass : TrooperClass
+public class Fighter : Trooper
 {
     float randomY;
     Rigidbody rb;
