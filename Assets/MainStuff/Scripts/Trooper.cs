@@ -12,28 +12,26 @@ public class Trooper : Seeker
     public bool foundTargetToAttack;
     public bool targetIsShip;
     public bool ignorePlayerCommandAndStay;
-
     public bool stopDoing;
+    public bool rotateBody;
 
     public int attackTargetId;
+    public int randomCollisionStuckDirection;
 
     public GameObject enemyToLook;
     public GameObject targetToChase;
     public GameObject targetToChaseByPlayerCommand;
     public GameObject teamSelectMark;
-    
+    public GameObject body;
+
     public float trooperSpeed;
     public float distToLerp;
     public float timer;
 
-    public GameObject body;
-    
-    public Rigidbody rbTrooper;
-
-    public bool rotateBody;
+    public Rigidbody rbTrooper;        
 
     float randomSpeedDeviation;
-    public int randomCollisionStuckDirection;
+    
 
     public override void Awake()
     {
@@ -81,10 +79,10 @@ public class Trooper : Seeker
     {
         FindItemsAround(GameMaster.GM.globalObjectList, GameMaster.GM.platformObjectList);
                
-            //Vector3 MoveSin = new Vector3(transform.position.x, 0.2f, transform.position.z);
-            //    gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
+        //Vector3 MoveSin = new Vector3(transform.position.x, 0.2f, transform.position.z);
+        //    gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
 
-            //HealthBar.transform.LookAt(Camera.main.transform.position, -Vector3.up);
+        //HealthBar.transform.LookAt(Camera.main.transform.position, -Vector3.up);
     }
 
     public override void FindItemsAround(List<GameObject> _GlobalObjectList, List<GameObject> _PlatformList)
@@ -113,10 +111,16 @@ public class Trooper : Seeker
                 else
                 {
                     if (targetToChase.GetComponent<Player>() != null)
-                        pointFromShooting = new Vector3(targetToChase.transform.position.x, transform.position.y, targetToChase.transform.position.z);
+                    {
+                        if (gameObject.name == "LightShip")
+                            pointFromShooting = new Vector3(targetToChase.transform.position.x, targetToChase.transform.position.y, targetToChase.transform.position.z);
+                        if (gameObject.name == "Trooper")
+                            pointFromShooting = new Vector3(targetToChase.transform.position.x, transform.position.y, targetToChase.transform.position.z);
+                    }
+                        
                     else
                     {
-                        pointFromShooting = new Vector3(targetToChase.transform.position.x, transform.position.y, targetToChase.transform.position.z);
+                        pointFromShooting = new Vector3(targetToChase.transform.position.x, targetToChase.transform.position.y, targetToChase.transform.position.z);
                     }
                 }
             }
@@ -222,7 +226,7 @@ public class Trooper : Seeker
     {
         if (collisioninfo.gameObject.GetComponent<Building>() != null || collisioninfo.gameObject.GetComponent<Tower>() != null || collisioninfo.gameObject.GetComponent<Seeker>() != null)
         {
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(Vector3.left * 120 * randomCollisionStuckDirection, ForceMode.Impulse);            
+            gameObject.GetComponent<Rigidbody>().AddRelativeForce(Vector3.left * 300 * Random.Range(-1, 2), ForceMode.Impulse);     
         }
     }
 }

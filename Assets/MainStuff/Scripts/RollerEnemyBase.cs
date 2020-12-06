@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class RollerEnemyBase : Trooper
 {
-    // Start is called before the first frame update
     public override void Awake()
     {
         level = 1;
@@ -29,13 +28,14 @@ public class RollerEnemyBase : Trooper
         textHP.transform.parent = transform;
 
         healthBarScaleMultiplier = 0.8f;
+
         //healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 5, 0), Quaternion.Euler(0, 0, 0));
         //healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
         //healthBar.transform.SetParent(gameObject.transform);
+
         pointFromShootingRandomize.Set(Random.Range(-40, 40), 0, Random.Range(-40, 40));
     }
-
-    // Update is called once per frame
+        
     public override void Update()
     {
         FindItemsAround(GameMaster.GM.globalObjectList, GameMaster.GM.platformObjectList);

@@ -82,7 +82,7 @@ public class Player: FactionIndex
         playerWeaponList = new List<Weapon>();
         currentWeaponNumber = 0;
 
-        GameMaster.GM.myCamera.transform.localPosition = new Vector3(800000, 250000, -300000);
+        GameMaster.GM.myCamera.transform.localPosition = new Vector3(300000, 10000000, -150000);
 
         targetSprite = targetUI.GetComponent<Image>().sprite;
         followSprite = followUI.GetComponent<Image>().sprite;
@@ -300,9 +300,7 @@ public class Player: FactionIndex
         timer += Time.deltaTime;
 
         waitForCommand();
-
-        // ============================================ KEYS ========================================================
-
+                
         //if (transform.position.y > 20)
         //    transform.position = new Vector3(transform.position.x, 20, transform.position.z);
 

@@ -14,10 +14,9 @@ public class MainMenu : MonoBehaviour
     public TMP_Text factionCountText;
     public TMP_Text moneyCountText;
     List<Color> factionColors;
-
+        
     public void Start()
-    {
-        //Application.targetFrameRate = 10;
+    {        
         shipsList = new List<GameObject>();
         SetBaseCount();
         SetMoneyCount();
@@ -35,6 +34,8 @@ public class MainMenu : MonoBehaviour
 
     public void SetBaseCount()
     {
+        gameObject.GetComponent<AudioSource>().Play();
+
         int factionCount = (int)factionsSlider.value;       
         Settings.SET.mainBaseCount = factionCount;
        

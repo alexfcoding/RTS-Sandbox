@@ -17,7 +17,8 @@ public class Ship : Seeker
 
     public override void Awake()
     {
-        money = 20000 * GameMaster.GM.startMoney / 100;
+        money = 200000 * GameMaster.GM.startMoney / 100;
+
         health = 200000;
         maxHP = 200000;
         gameObject.tag = "Ship";
@@ -46,6 +47,12 @@ public class Ship : Seeker
     {
         textHP.GetComponent<TextMesh>().color = healthBar.GetComponent<SpriteRenderer>().color;
         textHP.GetComponent<TextMesh>().fontSize = 355;
+
+        if (fractionId == 0)
+        {
+            money = 0;
+            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString();
+        }            
     }
 
     public void FixedUpdate()
@@ -185,7 +192,7 @@ public class Ship : Seeker
                     if (fractionBarracsList.Count > 0)
                         if (fractionBarracsList[rndBaseSpawnTrooper].gameObject != null)
                         {
-                            createdObject = GameMaster.GM.ConstructObject(unitPrefab, fractionBarracsList[rndBaseSpawnTrooper].transform.position + new Vector3(Random.Range(-80, 80), 0, Random.Range(-80, 80)), Quaternion.Euler(0, 0, 0), unitName, GameMaster.GM.unitList);
+                            createdObject = GameMaster.GM.ConstructObject(unitPrefab, fractionBarracsList[rndBaseSpawnTrooper].transform.position + new Vector3(Random.Range(-120, 120), 0, Random.Range(-120, 120)), Quaternion.Euler(0, 0, 0), unitName, GameMaster.GM.unitList);
                             createdObject.GetComponent<FactionIndex>().SetFractionId(fractionId);
                             Vector3 warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);
                             GameMaster.GM.GiveWeaponToObject(warriorPosition);
@@ -203,10 +210,10 @@ public class Ship : Seeker
                             createdObject.GetComponent<Seeker>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.fractionId];
 
                             if (createdObject.GetComponent<FactionIndex>().fractionId != 0)
-                                AttackPlayerWithProbability(20, createdObject);
+                                AttackPlayerWithProbability(0, createdObject);
 
                             if (createdObject.GetComponent<Trooper>() != null)
-                                createdObject.GetComponent<Trooper>().targetToChaseByPlayerCommand = createdObject.GetComponent<Trooper>().targetToChase;
+                                createdObject.GetComponent<Trooper>().targetToChaseByPlayerCommand = createdObject.GetComponent<Trooper>().targetToChase;  
                         }
 
                 if (unitName == "LightShip")
@@ -232,7 +239,7 @@ public class Ship : Seeker
                             createdObject.GetComponent<Seeker>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.fractionId];
 
                             if (createdObject.GetComponent<FactionIndex>().fractionId != 0)
-                                AttackPlayerWithProbability(20, createdObject);
+                                AttackPlayerWithProbability(0, createdObject);
 
                             if (createdObject.GetComponent<Trooper>() != null)
                                 createdObject.GetComponent<Trooper>().targetToChaseByPlayerCommand = createdObject.GetComponent<Trooper>().targetToChase;
@@ -261,7 +268,6 @@ public class Ship : Seeker
             attacker.GetComponent<Trooper>().targetToChase = GameMaster.GM.player.transform.gameObject;
             //attacker.GetComponent<TrooperClass>().lootAfterDeath = true;
         }
-            
     }
 
     public int CountFractionWarriors(int fractionId)
@@ -386,7 +392,7 @@ public class Ship : Seeker
         GameMaster.GM.enemyMoneyText.text = "";
 
         if (fractionId == 0)
-            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString() + " Cr.";
+            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString();
 
         for (int i = 1; i < GameMaster.GM.shipObjectList.Count; i++)
         {

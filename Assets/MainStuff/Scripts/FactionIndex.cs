@@ -15,10 +15,10 @@ public class FactionIndex : MonoBehaviour
     public float maxHP;
     public float healthBarScaleMultiplier;
     public float level;
+
     public GameObject healthBar;
     public GameObject whoIsDamaging;
     public GameObject deathEffect;
-    
 
     public AudioSource deathSound;
 

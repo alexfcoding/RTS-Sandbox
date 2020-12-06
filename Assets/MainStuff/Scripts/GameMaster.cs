@@ -252,7 +252,7 @@ public class GameMaster : MonoBehaviour
         }            
     }
 
-    public void SetFractionColors ()
+    public void SetFactionColors ()
     {
         fractionColors = new List<Color>();
         List<Color> importantColors = new List<Color>();

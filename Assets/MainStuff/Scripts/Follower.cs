@@ -24,7 +24,7 @@ public class Follower : FactionIndex
         health = 50;
         maxHP = 50;
         gameObject.tag = "Follower";
-        jumpPower = 25;
+        jumpPower = 15;
         speed = 50;
         followOwner = false;
         fractionId = 10;
@@ -241,11 +241,14 @@ public class Follower : FactionIndex
         {
             gameObject.GetComponent<ParticleSystem>().Play();
             audioPickEnemyCube.Play();
+
             //collisioninfo.gameObject.transform.localScale += new Vector3(0.5f, 0.5f, 0.5f);
-           // collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 100;
-           // collisioninfo.gameObject.GetComponent<FractionIndexClass>().level += 1;
+            // collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 100;
+            // collisioninfo.gameObject.GetComponent<FractionIndexClass>().level += 1;
+
             if (collisioninfo.gameObject.GetComponent<Seeker>() != null && collisioninfo.gameObject.GetComponent<Seeker>().currentWeapon != null)
                 collisioninfo.gameObject.GetComponent<Seeker>().currentWeapon.ownerLevel = level;
+
             // GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
 
             gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FactionIndex>().fractionId);
@@ -289,6 +292,7 @@ public class Follower : FactionIndex
             
             gameObject.transform.position = new Vector3(Random.Range(-700, 700), 200, Random.Range(-700, 700));
             fractionId = 10;
+
             //gameObject.GetComponent<Renderer>().material.color = Color.white;
 
             if (gameObject.GetComponentsInChildren<Light>() != null)

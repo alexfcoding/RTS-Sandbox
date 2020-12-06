@@ -14,9 +14,11 @@ public class Weapon : MonoBehaviour
     public float camX;
     public float camY;
     public float camZ;
-    float sprayShoot;
-    public Vector3 weaponPositionOffset;
     public float ownerLevel;
+    float sprayShoot;
+
+    public Vector3 weaponPositionOffset;
+
     public GameObject rocketLauncherAmmoPrefab;
     public GameObject createdBullet;
     public GameObject bulletEffectAI, bulletEffectPlayer;
@@ -64,7 +66,6 @@ public class Weapon : MonoBehaviour
         {
             transform.Rotate(0, -5, 0);
         }
-
         
         //if (currentSeeker != null && currentSeeker.tag == "Tower")
         //{
@@ -76,11 +77,13 @@ public class Weapon : MonoBehaviour
         //    }
 
         //}
+        
     }
 
     public void Update()
     {
         WeaponAction();
+
         //if (gameObject.tag == "PlayerWeapon")
         //{
         //    GameObject LockedTarget = GameMaster.GM.player.GetComponent<PlayerClass>().targetToLock;
@@ -100,7 +103,6 @@ public class Weapon : MonoBehaviour
         //    else
         //        gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
         //}
-
     }
 
     public void WeaponAction()
@@ -168,12 +170,13 @@ public class Weapon : MonoBehaviour
                     {
                         GameMaster.GM.shakeCamera = true;
                         reloadNow = true;
-                        GameObject CreatedObject = GameMaster.GM.ConstructObject(Player.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,
-                        Player.mainPlayer.currentWeapon.transform.TransformPoint(0 + (float) Random.Range(-3,3) / 6, 0 + (float) Random.Range(-3, 3) / 6, 4), Player.mainPlayer.currentWeapon.transform.rotation,
+                        GameObject CreatedObject = GameMaster.GM.ConstructObject(Player.mainPlayer.currentWeapon.rocketLauncherAmmoPrefab,                        
+                            Player.mainPlayer.currentWeapon.transform.TransformPoint(0 + (float) Random.Range(-1, 1) / 6, 0 + (float) Random.Range(-1, 1) / 6, 6), Player.mainPlayer.currentWeapon.transform.rotation,
                         "Rocket", GameMaster.GM.bulletObjectList, true);
                         CreatedObject.GetComponent<RocketShell>().playersBullet = true;
                         CreatedObject.GetComponent<RocketShell>().LaunchSound();
                         CreatedObject.GetComponent<RocketShell>().weaponToStick = gameObject;
+                        CreatedObject.gameObject.GetComponent<Rigidbody>().AddRelativeForce(Random.Range(-50, 50), Random.Range(-50, 50), 0, ForceMode.Impulse);
                     }
 
                     if (isBombLauncher == true && gameObject == GameMaster.GM.player.GetComponent<Player>().currentWeapon.gameObject)

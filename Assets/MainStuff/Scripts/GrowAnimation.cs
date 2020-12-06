@@ -11,7 +11,7 @@ public class GrowAnimation : MonoBehaviour
     public void Start()
     {        
         tickBuilding = 0.05f;
-        InvokeRepeating("ConstructBuilding", 0f, 0.01f); // 0.1f = Max TickBuilding (10)/(10sec/0.1)        
+        InvokeRepeating("ConstructBuilding", 0f, 0.01f);
     }       
 
     public void ConstructBuilding ()

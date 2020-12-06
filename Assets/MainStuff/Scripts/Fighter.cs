@@ -44,6 +44,7 @@ public class Fighter : Trooper
     public void FlyAnimation ()
     {
         timer += Time.deltaTime;
+
         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(Timer) * 0.1f,
         //  Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(Timer * 4f + randomY) * 1f + 15f,
         
@@ -51,7 +52,7 @@ public class Fighter : Trooper
             transform.position.y + Mathf.Sin(timer * 2f) * 0.1f,
                 transform.position.z + Mathf.Sin(timer * 2f) * 0.1f);
         
-        if (transform.position.y < 15)
+        if (transform.position.y < 20)
             rb.AddForce(0, 300, 0, ForceMode.Impulse);
 
         rb.MovePosition(moveSin);

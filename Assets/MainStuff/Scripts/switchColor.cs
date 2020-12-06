@@ -7,19 +7,14 @@ public class switchColor : MonoBehaviour
 
     public GameObject light;
     public bool triggered = true;
-    int id;
-    // Start is called before the first frame update
+    int id;    
+
     void Start()
     {
         id = gameObject.GetComponentInParent<FactionIndex>().fractionId;
         InvokeRepeating("SwitchColor", 0f, 0.5f);
     }
-    // Update is called once per frame
-    void FixedUpdate()
-    {        
-
-    }
-
+    
     public void SwitchColor()
     {
         if (triggered)

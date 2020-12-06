@@ -6,15 +6,13 @@ using UnityEngine;
 public class Tower : Seeker
 {
     //public float setHealth;
-
-    // Start is called before the first frame update
+        
     public float healthBarTopPosition;
     public float levelTopPosition;
 
     public override void Awake()
     {
-        level = 1;
-       
+        level = 1;       
         minDistance = 1000;
         minDistNum = 0;
         countOfItemsCollected = 0;

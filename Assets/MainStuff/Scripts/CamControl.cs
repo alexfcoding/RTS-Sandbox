@@ -11,8 +11,7 @@ public class CamControl : MonoBehaviour
     
     void Start()
     {
-        rotationSpeed = 0.8f;
-        
+        rotationSpeed = 0.8f;        
     }
 
     void LateUpdate()

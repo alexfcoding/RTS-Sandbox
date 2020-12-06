@@ -19,6 +19,8 @@ public class RocketShell : MonoBehaviour
     public bool isProjectile;
     public bool isHoming;
     public bool playersBullet;
+
+    public Rigidbody rb;
     
     public void FixedUpdate()
     {
@@ -34,8 +36,8 @@ public class RocketShell : MonoBehaviour
     {
         Timer += Time.deltaTime;
 
-        if ((isProjectile==true) && (gameObject.GetComponent<Rigidbody>()!=null))
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(0, 0, speed += 18, ForceMode.Acceleration);
+        if ((isProjectile==true) && (rb != null))
+            rb.AddRelativeForce(0, 0, speed += 24, ForceMode.Acceleration);
         
         if (playersBullet == true && isHoming == true)
             if (Physics.BoxCast(GameMaster.GM.player.transform.TransformPoint(0, 0, 0), new Vector3(20, 20, 2), transform.forward, out RaycastHit hitInfo2, Quaternion.Euler(0, 0, 0), 400, 1 << 8))
@@ -55,6 +57,7 @@ public class RocketShell : MonoBehaviour
     {
         isProjectile = true;
         playersBullet = false;
+        rb = gameObject.GetComponent<Rigidbody>();
     }
 
     public virtual void OnCollisionEnter(Collision collision)
@@ -95,7 +98,7 @@ public class RocketShell : MonoBehaviour
             FactionIndex fractionHitObject = hit.GetComponent<FactionIndex>();
 
             if ((hit.GetComponent<Rigidbody>() != null && hit.GetComponent<Seeker>() == null && hit.GetComponent<Trooper>() == null) && (hit.name != "Rocket") && (hit.name != "Bomb"))
-                hit.GetComponent<Rigidbody>().AddExplosionForce(500, gameObject.transform.position + new Vector3(0, 0, 0), 50, 1, ForceMode.Impulse);
+                hit.GetComponent<Rigidbody>().AddExplosionForce(300, gameObject.transform.position + new Vector3(0, 0, 0), 20, 1, ForceMode.Impulse);
 
             if (fractionHitObject != null && hit.gameObject != null)
             {

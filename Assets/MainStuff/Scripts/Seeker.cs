@@ -227,7 +227,14 @@ public class Seeker : FactionIndex
             whoIsDamaging.GetComponent<FactionIndex>().health += 1000;
             maxHP += 1000;
         }
-           
+
+        if (whoIsDamaging != null && whoIsDamaging.tag == "Player")
+        {
+            whoIsDamaging.GetComponent<FactionIndex>().health += 200;
+            maxHP += 1000;
+            GameMaster.GM.player.GetComponent<Player>().playerHealth3dText.text = $"HP: {GameMaster.GM.player.GetComponent<Player>().health}"; 
+        }
+
         totallyDead = true;
 
         if (GetComponent<AudioSource>() != null)
