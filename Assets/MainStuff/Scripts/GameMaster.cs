@@ -18,6 +18,11 @@ public class GameMaster : MonoBehaviour
     public static GameMaster GM;
 
     /// <summary>
+    /// AI-based simulation without player
+    /// </summary>
+    public bool aiModeOnly;
+
+    /// <summary>
     /// Count of base ships (including player's)
     /// </summary>
     public int mainBaseCount;
@@ -262,6 +267,7 @@ public class GameMaster : MonoBehaviour
         importantColors.Add(new Color(1, 1, 0, 1f));
         importantColors.Add(new Color(1, 0, 0, 1f));
         importantColors.Add(new Color(1, 0, 1, 1f));
+        importantColors.Add(new Color(1, 1, 1, 1f));
 
         for (int i = 0; i < GameMaster.GM.mainBaseCount; i++)
         {

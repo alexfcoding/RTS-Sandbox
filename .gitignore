@@ -8,4 +8,5 @@ Assets/*
 !Assets/MainStuff/
 Assets/MainStuff/*
 !Assets/MainStuff/Scripts
+!img/
 *.meta

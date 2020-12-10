@@ -123,7 +123,7 @@ public class Weapon : MonoBehaviour
             for (int i = 0; i < colliders.Length; i++)
             {
                 if ((colliders[i].GetComponent<FactionIndex>() != null && objectToStick != null && colliders[i].gameObject != null
-                && colliders[i].GetComponent<FactionIndex>().fractionId != objectToStick.GetComponent<FactionIndex>().fractionId
+                && colliders[i].GetComponent<FactionIndex>().factionId != objectToStick.GetComponent<FactionIndex>().factionId
                 && currentSeeker.GetComponent<FactionIndex>().dead == false
                 && colliders[i].GetComponent<FactionIndex>().isSimpleFollower == false
                 && colliders[i].GetComponent<FactionIndex>().dead == false) 

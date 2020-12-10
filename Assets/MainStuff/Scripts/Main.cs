@@ -33,7 +33,8 @@ public class Main : MonoBehaviour
         SetupFactionsAndPlayer(GameMaster.GM.mainBaseCount); 
         CreateShipPlatforms();
         CreateSeekers();
-        
+
+        //GameMaster.GM.shipObjectList[0].GetComponent<FactionIndex>().factionId = 2;
         //CreateResources(1000);
         //CreateRollerBalls(20);
         //CreateWeapons(100);
@@ -45,7 +46,7 @@ public class Main : MonoBehaviour
     {
         for (int i = 0; i < baseCount; i++)
         {
-            GameObject newShipObject = GameMaster.GM.ConstructObject(GameMaster.GM.shipPrefab, new Vector3(2700 * Mathf.Cos(spawnCircleAngle * 3.14f / 180), 110, 2700 * Mathf.Sin(spawnCircleAngle * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "Seeker", GameMaster.GM.shipObjectList);
+            GameObject newShipObject = GameMaster.GM.ConstructObject(GameMaster.GM.shipPrefab, new Vector3(2500 * Mathf.Cos(spawnCircleAngle * 3.14f / 180), 110, 2500 * Mathf.Sin(spawnCircleAngle * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "Seeker", GameMaster.GM.shipObjectList);
             newShipObject.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             newShipObject.GetComponent<Ship>().SetFractionId(i);
 
@@ -53,20 +54,32 @@ public class Main : MonoBehaviour
             {
                 GameMaster.GM.shipObjectList[0].GetComponent<Ship>().shipIsDeadEvent += printDeadHandler;
                 //GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(600, -110 + 5, -100);
-                GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(300, -100 + 5, 0);
+                GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(600, -100 + 5, 0);
                 GameMaster.GM.player.GetComponent<Player>().playerHealth3dText.color = GameMaster.GM.fractionColors[0];
                 GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, -6000), Quaternion.Euler(0, 0, 0), "MachineGun", GameMaster.GM.weaponObjectList);
                 GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, -3000), Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
                 GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, 0), Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
                 GameMaster.GM.ConstructObject(GameMaster.GM.bombLauncherPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, 3000), Quaternion.Euler(0, 0, 0), "BombLauncher", GameMaster.GM.weaponObjectList);
-
+                
+                if (GameMaster.GM.aiModeOnly == true)
+                {
+                    for (int j = 0; j < 20; j++)
+                    {
+                        GameObject newTower = GameMaster.GM.ConstructObject(GameMaster.GM.TowerGunPrefab, new Vector3(newShipObject.transform.position.x - 500 * Mathf.Cos(spawnCircleAngle2 * 3.14f / 180), 0, newShipObject.transform.position.z - 500 * Mathf.Sin(spawnCircleAngle2 * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "GunTower", GameMaster.GM.globalObjectList);
+                        newTower.GetComponent<Tower>().SetFractionId(newShipObject.GetComponent<Ship>().factionId);
+                        newTower.GetComponent<Tower>().isVulnerable = true;
+                        newTower.GetComponent<Tower>().health = 5000;
+                        newTower.GetComponent<Tower>().maxHP = 5000;
+                        spawnCircleAngle2 += 360 / 20;
+                    }
+                }
             }
             else
             {
                 for (int j = 0; j < 20; j++)
                 {
                     GameObject newTower = GameMaster.GM.ConstructObject(GameMaster.GM.TowerGunPrefab, new Vector3(newShipObject.transform.position.x - 500 * Mathf.Cos(spawnCircleAngle2 * 3.14f / 180), 0, newShipObject.transform.position.z - 500 * Mathf.Sin(spawnCircleAngle2 * 3.14f / 180)), Quaternion.Euler(0, Random.Range(-180, 180), 0), "GunTower", GameMaster.GM.globalObjectList);
-                    newTower.GetComponent<Tower>().SetFractionId(newShipObject.GetComponent<Ship>().fractionId);
+                    newTower.GetComponent<Tower>().SetFractionId(newShipObject.GetComponent<Ship>().factionId);
                     newTower.GetComponent<Tower>().isVulnerable = true;
                     newTower.GetComponent<Tower>().health = 5000;
                     newTower.GetComponent<Tower>().maxHP = 5000;
@@ -173,7 +186,7 @@ public class Main : MonoBehaviour
                 createdObject.GetComponent<FactionIndex>().SetFractionId(i);
                 createdObject.GetComponent<Seeker>().textHP.gameObject.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[i];
 
-                if (createdObject.GetComponent<FactionIndex>().fractionId == 0)
+                if (createdObject.GetComponent<FactionIndex>().factionId == 0)
                     createdObject.GetComponent<Seeker>().textHP.gameObject.GetComponent<TextMesh>().text = createdObject.GetComponent<Seeker>().level.ToString() + " *";
 
                 warriorPosition = createdObject.transform.position + new Vector3(0, 0, 0);
@@ -201,7 +214,7 @@ public class Main : MonoBehaviour
                 createdObject.GetComponent<FactionIndex>().SetFractionId(i);
                 createdObject.GetComponent<Seeker>().textHP.gameObject.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[i];
 
-                if (createdObject.GetComponent<FactionIndex>().fractionId == 0)
+                if (createdObject.GetComponent<FactionIndex>().factionId == 0)
                     createdObject.GetComponent<Seeker>().textHP.gameObject.GetComponent<TextMesh>().text = createdObject.GetComponent<Seeker>().level.ToString() + " *";
 
                 warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);

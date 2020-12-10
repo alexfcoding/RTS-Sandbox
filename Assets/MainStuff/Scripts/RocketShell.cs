@@ -41,7 +41,7 @@ public class RocketShell : MonoBehaviour
         
         if (playersBullet == true && isHoming == true)
             if (Physics.BoxCast(GameMaster.GM.player.transform.TransformPoint(0, 0, 0), new Vector3(20, 20, 2), transform.forward, out RaycastHit hitInfo2, Quaternion.Euler(0, 0, 0), 400, 1 << 8))
-                if ((hitInfo2.transform.tag == "Seeker" || hitInfo2.transform.tag == "Trooper")&&(hitInfo2.transform.GetComponent<FactionIndex>().fractionId != 0))
+                if ((hitInfo2.transform.tag == "Seeker" || hitInfo2.transform.tag == "Trooper")&&(hitInfo2.transform.GetComponent<FactionIndex>().factionId != 0))
                 {
                     gameObject.transform.LookAt(hitInfo2.transform.position + new Vector3(0, 1, 0));
                     Vector3 normalizeDirection = (hitInfo2.transform.position + new Vector3(0, 1, 0) - gameObject.transform.position).normalized;

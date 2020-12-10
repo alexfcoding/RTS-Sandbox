@@ -27,7 +27,7 @@ public class Follower : FactionIndex
         jumpPower = 15;
         speed = 50;
         followOwner = false;
-        fractionId = 10;
+        factionId = 10;
         followOwnerCharger = false;
         jumping = true;
         isSimpleFollower = true;
@@ -84,7 +84,7 @@ public class Follower : FactionIndex
                         if (ownerToFollow.GetComponent<Seeker>().whoIsDamaging!=null)
                             {
                                 ownerToFollow = ownerToFollow.GetComponent<Seeker>().whoIsDamaging;
-                                fractionId = 10; // Установить идентификатор FractionId
+                                factionId = 10; // Установить идентификатор FractionId
                                 moveToNextOwner = true;
                                 StartCoroutine(MoveToNextOwnerTrigger());
                                 gameObject.tag = "Follower"; // вернуть тэг кубу Follower
@@ -93,7 +93,7 @@ public class Follower : FactionIndex
                             {
                                 followOwner = false; // убрать владельца
                                 gameObject.tag = "Follower"; // вернуть тэг кубу Follower
-                                fractionId = 10;                                
+                                factionId = 10;                                
                             }
                     }
 
@@ -160,7 +160,7 @@ public class Follower : FactionIndex
         //gameObject.GetComponent<Rigidbody>().useGravity = true;
         gameObject.GetComponent<Rigidbody>().mass = 5;
 
-        if (fractionId == 10)
+        if (factionId == 10)
             followOwner = false;
     }
 
@@ -183,9 +183,9 @@ public class Follower : FactionIndex
 
         if (collisioninfo.gameObject.tag == "Seeker") // Если куб столкнулся с Seeker или Player ...
         { 
-            if (gameObject.GetComponent<FactionIndex>().fractionId == 10) // ... и его индекс равен 10 (свободный)
+            if (gameObject.GetComponent<FactionIndex>().factionId == 10) // ... и его индекс равен 10 (свободный)
             {
-                gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FactionIndex>().fractionId); // установить  индекс равный Seeker или Player
+                gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FactionIndex>().factionId); // установить  индекс равный Seeker или Player
 
                 if (collisioninfo.gameObject.GetComponent<Seeker>() != null) // Если столкновение с Seeker, то ...
                 {
@@ -208,7 +208,7 @@ public class Follower : FactionIndex
 
                     for (int i = 0; i < lightsCount; i++)
                     {
-                        gameObject.GetComponentsInChildren<Light>()[i].color = GameMaster.GM.fractionColors[this.fractionId];
+                        gameObject.GetComponentsInChildren<Light>()[i].color = GameMaster.GM.fractionColors[this.factionId];
                     }
                 }
 
@@ -237,7 +237,7 @@ public class Follower : FactionIndex
         //    GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
         //}
 
-        else if (gameObject.GetComponent<FactionIndex>().fractionId == 10 && collisioninfo.gameObject.tag == "Player")
+        else if (gameObject.GetComponent<FactionIndex>().factionId == 10 && collisioninfo.gameObject.tag == "Player")
         {
             gameObject.GetComponent<ParticleSystem>().Play();
             audioPickEnemyCube.Play();
@@ -251,7 +251,7 @@ public class Follower : FactionIndex
 
             // GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
 
-            gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FactionIndex>().fractionId);
+            gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FactionIndex>().factionId);
             ownerToFollow = collisioninfo.collider.gameObject;
 
             //gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
@@ -262,7 +262,7 @@ public class Follower : FactionIndex
 
                 for (int i = 0; i < lightsCount; i++)
                 {
-                    gameObject.GetComponentsInChildren<Light>()[i].color = GameMaster.GM.fractionColors[this.fractionId];
+                    gameObject.GetComponentsInChildren<Light>()[i].color = GameMaster.GM.fractionColors[this.factionId];
                 }
             }
 
@@ -291,7 +291,7 @@ public class Follower : FactionIndex
             }
             
             gameObject.transform.position = new Vector3(Random.Range(-700, 700), 200, Random.Range(-700, 700));
-            fractionId = 10;
+            factionId = 10;
 
             //gameObject.GetComponent<Renderer>().material.color = Color.white;
 

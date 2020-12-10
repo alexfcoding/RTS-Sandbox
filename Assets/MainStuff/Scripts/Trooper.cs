@@ -128,13 +128,16 @@ public class Trooper : Seeker
             {
                 int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
 
-                while (rnDShip == fractionId)
+                while (rnDShip == factionId)
                     rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
 
-                if (fractionId != 0 && GameMaster.GM.shipObjectList[rnDShip] != null)
+                if (GameMaster.GM.shipObjectList[rnDShip] != null)
                     targetToChase = GameMaster.GM.shipObjectList[rnDShip];
-                else
-                    targetToChase = GameMaster.GM.player.gameObject;
+
+                if (factionId != 0 && GameMaster.GM.aiModeOnly == false && GameMaster.GM.shipObjectList[rnDShip] != null)
+                    targetToChase = GameMaster.GM.shipObjectList[rnDShip];
+                //else
+                //    targetToChase = GameMaster.GM.player.gameObject;
             }
            
             if (targetToChase != null && targetToChase.GetComponent<Ship>() != null)

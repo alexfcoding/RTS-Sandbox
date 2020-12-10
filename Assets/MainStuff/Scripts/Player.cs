@@ -143,7 +143,7 @@ public class Player: FactionIndex
         timer = 0;
         playerCubesCount = 0;
         playerMoney = 0;
-        fractionId = 0;
+        factionId = 0;
         targetSpritePrefab.transform.localScale = new Vector3(2f, 2f, 2f);
         selector = Instantiate(GameMaster.GM.teamSelect, transform.position + new Vector3(0, 5, 0), Quaternion.Euler(0, 0, 0));
         // selector.transform.SetParent(gameObject.transform);
@@ -196,7 +196,7 @@ public class Player: FactionIndex
             Collider[] team = Physics.OverlapBox(selector.transform.position, new Vector3(selectorScale / 1.5f, 9999, selectorScale / 1.5f), Quaternion.identity, 1 << 8);
 
             foreach (Collider teamMate in team)
-                if (teamMate.tag == "Trooper" && teamMate.gameObject.GetComponent<FactionIndex>().fractionId == 0)
+                if (teamMate.tag == "Trooper" && teamMate.gameObject.GetComponent<FactionIndex>().factionId == 0)
                 {
                     teamMateList.Add(teamMate.gameObject);
                     teamMate.GetComponent<Trooper>().teamSelectMark = Instantiate(GameMaster.GM.teamMarker, teamMate.transform.position + new Vector3(0, 12, 0), Quaternion.Euler(0, 0, 0));
@@ -255,9 +255,9 @@ public class Player: FactionIndex
 
         if (spectatorMode == true)
         {
-            //transform.RotateAround(new Vector3(0, 0, 0), transform.up, 2f * Time.deltaTime);
+            transform.RotateAround(new Vector3(0, 0, 0), transform.up, 2f * Time.deltaTime);
             transform.LookAt(new Vector3(0, 0, 0));
-            // transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(new Vector3(0, 0, 0)), Time.deltaTime);
+            //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(new Vector3(-100, 0, 0)), Time.deltaTime);
         }
 
         //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 2f) * 0.07f,
@@ -608,19 +608,19 @@ public class Player: FactionIndex
                 {
                     targetUI.GetComponent<Image>().enabled = true;                    
 
-                    if (hit.transform.GetComponent<FactionIndex>().fractionId != 0)
+                    if (hit.transform.GetComponent<FactionIndex>().factionId != 0)
                     {
                         targetUI.transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
                         targetUI.GetComponent<Image>().sprite = targetSprite;
                         targetUI.GetComponent<Image>().transform.position = Input.mousePosition;
-                        targetUI.GetComponent<Image>().color = GameMaster.GM.fractionColors[hit.transform.GetComponent<FactionIndex>().fractionId];
+                        targetUI.GetComponent<Image>().color = GameMaster.GM.fractionColors[hit.transform.GetComponent<FactionIndex>().factionId];
                     }
                     else
                     {
                         targetUI.transform.localScale = new Vector3(0.4f, 0.5f, 0.5f);
                         targetUI.GetComponent<Image>().sprite = followSprite;
                         targetUI.GetComponent<Image>().transform.position = Input.mousePosition + new Vector3(0, 40, 0);
-                        targetUI.GetComponent<Image>().color = GameMaster.GM.fractionColors[hit.transform.GetComponent<FactionIndex>().fractionId];
+                        targetUI.GetComponent<Image>().color = GameMaster.GM.fractionColors[hit.transform.GetComponent<FactionIndex>().factionId];
                     }                        
                 }
                 else

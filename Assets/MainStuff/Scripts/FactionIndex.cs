@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FactionIndex : MonoBehaviour
 {
-    public int fractionId;
+    public int factionId;
 
     public bool isSimpleFollower;
     public bool dead, totallyDead;
@@ -38,7 +38,7 @@ public class FactionIndex : MonoBehaviour
 
     public void SetFractionId(int fractionId)
     {
-        this.fractionId = fractionId;
+        this.factionId = fractionId;
 
         if (gameObject.name == "Seeker" || gameObject.name == "GunTower" || gameObject.name == "Tower")
         {
@@ -50,13 +50,13 @@ public class FactionIndex : MonoBehaviour
 
                 for (int i = 0; i < lightsCount; i++)
                 {
-                    gameObject.GetComponentsInChildren<Light>()[i].color = GameMaster.GM.fractionColors[this.fractionId];
+                    gameObject.GetComponentsInChildren<Light>()[i].color = GameMaster.GM.fractionColors[this.factionId];
                 }
             }
         }
 
         if (healthBar != null)
-            healthBar.GetComponent<SpriteRenderer>().color = GameMaster.GM.fractionColors[this.fractionId];
+            healthBar.GetComponent<SpriteRenderer>().color = GameMaster.GM.fractionColors[this.factionId];
     }
 
     public void SetHealth (float healthToSet)

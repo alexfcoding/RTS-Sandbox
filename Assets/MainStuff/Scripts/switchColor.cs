@@ -11,7 +11,7 @@ public class switchColor : MonoBehaviour
 
     void Start()
     {
-        id = gameObject.GetComponentInParent<FactionIndex>().fractionId;
+        id = gameObject.GetComponentInParent<FactionIndex>().factionId;
         InvokeRepeating("SwitchColor", 0f, 0.5f);
     }
     

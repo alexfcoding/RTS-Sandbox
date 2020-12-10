@@ -60,10 +60,10 @@ public class RollerEnemyBase : Trooper
             {
                 int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
 
-                while (rnDShip == fractionId)
+                while (rnDShip == factionId)
                     rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
 
-                if (fractionId != 0 && GameMaster.GM.shipObjectList[rnDShip] != null)
+                if (factionId != 0 && GameMaster.GM.shipObjectList[rnDShip] != null)
                     targetToChase = GameMaster.GM.shipObjectList[rnDShip];
                 else
                     targetToChase = GameMaster.GM.player.gameObject;

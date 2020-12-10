@@ -60,7 +60,7 @@ public class Seeker : FactionIndex
         {
             if (health > damage)
             {
-                if (whoIsDamaging != null && whoIsDamaging.GetComponent<FactionIndex>().fractionId != GetComponent<FactionIndex>().fractionId)
+                if (whoIsDamaging != null && whoIsDamaging.GetComponent<FactionIndex>().factionId != GetComponent<FactionIndex>().factionId)
                     health -= damage;
 
                 textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
@@ -141,7 +141,7 @@ public class Seeker : FactionIndex
 
             //Debug.Log(objectList[minDistNum].name);
 
-            if (objectList[minDistNum] == null || objectList[minDistNum].GetComponent<FactionIndex>().fractionId != 0 && objectList[minDistNum].GetComponent<FactionIndex>().fractionId != fractionId || currentTargetObject.gameObject == null)
+            if (objectList[minDistNum] == null || objectList[minDistNum].GetComponent<FactionIndex>().factionId != 0 && objectList[minDistNum].GetComponent<FactionIndex>().factionId != factionId || currentTargetObject.gameObject == null)
             {
                 findNextObject = true;
             }
@@ -175,14 +175,14 @@ public class Seeker : FactionIndex
                 }
             }
 
-            if (goingToBase == true && platformList[fractionId].gameObject != null)
+            if (goingToBase == true && platformList[factionId].gameObject != null)
             {
-                currentTarget = new Vector3(platformList[fractionId].transform.position.x, transform.position.y, platformList[fractionId].transform.position.z);
+                currentTarget = new Vector3(platformList[factionId].transform.position.x, transform.position.y, platformList[factionId].transform.position.z);
                 //transform.LookAt(currentTarget);
 
                 Quaternion lookOnLook = Quaternion.LookRotation(new Vector3(currentTarget.x, transform.position.y, currentTarget.z) - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 3f);
-                Vector3 normalizeDirection = (platformList[fractionId].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
+                Vector3 normalizeDirection = (platformList[factionId].gameObject.GetComponent<Transform>().transform.position - gameObject.transform.position).normalized;
                 gameObject.GetComponent<Transform>().transform.position += normalizeDirection * Time.deltaTime * 70;
             }
 

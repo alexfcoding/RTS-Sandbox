@@ -48,11 +48,7 @@ public class Ship : Seeker
         textHP.GetComponent<TextMesh>().color = healthBar.GetComponent<SpriteRenderer>().color;
         textHP.GetComponent<TextMesh>().fontSize = 355;
 
-        if (fractionId == 0)
-        {
-            money = 0;
-            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString();
-        }            
+        UpdateMoneyStats();
     }
 
     public void FixedUpdate()
@@ -72,51 +68,53 @@ public class Ship : Seeker
         int rndUnit;
         int rndBuilding;
 
-        if (fractionId != 0)
-        {
-            if (fractionBarracsList.Count > 0 && CountFractionWarriors(fractionId) <= fractionBarracsList.Count * 20 && money > 600)
+        if (GameMaster.GM.aiModeOnly == false && factionId != 0 || GameMaster.GM.aiModeOnly == true)
+        {            
             {
-                //SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
-                //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
-                rndUnit = Random.Range(0, 100);
-
-                if (rndUnit < 70)
-                    spendMoney(300, startCreatingTrooper);
-            }
-
-            if (fractionFactoryList.Count > 0 && CountFractionWarriors(fractionId) <= fractionFactoryList.Count * 30 && money > 600)
-            {
-                //SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
-                //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
-                rndUnit = Random.Range(0, 100);
-
-                if (rndUnit < 70)
-                    spendMoney(600, startCreatingLightShip);               
-            }
-
-            if (fractionBarracsList.Count < 3 && money > 3000)
-            {
-                //SpendMoneyMethod SpendOnBarracsDelegate = startBarracsConstruction;
-                //SpendMoneyMethod SpendOnFactoryDelegate = startFactoryConstruction;
-                rndBuilding = Random.Range(0, 100);
-                
-                if (rndBuilding < 50)
-                    spendMoney(2000, startBarracsConstruction);
-                else 
+                if (fractionBarracsList.Count > 0 && CountFractionWarriors(factionId) <= fractionBarracsList.Count * 20 && money > 600)
                 {
-                    spendMoney(3000, startFactoryConstruction);
+                    //SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
+                    //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
+                    rndUnit = Random.Range(0, 100);
+
+                    if (rndUnit < 70)
+                        spendMoney(300, startCreatingTrooper);
                 }
-            }
 
-            if (fractionBarracsList.Count > 0 && money > 5000 && fractionBarracsList.Count < 3)
-            {
-                SpendMoneyMethod SpendOnTowerDelegate = startCreatingTower;
-                
-                rndBuilding = Random.Range(0, 100);
+                if (fractionFactoryList.Count > 0 && CountFractionWarriors(factionId) <= fractionFactoryList.Count * 30 && money > 600)
+                {
+                    //SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
+                    //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
+                    rndUnit = Random.Range(0, 100);
 
-                spendMoney(5000, SpendOnTowerDelegate);
-               
-            }
+                    if (rndUnit < 70)
+                        spendMoney(600, startCreatingLightShip);
+                }
+
+                if (fractionBarracsList.Count < 3 && money > 3000)
+                {
+                    //SpendMoneyMethod SpendOnBarracsDelegate = startBarracsConstruction;
+                    //SpendMoneyMethod SpendOnFactoryDelegate = startFactoryConstruction;
+                    rndBuilding = Random.Range(0, 100);
+
+                    if (rndBuilding < 50)
+                        spendMoney(2000, startBarracsConstruction);
+                    else
+                    {
+                        spendMoney(3000, startFactoryConstruction);
+                    }
+                }
+
+                if (fractionBarracsList.Count > 0 && money > 5000 && fractionBarracsList.Count < 3)
+                {
+                    SpendMoneyMethod SpendOnTowerDelegate = startCreatingTower;
+
+                    rndBuilding = Random.Range(0, 100);
+
+                    spendMoney(5000, SpendOnTowerDelegate);
+
+                }
+            }     
         }
     }
 
@@ -155,22 +153,34 @@ public class Ship : Seeker
         GameObject newBuilding = null;
         if (gameObject != null)
         {
-            if (fractionId != 0)
+            if (GameMaster.GM.aiModeOnly == false)
+            { 
+                if (factionId != 0)
+                {
+                    newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.shipObjectList[factionId].transform.position
+                + new Vector3(Random.Range(-500, 500), -GameMaster.GM.shipObjectList[factionId].transform.position.y, Random.Range(-500, 500)),
+                 Quaternion.Euler(0, 0, 0), buildingName, GameMaster.GM.trooperBaseList);
+                }       
+                else
+                {                    
+                    newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 25000),
+                            Quaternion.Euler(0, 0, 0), buildingName, GameMaster.GM.trooperBaseList);
+                    //newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 50000),
+                    //Quaternion.Euler(0, 0, 0), "Barracs", GameMaster.GM.trooperBaseList);
+                }
+            }
+            else
             {
-                newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.shipObjectList[fractionId].transform.position
-                 + new Vector3(Random.Range(-500, 500), -GameMaster.GM.shipObjectList[fractionId].transform.position.y, Random.Range(-500, 500)),
-                  Quaternion.Euler(0, 0, 0), buildingName, GameMaster.GM.trooperBaseList);
+                newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.shipObjectList[factionId].transform.position
+                + new Vector3(Random.Range(-500, 500), -GameMaster.GM.shipObjectList[factionId].transform.position.y, Random.Range(-500, 500)),
+                 Quaternion.Euler(0, 0, 0), buildingName, GameMaster.GM.trooperBaseList);
             }
 
-            if (fractionId == 0)
-                newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 25000),
-                    Quaternion.Euler(0, 0, 0), buildingName, GameMaster.GM.trooperBaseList);
-                //newBuilding = GameMaster.GM.ConstructObject(buildingPrefabObject, GameMaster.GM.player.TransformPoint(0, 0, 50000),
-                //Quaternion.Euler(0, 0, 0), "Barracs", GameMaster.GM.trooperBaseList);
+          
 
             newBuilding.transform.position = new Vector3(newBuilding.transform.position.x, 0, newBuilding.transform.position.z);
 
-            newBuilding.GetComponent<FactionIndex>().SetFractionId(fractionId);
+            newBuilding.GetComponent<FactionIndex>().SetFractionId(factionId);
             if (newBuilding.gameObject.tag == "Barracs")
                 fractionBarracsList.Add(newBuilding);
             if (newBuilding.gameObject.tag == "Factory")
@@ -180,7 +190,7 @@ public class Ship : Seeker
 
     public void CreateUnit(int UnitCount, GameObject unitPrefab, string unitName)
     {
-        if (GameMaster.GM.shipObjectList[fractionId].gameObject != null)
+        if (GameMaster.GM.shipObjectList[factionId].gameObject != null)
         {
             for (int j = 0; j < UnitCount; j++)
             {
@@ -193,23 +203,25 @@ public class Ship : Seeker
                         if (fractionBarracsList[rndBaseSpawnTrooper].gameObject != null)
                         {
                             createdObject = GameMaster.GM.ConstructObject(unitPrefab, fractionBarracsList[rndBaseSpawnTrooper].transform.position + new Vector3(Random.Range(-120, 120), 0, Random.Range(-120, 120)), Quaternion.Euler(0, 0, 0), unitName, GameMaster.GM.unitList);
-                            createdObject.GetComponent<FactionIndex>().SetFractionId(fractionId);
+                            createdObject.GetComponent<FactionIndex>().SetFractionId(factionId);
                             Vector3 warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);
                             GameMaster.GM.GiveWeaponToObject(warriorPosition);
                             if (createdObject.GetComponent<Trooper>() != null)
                             {
                                 createdObject.GetComponent<Trooper>().targetIsShip = false;
                                 //createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.shipObjectList[ChooseRandomTarget(GameMaster.GM.shipObjectList)];
-                                if (fractionId == 0)
+
+                                if (factionId == 0 && GameMaster.GM.aiModeOnly == false)
                                     createdObject.GetComponent<Trooper>().targetToChase = GameMaster.GM.player.gameObject;
+
                                 //createdObject.GetComponent<TrooperClass>().targetToChase = fractionBarracsList[rndBaseSpawnTrooper].gameObject;
                             }
 
                             //float randomScale = Random.Range(1f, 2f); // Рандомизируем размеры пехоты
                             //createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
-                            createdObject.GetComponent<Seeker>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.fractionId];
+                            createdObject.GetComponent<Seeker>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.factionId];
 
-                            if (createdObject.GetComponent<FactionIndex>().fractionId != 0)
+                            if (createdObject.GetComponent<FactionIndex>().factionId != 0)
                                 AttackPlayerWithProbability(0, createdObject);
 
                             if (createdObject.GetComponent<Trooper>() != null)
@@ -222,23 +234,23 @@ public class Ship : Seeker
                         {
                             createdObject = GameMaster.GM.ConstructObject(unitPrefab, fractionFactoryList[rndBaseSpawnLightShip].transform.position + new Vector3(Random.Range(-80, 80), 0, Random.Range(-80, 80)), Quaternion.Euler(0, 0, 0), unitName, GameMaster.GM.unitList);
 
-                            createdObject.GetComponent<FactionIndex>().SetFractionId(fractionId);
+                            createdObject.GetComponent<FactionIndex>().SetFractionId(factionId);
                             Vector3 warriorPosition = createdObject.transform.position + new Vector3(0, 2, 0);
                             GameMaster.GM.GiveWeaponToObject(warriorPosition);
                             if (createdObject.GetComponent<Trooper>() != null)
                             {
                                 createdObject.GetComponent<Trooper>().targetIsShip = false;
                                 //createdObject.GetComponent<TrooperClass>().targetToChase = GameMaster.GM.shipObjectList[ChooseRandomTarget(GameMaster.GM.shipObjectList)];
-                                if (fractionId == 0)
+                                if (factionId == 0 && GameMaster.GM.aiModeOnly == false)
                                     createdObject.GetComponent<Trooper>().targetToChase = GameMaster.GM.player.gameObject;
                                 //createdObject.GetComponent<TrooperClass>().targetToChase = fractionBarracsList[rndBaseSpawnTrooper].gameObject;
                             }
 
                             //float randomScale = Random.Range(1f, 2f); // Рандомизируем размеры пехоты
                             //createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
-                            createdObject.GetComponent<Seeker>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.fractionId];
+                            createdObject.GetComponent<Seeker>().textHP.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[this.factionId];
 
-                            if (createdObject.GetComponent<FactionIndex>().fractionId != 0)
+                            if (createdObject.GetComponent<FactionIndex>().factionId != 0)
                                 AttackPlayerWithProbability(0, createdObject);
 
                             if (createdObject.GetComponent<Trooper>() != null)
@@ -250,9 +262,9 @@ public class Ship : Seeker
 
     public int ChooseRandomTarget(List<GameObject> ListToSearchEnemy)
     {
-        int rndTarget = fractionId;
+        int rndTarget = factionId;
 
-        while (rndTarget == fractionId)
+        while (rndTarget == factionId)
             rndTarget = Random.Range(0, GameMaster.GM.mainBaseCount);
 
         return rndTarget;
@@ -276,7 +288,7 @@ public class Ship : Seeker
 
         foreach (GameObject Warrior in GameMaster.GM.unitList)
         {
-            if (Warrior != null && Warrior.GetComponent<FactionIndex>().fractionId == fractionId)
+            if (Warrior != null && Warrior.GetComponent<FactionIndex>().factionId == fractionId)
                 warriorsCount++;
         }
 
@@ -290,7 +302,7 @@ public class Ship : Seeker
         if (GameMaster.GM.trooperBaseList != null)
             foreach (GameObject Barracs in GameMaster.GM.trooperBaseList)
             {
-                if (Barracs.gameObject != null && Barracs.gameObject.name == barracsName && Barracs.GetComponent<FactionIndex>().fractionId == fractionId)
+                if (Barracs.gameObject != null && Barracs.gameObject.name == barracsName && Barracs.GetComponent<FactionIndex>().factionId == fractionId)
                 {
                     barracsCount++;
                     fractionBarracsList.Add(Barracs);
@@ -332,7 +344,7 @@ public class Ship : Seeker
 
             for (int i = 0; i < GameMaster.GM.globalObjectList.Count; i++)
             {
-                if (GameMaster.GM.globalObjectList[i] != null && GameMaster.GM.globalObjectList[i].gameObject.tag == "Seeker" && GameMaster.GM.globalObjectList[i].gameObject.GetComponent<FactionIndex>().fractionId == fractionId)
+                if (GameMaster.GM.globalObjectList[i] != null && GameMaster.GM.globalObjectList[i].gameObject.tag == "Seeker" && GameMaster.GM.globalObjectList[i].gameObject.GetComponent<FactionIndex>().factionId == factionId)
                 {
                     GameObject Explode = Instantiate(GameMaster.GM.globalObjectList[i].gameObject.GetComponent<FactionIndex>().deathEffect, GameMaster.GM.globalObjectList[i].gameObject.transform.position, Quaternion.Euler(0, 0, 0));
 
@@ -365,12 +377,7 @@ public class Ship : Seeker
         money += coinsToEarn;
         GameMaster.GM.enemyMoneyText.text = "";
 
-        if (fractionId == 0)
-        {
-            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString();
-        }
-           
-
+        UpdateMoneyStats();
         for (int i = 1; i < GameMaster.GM.shipObjectList.Count; i++)
         {
             if (GameMaster.GM.shipObjectList[i] != null)
@@ -386,19 +393,34 @@ public class Ship : Seeker
             money -= howMuchToSpend;
             creatingMethod();
         }
-        else if (fractionId == 0)
+        else if (factionId == 0)
             insufficientFunds.Play();
 
         GameMaster.GM.enemyMoneyText.text = "";
 
-        if (fractionId == 0)
-            GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString();
+        UpdateMoneyStats();
 
         for (int i = 1; i < GameMaster.GM.shipObjectList.Count; i++)
         {
             if (GameMaster.GM.shipObjectList[i] != null)
                 GameMaster.GM.enemyMoneyText.text +=
-                 "Enemy #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<Ship>().money.ToString() + "\n";
+                 "AI #" + i.ToString() + ": " + GameMaster.GM.shipObjectList[i].GetComponent<Ship>().money.ToString() + "\n";
+        }
+    }
+
+    public void UpdateMoneyStats()
+    {
+        if (factionId == 0)
+        {
+            if (GameMaster.GM.aiModeOnly == false)
+            {
+                money = 0;
+                GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString();
+            }
+            else
+            {
+                GameMaster.GM.playerMoneyText.text = "AI #0: " + money.ToString();
+            }
         }
     }
 
