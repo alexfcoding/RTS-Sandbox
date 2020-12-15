@@ -20,6 +20,7 @@ public class Trooper : Seeker
 
     public GameObject enemyToLook;
     public GameObject targetToChase;
+    public Vector3 pointToChase;
     public GameObject targetToChaseByPlayerCommand;
     public GameObject teamSelectMark;
     public GameObject body;
@@ -117,25 +118,31 @@ public class Trooper : Seeker
                         if (gameObject.name == "Trooper")
                             pointFromShooting = new Vector3(targetToChase.transform.position.x, transform.position.y, targetToChase.transform.position.z);
                     }
-                        
-                    else
+
+                    if (targetToChase.GetComponent<Seeker>() != null)
                     {
                         pointFromShooting = new Vector3(targetToChase.transform.position.x, targetToChase.transform.position.y, targetToChase.transform.position.z);
-                    }
+                    }  
                 }
             }
             else
             {
-                int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
+                if (pointToChase != new Vector3(0,0,0))
+                    pointFromShooting = pointToChase;
+                else
+                {
+                    int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
 
-                while (rnDShip == factionId)
-                    rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
+                    while (rnDShip == factionId)
+                        rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
 
-                if (GameMaster.GM.shipObjectList[rnDShip] != null)
-                    targetToChase = GameMaster.GM.shipObjectList[rnDShip];
+                    if (GameMaster.GM.shipObjectList[rnDShip] != null)
+                        targetToChase = GameMaster.GM.shipObjectList[rnDShip];
 
-                if (factionId != 0 && GameMaster.GM.aiModeOnly == false && GameMaster.GM.shipObjectList[rnDShip] != null)
-                    targetToChase = GameMaster.GM.shipObjectList[rnDShip];
+                    if (factionId != 0 && GameMaster.GM.aiModeOnly == false && GameMaster.GM.shipObjectList[rnDShip] != null)
+                        targetToChase = GameMaster.GM.shipObjectList[rnDShip];
+                }
+                
                 //else
                 //    targetToChase = GameMaster.GM.player.gameObject;
             }

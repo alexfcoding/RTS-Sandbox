@@ -22,7 +22,7 @@ public class Building : FactionIndex
         maxHP = 5000;
         tickBuilding = 0.05f;
 
-        if (beginConstruction != null && factionId == 0)
+        if (beginConstruction != null && factionId == 0 && GameMaster.GM.aiModeOnly == false)
             beginConstruction.Play();
 
         InvokeRepeating("ConstructBuilding", 0f, 0.05f); // 0.1f = Max TickBuilding (10)/(10sec/0.1)
@@ -49,7 +49,7 @@ public class Building : FactionIndex
         {
             healthBar.transform.localPosition += new Vector3(0, 4, 0);
 
-            if (factionId == 0)
+            if (factionId == 0 && GameMaster.GM.aiModeOnly == false)
                 constructionComplete.Play();
 
             CancelInvoke("ConstructBuilding");

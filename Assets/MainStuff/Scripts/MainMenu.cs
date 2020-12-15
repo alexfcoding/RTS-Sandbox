@@ -95,6 +95,8 @@ public class MainMenu : MonoBehaviour
     {
         int startMoney = (int)moneySlider.value;
         Settings.SET.startMoney = startMoney;
+
+
         moneyCountText.GetComponent<TMP_Text>().text = $"Start Money: {startMoney.ToString()} %";
     }
 }

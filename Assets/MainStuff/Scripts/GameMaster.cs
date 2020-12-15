@@ -252,7 +252,7 @@ public class GameMaster : MonoBehaviour
         }          
         else
         {
-            mainBaseCount = 5;
+            mainBaseCount = 2;
             startMoney = 50;
         }            
     }

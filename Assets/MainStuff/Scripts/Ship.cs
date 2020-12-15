@@ -19,6 +19,7 @@ public class Ship : Seeker
     {
         money = 200000 * GameMaster.GM.startMoney / 100;
 
+
         health = 200000;
         maxHP = 200000;
         gameObject.tag = "Ship";
@@ -48,7 +49,12 @@ public class Ship : Seeker
         textHP.GetComponent<TextMesh>().color = healthBar.GetComponent<SpriteRenderer>().color;
         textHP.GetComponent<TextMesh>().fontSize = 355;
 
+        if (factionId == 0) {
+            //money /= 10;
+        }
+
         UpdateMoneyStats();
+
     }
 
     public void FixedUpdate()
@@ -71,7 +77,7 @@ public class Ship : Seeker
         if (GameMaster.GM.aiModeOnly == false && factionId != 0 || GameMaster.GM.aiModeOnly == true)
         {            
             {
-                if (fractionBarracsList.Count > 0 && CountFractionWarriors(factionId) <= fractionBarracsList.Count * 20 && money > 600)
+                if (fractionBarracsList.Count > 0 && CountFractionWarriors(factionId) <= 180 && money > 600)
                 {
                     //SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
                     //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
@@ -81,7 +87,7 @@ public class Ship : Seeker
                         spendMoney(300, startCreatingTrooper);
                 }
 
-                if (fractionFactoryList.Count > 0 && CountFractionWarriors(factionId) <= fractionFactoryList.Count * 30 && money > 600)
+                if (fractionFactoryList.Count > 0 && CountFractionWarriors(factionId) <= 180 && money > 600)
                 {
                     //SpendMoneyMethod spendOnTrooperDelegate = startCreatingTrooper;
                     //SpendMoneyMethod spendOnLightShipDelegate = startCreatingLightShip;
@@ -414,11 +420,11 @@ public class Ship : Seeker
         {
             if (GameMaster.GM.aiModeOnly == false)
             {
-                money = 0;
+                //money = 0;
                 GameMaster.GM.playerMoneyText.text = "Player: " + money.ToString();
             }
             else
-            {
+            {                
                 GameMaster.GM.playerMoneyText.text = "AI #0: " + money.ToString();
             }
         }

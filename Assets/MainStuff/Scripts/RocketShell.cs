@@ -68,8 +68,12 @@ public class RocketShell : MonoBehaviour
                 ContactPoint contact = collision.contacts[0];
                 Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
                 Vector3 pos = contact.point;
-                GameObject Explosions = Instantiate(explosionRocketPrefab, pos, Quaternion.Euler(0, 0, 0));
-                Destroy(Explosions, 2f);
+                if (explosionRocketPrefab != null)
+                {
+                    GameObject Explosions = Instantiate(explosionRocketPrefab, pos, Quaternion.Euler(0, 0, 0));
+                    Destroy(Explosions, 2f);
+                }
+                
 
                 Explode();
             }

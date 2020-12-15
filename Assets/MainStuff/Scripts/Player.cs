@@ -46,7 +46,7 @@ public class Player: FactionIndex
     public GameObject selector;    
     public GameObject currentShipTarget;
     public GameObject clickedObject;
-    public GameObject targetUI, followUI;
+    public GameObject targetUI, followUI, followUnitUI;
     public GameObject targetSpritePrefab;
     public GameObject targetToLock;
     public GameObject trooperBase;
@@ -73,7 +73,7 @@ public class Player: FactionIndex
     public List<Weapon> playerWeaponList;
     int currentWeaponNumber;
 
-    public Sprite targetSprite, followSprite;
+    public Sprite targetSprite, followSprite, followUnitSprite;
 
     public void Start()
     {
@@ -86,6 +86,7 @@ public class Player: FactionIndex
 
         targetSprite = targetUI.GetComponent<Image>().sprite;
         followSprite = followUI.GetComponent<Image>().sprite;
+        followUnitSprite = followUnitUI.GetComponent<Image>().sprite;
     }
     
     public override void TakeDamage(float damage)
@@ -230,7 +231,7 @@ public class Player: FactionIndex
 
         //            if (hitInfo2.transform.name == "LightShip")
         //                targetSpritePrefab.transform.position = hitInfo2.transform.position + new Vector3(0, 0, 0);
-        //            else
+        //            els
         //                targetSpritePrefab.transform.position = hitInfo2.transform.position + new Vector3(0, 3, 0);
 
         //            targetSpritePrefab.transform.LookAt(Camera.main.transform.position, -Vector3.up);
@@ -309,6 +310,7 @@ public class Player: FactionIndex
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             stopCamControls = true;
+            targetUI.GetComponent<Image>().enabled = true;
         }
 
         //if (Input.GetKeyUp("0"))
@@ -603,7 +605,7 @@ public class Player: FactionIndex
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit, 5000))
-            {
+            {              
                 if (hit.transform.GetComponent<Seeker>() != null || hit.transform.GetComponent<Player>() != null)
                 {
                     targetUI.GetComponent<Image>().enabled = true;                    
@@ -617,14 +619,21 @@ public class Player: FactionIndex
                     }
                     else
                     {
-                        targetUI.transform.localScale = new Vector3(0.4f, 0.5f, 0.5f);
-                        targetUI.GetComponent<Image>().sprite = followSprite;
-                        targetUI.GetComponent<Image>().transform.position = Input.mousePosition + new Vector3(0, 40, 0);
-                        targetUI.GetComponent<Image>().color = GameMaster.GM.fractionColors[hit.transform.GetComponent<FactionIndex>().factionId];
-                    }                        
+                        targetUI.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                        targetUI.GetComponent<Image>().sprite = followUnitSprite;
+                        targetUI.GetComponent<Image>().transform.position = Input.mousePosition + new Vector3(0, 20, 0);
+                        targetUI.GetComponent<Image>().color = GameMaster.GM.fractionColors[0];
+                    }
+
+                }                
+
+                if (hit.transform.gameObject.GetComponent<Terrain>() != null)
+                {
+                    targetUI.transform.localScale = new Vector3(0.4f, 0.5f, 0.5f);
+                    targetUI.GetComponent<Image>().sprite = followSprite;
+                    targetUI.GetComponent<Image>().transform.position = Input.mousePosition + new Vector3(0, 25, 0);
+                    targetUI.GetComponent<Image>().color = GameMaster.GM.fractionColors[0];
                 }
-                else
-                    targetUI.GetComponent<Image>().enabled = false;
             }
         }
 
@@ -638,11 +647,13 @@ public class Player: FactionIndex
             RaycastHit hit2;
             Ray ray2 = Camera.main.ScreenPointToRay(Input.mousePosition);
 
+            clickedObject = null;
+
             if (Physics.Raycast(ray2, out hit2, 5000))
             {
                 if (hit2.transform.GetComponent<Seeker>() != null || hit2.transform.GetComponent<Player>() != null)
                     clickedObject = hit2.transform.gameObject;
-                                
+                            
                 foreach (GameObject teamMate in teamMateList)
                 {
                     if (teamMate != null)
@@ -656,6 +667,7 @@ public class Player: FactionIndex
                             }
 
                             teamMate.GetComponent<Trooper>().targetToChase = clickedObject;
+                            teamMate.GetComponent<Trooper>().pointToChase = hit2.point;
                             teamMate.GetComponent<Trooper>().targetToChaseByPlayerCommand = clickedObject;
                             teamMate.GetComponent<Trooper>().wait = false;
                             teamMate.GetComponent<Trooper>().enemyToLook = null;
