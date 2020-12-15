@@ -13,7 +13,7 @@ C# Unity 3D classes for creation of action / real-time strategy games
 
 [![](img/preview_3.png?raw=true)](https://youtu.be/QG2a9d7SQ80 "Battle Simulation")
 
-## Code Map
+## Class Diagram
 
 ![](img/codemap_white.png)
 
@@ -24,7 +24,9 @@ C# Unity 3D classes for creation of action / real-time strategy games
   - AI vs AI
 - All game logic code was created from scratch
 - Game example (videos above) uses free 3d-models, textures and some particle effects from Unity asset store
+
 ## Rules
+
 - "All against all" principle
 - A selected number of bases (Ship.cs) are placed on the map with physical resource objects (Follower.cs) at any place
 - Each faction has own unique color
