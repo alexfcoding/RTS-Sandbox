@@ -30,9 +30,10 @@ C# Unity 3D classes for creation of action / real-time strategy games
 - "All against all" principle
 - A selected number of bases (Ship.cs) are placed on the map with physical resource objects (Follower.cs) at any place
 - Each faction has own unique color
-- Opponents fight between their bases and the player (Player.cs)
+- AI opponents fight between their bases and the player (Player.cs)
 - Resource collector ships (Seeker.cs) of each faction ("factionId" in FactionIndex.cs) find resource objects and take to their bases
 - Resources change their colors to faction's color after the object picking up
+- AI builds defence towers and factories for units creation with collected resources
 - The player controls a small ship, attacks opponents and their bases
 - With a given probability, opponents send created units (Trooper.cs, Fighter.cs) to attack player's small ship and base
 - The player creates buildings (Building.cs), units, defence towers (Tower.cs), finds resources and takes to the base ship
