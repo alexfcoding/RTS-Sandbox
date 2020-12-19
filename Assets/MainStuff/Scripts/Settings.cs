@@ -14,6 +14,9 @@ public class Settings : MonoBehaviour
     /// </summary>
     public int mainBaseCount;
     public int startMoney;
+    public int unitsCount;
+    public int attackProbability;
+    public bool aiPlayerBase;
 
     void Awake()
     {

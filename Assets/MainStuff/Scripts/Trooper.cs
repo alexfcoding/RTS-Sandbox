@@ -6,7 +6,8 @@ public class Trooper : Seeker
 {
     public Vector3 pointFromShooting;
     public Vector3 pointFromShootingRandomize;
-    
+    public Vector3 pointToChase;
+
     public bool destinationPass;
     public bool wait;
     public bool foundTargetToAttack;
@@ -20,7 +21,6 @@ public class Trooper : Seeker
 
     public GameObject enemyToLook;
     public GameObject targetToChase;
-    public Vector3 pointToChase;
     public GameObject targetToChaseByPlayerCommand;
     public GameObject teamSelectMark;
     public GameObject body;
@@ -28,11 +28,9 @@ public class Trooper : Seeker
     public float trooperSpeed;
     public float distToLerp;
     public float timer;
+    float randomSpeedDeviation;
 
     public Rigidbody rbTrooper;        
-
-    float randomSpeedDeviation;
-    
 
     public override void Awake()
     {
@@ -79,11 +77,6 @@ public class Trooper : Seeker
     public override void Update()
     {
         FindItemsAround(GameMaster.GM.globalObjectList, GameMaster.GM.platformObjectList);
-               
-        //Vector3 MoveSin = new Vector3(transform.position.x, 0.2f, transform.position.z);
-        //    gameObject.GetComponent<Rigidbody>().MovePosition(MoveSin);
-
-        //HealthBar.transform.LookAt(Camera.main.transform.position, -Vector3.up);
     }
 
     public override void FindItemsAround(List<GameObject> _GlobalObjectList, List<GameObject> _PlatformList)
@@ -139,12 +132,9 @@ public class Trooper : Seeker
                     if (GameMaster.GM.shipObjectList[rnDShip] != null)
                         targetToChase = GameMaster.GM.shipObjectList[rnDShip];
 
-                    if (factionId != 0 && GameMaster.GM.aiModeOnly == false && GameMaster.GM.shipObjectList[rnDShip] != null)
+                    if (factionId != 0 && GameMaster.GM.aiPlayerBase == false && GameMaster.GM.shipObjectList[rnDShip] != null)
                         targetToChase = GameMaster.GM.shipObjectList[rnDShip];
                 }
-                
-                //else
-                //    targetToChase = GameMaster.GM.player.gameObject;
             }
            
             if (targetToChase != null && targetToChase.GetComponent<Ship>() != null)
@@ -157,28 +147,21 @@ public class Trooper : Seeker
             {
                 if (gameObject.name != "LightShip")
                 {
-                    //Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
-                    //transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
                     body.transform.LookAt(enemyToLook.transform.position);
-                    //body.transform.eulerAngles = new Vector3(0,0,-90);                  }
+                   
                     if (rotateBody)
                         body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
-                    //else
-                        //  body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
-
+                   
                     wait = true;
                 }
                 else
                 {
                     Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
-                    //body.transform.LookAt(enemyToLook.transform.position);
-                    //body.transform.eulerAngles = new Vector3(0,0,-90);                  }
+                    
                     if (rotateBody)
                         body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
-                    //else
-                    //  body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
-
+                   
                     wait = true;
                 }    
             }
@@ -196,14 +179,13 @@ public class Trooper : Seeker
                 Quaternion lookOnLook = Quaternion.LookRotation(pointFromShooting - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
                 
-                rbTrooper.AddRelativeForce(Vector3.forward * trooperSpeed * Time.deltaTime * 40, ForceMode.VelocityChange); //* Time.deltaTime * 30
+                rbTrooper.AddRelativeForce(Vector3.forward * trooperSpeed * Time.deltaTime * 40, ForceMode.VelocityChange);
 
                 if (gameObject.GetComponent<Animator>() != null)
                 {
                     gameObject.GetComponent<Animator>().Play("Run_Guard");
                     gameObject.GetComponent<Animator>().speed = 1 + randomSpeedDeviation;
-                }
-                    
+                } 
             }
             else
             {
@@ -224,9 +206,6 @@ public class Trooper : Seeker
         {
             if (gameObject.GetComponent<Animator>() != null)
                 gameObject.GetComponent<Animator>().Play("Idle");
-
-            //if (gameObject.GetComponent<Animator>() != null)
-            //    gameObject.GetComponent<Animator>().Play("Die");
 
             stopDoing = true;
         }

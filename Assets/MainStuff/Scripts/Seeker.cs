@@ -75,10 +75,7 @@ public class Seeker : FactionIndex
                 {
                     if (healthBar != null)
                         healthBar.transform.localScale = new Vector3(0, 0, 0);
-                    //smoke = Instantiate(GameMaster.GM.smokeAfterDeath, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
-                    //smoke.transform.parent = gameObject.transform;
-                    //Destroy(smoke, 2f);
-
+                    
                     if (gameObject.GetComponent<Trooper>() == null && gameObject.GetComponent<Rigidbody>() != null)
                         gameObject.GetComponent<Rigidbody>().AddForce(0, 800, 0, ForceMode.Impulse);
 
@@ -95,17 +92,11 @@ public class Seeker : FactionIndex
     {
         health += healpoints;
         healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
-
-        //if (textHP != null)
-        //{
-        //    textHP.gameObject.GetComponent<TextMesh>().text = GetComponent<SeekerClass>().health.ToString();
-        //}
     }
 
     public void SetHealth(float inputHealth)
     {
         health = inputHealth;
-        //TextHP.gameObject.GetComponent<TextMesh>().text = Health.ToString();
     }
 
     public virtual void FindItemsAround(List<GameObject> objectList, List<GameObject> platformList)
@@ -115,21 +106,6 @@ public class Seeker : FactionIndex
         
         transform.position = new Vector3(transform.position.x, 20, transform.position.z);
 
-        //timer2 += Time.deltaTime;
-        ////Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(Timer) * 0.1f,
-        ////  Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(Timer * 4f + randomY) * 1f + 15f,
-
-        //Vector3 moveSin = new Vector3(transform.position.x + Mathf.Sin(timer2) * 0.1f,
-        //    transform.position.y + Mathf.Sin(timer2 * 2f) * 0.1f,
-        //        transform.position.z + Mathf.Sin(timer2 * 2f) * 0.1f);
-
-        //gameObject.GetComponent<Rigidbody>().MovePosition(moveSin);
-        //if (transform.position.y < 20)
-        //{
-        //    gameObject.GetComponent<Rigidbody>().velocity = new Vector3(0, 0, 0);
-        //    gameObject.GetComponent<Rigidbody>().MovePosition(new Vector3(transform.position.x, 20, transform.position.z));
-        //}
-
         healthBar.transform.LookAt(Camera.main.transform.position, -Vector3.up);
 
         if (objectList.Count > 0 && dead == false)
@@ -138,8 +114,6 @@ public class Seeker : FactionIndex
             {
                 minDistNum = Random.Range(0, objectList.Count);
             }
-
-            //Debug.Log(objectList[minDistNum].name);
 
             if (objectList[minDistNum] == null || objectList[minDistNum].GetComponent<FactionIndex>().factionId != 0 && objectList[minDistNum].GetComponent<FactionIndex>().factionId != factionId || currentTargetObject.gameObject == null)
             {
@@ -178,7 +152,6 @@ public class Seeker : FactionIndex
             if (goingToBase == true && platformList[factionId].gameObject != null)
             {
                 currentTarget = new Vector3(platformList[factionId].transform.position.x, transform.position.y, platformList[factionId].transform.position.z);
-                //transform.LookAt(currentTarget);
 
                 Quaternion lookOnLook = Quaternion.LookRotation(new Vector3(currentTarget.x, transform.position.y, currentTarget.z) - transform.position);
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 3f);
@@ -263,13 +236,11 @@ public class Seeker : FactionIndex
                 createdObject.GetComponent<Rigidbody>().useGravity = true;
                 createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
                 createdObject.GetComponent<Rigidbody>().drag = 1f;
+                
                 if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
                     createdObject.GetComponent<MeshCollider>().convex = true;
 
-                //createdObject.GetComponent<Follower>().ownerToFollow = gameObject;
-                //createdObject.GetComponent<Follower>().followOwner = true;
                 createdObject.GetComponent<Follower>().moveToNextOwner = true;
-                //Destroy(createdObject, 15 + i);
             }
         }
 
@@ -282,11 +253,5 @@ public class Seeker : FactionIndex
         }
         
         GameMaster.GM.RecursiveDestroy(transform, gameObject, 4);
-
-        for (int i = 0; i < 3; i++)
-        {
-            //Details = GameMaster.GM.ConstructObject(GameMaster.GM.EnemyDetailsPrefab, gameObject.transform.position + new Vector3(Random.Range(-7, 7), Random.Range(-7, 7), Random.Range(-7, 7)), Quaternion.Euler(0, 0, 0), "Parts", GameMaster.GM.GlobalObjectList);
-            //Details.gameObject.tag = "Follower";
-        }
     }
 }

@@ -69,8 +69,6 @@ public class Follower : FactionIndex
                 if (ownerToFollow.GetComponent<Seeker>() != null) // Если владелец - Seeker ...
                     if (ownerToFollow.GetComponent<Seeker>().totallyDead == true) // ... и он мертв ...
                     {
-                            //gameObject.GetComponent<Renderer>().material.color = Color.white; // ... то изменить цвет куба на белый
-
                             if (gameObject.GetComponentsInChildren<Light>() != null)
                             {
                                 int lightsCount = gameObject.GetComponentsInChildren<Light>().Length;
@@ -114,7 +112,6 @@ public class Follower : FactionIndex
             {
                 MoveAfterOwnerDeath();
             }
-
         }
 
         if (followOwnerCharger == true && chargerToFollow.gameObject != null) // Если двигаться к платформе
@@ -190,17 +187,14 @@ public class Follower : FactionIndex
                 if (collisioninfo.gameObject.GetComponent<Seeker>() != null) // Если столкновение с Seeker, то ...
                 {
                     Seeker Seeker = collisioninfo.gameObject.GetComponent<Seeker>();
-                    Seeker.findNextObject = true; // Команда Seeker для поиска нового куба
-                    //Seeker.Heal(1); // Лечение Seeker
+                    Seeker.findNextObject = true; // Команда Seeker для поиска нового куба                    
                     Seeker.countOfItemsCollected++; // Счетчик подобранных кубов++
                 }
 
-                //if (collisioninfo.gameObject.GetComponent<PlayerClass>() != null) // Если столкновение с Player, то ... 
-                //    collisioninfo.gameObject.GetComponent<PlayerClass>().Heal(20); // Лечение Player
+                // if (collisioninfo.gameObject.GetComponent<PlayerClass>() != null) // Если столкновение с Player, то ... 
+                //     collisioninfo.gameObject.GetComponent<PlayerClass>().Heal(20); // Лечение Player
 
                 ownerToFollow = collisioninfo.collider.gameObject; // Присвоить кубу владельца OwnerToFollow (Seeker или Player)
-
-                //gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
 
                 if (gameObject.GetComponentsInChildren<Light>() != null)
                 {
@@ -224,27 +218,10 @@ public class Follower : FactionIndex
                 audioPickEnemyCube.Play();
             }
         }
-        //else if (gameObject.GetComponent<FractionIndexClass>().fractionId == 10 && collisioninfo.gameObject.tag == "Trooper" && ownerToFollow != null &&
-        //ownerToFollow.GetComponent<SeekerClass>() != null &&
-        //ownerToFollow.GetComponent<SeekerClass>().dead == false)
-        //{
-        //    gameObject.GetComponent<ParticleSystem>().Play();
-        //    audioPickEnemyCube.Play();
-        //    //collisioninfo.gameObject.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
-        //    FractionIndexClass collisionObject = collisioninfo.gameObject.GetComponent<FractionIndexClass>();
-        //    collisionObject.health += 50;
-        //    //collisionObject.level += 1;
-        //    GameMaster.GM.RecursiveDestroy(transform, gameObject, 0.2f);
-        //}
-
         else if (gameObject.GetComponent<FactionIndex>().factionId == 10 && collisioninfo.gameObject.tag == "Player")
         {
             gameObject.GetComponent<ParticleSystem>().Play();
             audioPickEnemyCube.Play();
-
-            //collisioninfo.gameObject.transform.localScale += new Vector3(0.5f, 0.5f, 0.5f);
-            // collisioninfo.gameObject.GetComponent<FractionIndexClass>().health += 100;
-            // collisioninfo.gameObject.GetComponent<FractionIndexClass>().level += 1;
 
             if (collisioninfo.gameObject.GetComponent<Seeker>() != null && collisioninfo.gameObject.GetComponent<Seeker>().currentWeapon != null)
                 collisioninfo.gameObject.GetComponent<Seeker>().currentWeapon.ownerLevel = level;
@@ -253,8 +230,6 @@ public class Follower : FactionIndex
 
             gameObject.GetComponent<Follower>().SetFractionId(collisioninfo.gameObject.GetComponent<FactionIndex>().factionId);
             ownerToFollow = collisioninfo.collider.gameObject;
-
-            //gameObject.GetComponent<Renderer>().material.color = GameMaster.GM.fractionColors[collisioninfo.gameObject.GetComponent<FractionIndexClass>().fractionId];
 
             if (gameObject.GetComponentsInChildren<Light>() != null)
             {

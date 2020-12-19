@@ -78,7 +78,6 @@ public class Player: FactionIndex
     public void Start()
     {
         playerHealth3dText.text = $"HP: {health}";
-        //GameMaster.GM.MyCamera.transform.localPosition = new Vector3(CamX - 140, CamY - 140, CamZ - 140);
         playerWeaponList = new List<Weapon>();
         currentWeaponNumber = 0;
 
@@ -139,7 +138,6 @@ public class Player: FactionIndex
         level = 1;
         reload = false;
         alreadyHaveWeapon = false;
-        //health = 30000;
         tickWeapon = 1;
         timer = 0;
         playerCubesCount = 0;
@@ -147,7 +145,6 @@ public class Player: FactionIndex
         factionId = 0;
         targetSpritePrefab.transform.localScale = new Vector3(2f, 2f, 2f);
         selector = Instantiate(GameMaster.GM.teamSelect, transform.position + new Vector3(0, 5, 0), Quaternion.Euler(0, 0, 0));
-        // selector.transform.SetParent(gameObject.transform);
         selector.transform.Rotate(90, 0, 0);
         selector.transform.position = new Vector3(transform.position.x, 2, transform.position.z);
         selectorScale = 0;
@@ -180,10 +177,7 @@ public class Player: FactionIndex
 
             float playerHeightTerrain = Terrain.activeTerrain.SampleHeight(transform.position);
             float selectorDistance = Mathf.Sqrt(Mathf.Pow(groundDistance.distance, 2) - Mathf.Pow(playerHeightTerrain, 2));
-           // selector.transform.position = transform.position + transform.forward * selectorDistance;
-           // selector.transform.position = new Vector3(selector.transform.position.x, 1, selector.transform.position.z);
             selector.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
-           // selector.transform.eulerAngles = new Vector3(90, 0, 0);
 
             foreach (GameObject teamMate in teamMateList)
             {
@@ -193,7 +187,6 @@ public class Player: FactionIndex
 
             teamMateList.Clear();
 
-            //Collider[] team = Physics.OverlapSphere(selector.transform.position, selectorScale / 1.5f, 1 << 8);
             Collider[] team = Physics.OverlapBox(selector.transform.position, new Vector3(selectorScale / 1.5f, 9999, selectorScale / 1.5f), Quaternion.identity, 1 << 8);
 
             foreach (Collider teamMate in team)
@@ -261,12 +254,6 @@ public class Player: FactionIndex
             //transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(new Vector3(-100, 0, 0)), Time.deltaTime);
         }
 
-        //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, transform.position.y + Mathf.Sin(timer * 2f) * 0.07f,
-        //    transform.position.z + Mathf.Sin(timer * 3f) * 0.03f);
-
-        //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 1f) * 0.03f, Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(timer * 4f) * 0.2f + 16,
-        //   transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
-
         Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(timer * 2f) * 0.03f, transform.position.y + Mathf.Sin(timer * 1f) * 0.03f,
             transform.position.z + Mathf.Sin(timer * 1f) * 0.03f);
 
@@ -302,9 +289,6 @@ public class Player: FactionIndex
 
         waitForCommand();
                 
-        //if (transform.position.y > 20)
-        //    transform.position = new Vector3(transform.position.x, 20, transform.position.z);
-
         if (Input.GetKey(KeyCode.LeftControl))
         {
             Cursor.visible = true;
@@ -312,32 +296,6 @@ public class Player: FactionIndex
             stopCamControls = true;
             targetUI.GetComponent<Image>().enabled = true;
         }
-
-        //if (Input.GetKeyUp("0"))
-        //{
-        //    foreach (GameObject teamMate in teamMateList)
-        //    {
-        //        if (teamMate != null)
-        //        {
-        //            if (teamMate.GetComponent<TrooperClass>() != null)
-        //                teamMate.GetComponent<TrooperClass>().attackTargetId = 0;
-        //        }
-        //    }
-
-        //    int Rnd = Random.Range(0, 2);
-        //    switch (Rnd)
-        //    {
-        //        case 0:
-        //            voice1.Play();
-        //            break;
-        //        case 1:
-        //            voice2.Play();
-        //            break;
-        //        case 2:
-        //            voice3.Play();
-        //            break;
-        //    }
-        //}
 
         if (Input.GetKey("f"))
         {
@@ -424,10 +382,7 @@ public class Player: FactionIndex
             {
                 IEnumerator fadeSound1 = FadeAudioSource.FadeOut(forward, 0.5f);
                 StartCoroutine(fadeSound1);
-                //StopCoroutine(fadeSound1);
             }
-                
-            //gameObject.GetComponent<AudioSource>().Stop();
         }
 
         if (Input.GetKey("s"))
@@ -444,8 +399,7 @@ public class Player: FactionIndex
             {
                 IEnumerator fadeSound1 = FadeAudioSource.FadeOut(backwards, 0.5f);
                 StartCoroutine(fadeSound1);
-            }
-                //gameObject.GetComponent<AudioSource>().Stop();
+            } 
         }
 
         if (Input.GetKey("d"))
@@ -463,7 +417,6 @@ public class Player: FactionIndex
                 IEnumerator fadeSound1 = FadeAudioSource.FadeOut(right, 0.5f);
                 StartCoroutine(fadeSound1);
             }
-                //gameObject.GetComponent<AudioSource>().Stop();
         }
 
         if (Input.GetKey("a"))
@@ -481,7 +434,6 @@ public class Player: FactionIndex
                 IEnumerator fadeSound1 = FadeAudioSource.FadeOut(left, 0.5f);
                 StartCoroutine(fadeSound1);
             }
-                //gameObject.GetComponent<AudioSource>().Stop();
         }
 
         if (Input.GetKey("q"))
@@ -518,8 +470,6 @@ public class Player: FactionIndex
             }
         }
 
-        // Debug.Log(Input.GetAxisRaw("Mouse ScrollWheel"));
-
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
             currentWeaponNumber += 1;
@@ -528,8 +478,6 @@ public class Player: FactionIndex
             {
                 currentWeaponNumber = 0;
             }
-
-            //Debug.Log(currentWeaponNumber);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") < 0)
@@ -540,7 +488,6 @@ public class Player: FactionIndex
             {
                 currentWeaponNumber = playerWeaponList.Count - 1;
             }
-            Debug.Log(currentWeaponNumber);
         }
 
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
@@ -689,9 +636,6 @@ public class Player: FactionIndex
                         case 1:
                             voice2.Play();
                             break;
-                        //case 2:
-                        //    voice3.Play();
-                        //    break;
                     }
                 }
             }
@@ -704,7 +648,6 @@ public class Player: FactionIndex
             }
 
             GameMaster.GM.myCamera.GetComponent<Camera>().fieldOfView = 45f;
-            //GameMaster.GM.myCamera.transform.localPosition = new Vector3(cameraX, cameraY, cameraZ);            
         }
 
         if (Input.GetKeyUp(KeyCode.Mouse0))
@@ -847,7 +790,6 @@ public class Player: FactionIndex
         {
             GameMaster.GM.myCamera.GetComponent<Camera>().fieldOfView = 45f;
         }
-                 
     }
 
 }

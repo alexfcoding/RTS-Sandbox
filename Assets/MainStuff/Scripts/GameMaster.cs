@@ -20,13 +20,15 @@ public class GameMaster : MonoBehaviour
     /// <summary>
     /// AI-based simulation without player
     /// </summary>
-    public bool aiModeOnly;
+    public bool aiPlayerBase;
 
     /// <summary>
     /// Count of base ships (including player's)
     /// </summary>
     public int mainBaseCount;
     public int startMoney;
+    public int unitsCount;
+    public int attackProbability;
 
     public List<Color> fractionColors;
 
@@ -249,11 +251,16 @@ public class GameMaster : MonoBehaviour
         {
             mainBaseCount = Settings.SET.mainBaseCount;
             startMoney = Settings.SET.startMoney;
+            unitsCount = Settings.SET.unitsCount;
+            attackProbability = Settings.SET.attackProbability;
+            aiPlayerBase = Settings.SET.aiPlayerBase;
         }          
         else
         {
-            mainBaseCount = 2;
-            startMoney = 50;
+            mainBaseCount = 3;
+            startMoney = 30;
+            unitsCount = 100;
+            attackProbability = 15;
         }            
     }
 
@@ -344,7 +351,7 @@ public class GameMaster : MonoBehaviour
     }
 
     /// <summary>
-    /// Recursive destroying. Used for destroy all object childrens.
+    /// Recursive destroying. Used for destroy all object childs.
     /// </summary>
     /// <param name="objectTransform">Object Transform to destroy.</param>
     /// <param name="gameObj">Game object to destroy.</param>

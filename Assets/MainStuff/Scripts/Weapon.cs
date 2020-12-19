@@ -66,43 +66,11 @@ public class Weapon : MonoBehaviour
         {
             transform.Rotate(0, -5, 0);
         }
-        
-        //if (currentSeeker != null && currentSeeker.tag == "Tower")
-        //{
-
-        //    if (foundTargetToShoot == false)
-        //    {
-        //        gameObject.transform.localEulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
-        //        transform.Rotate(0, -1, 0);
-        //    }
-
-        //}
-        
     }
 
     public void Update()
     {
         WeaponAction();
-
-        //if (gameObject.tag == "PlayerWeapon")
-        //{
-        //    GameObject LockedTarget = GameMaster.GM.player.GetComponent<PlayerClass>().targetToLock;
-
-        //    if (GameMaster.GM.player.GetComponent<PlayerClass>().targetLockedIn == true)
-        //    {
-        //        if (LockedTarget.gameObject != null && LockedTarget.GetComponent<SeekerClass>() != null)
-        //        {
-        //            if (LockedTarget.gameObject.name == "Trooper")
-        //                gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 4, 0));
-        //            if (LockedTarget.gameObject.name == "Seeker")
-        //                gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 2, 0));
-        //            if (LockedTarget.gameObject.name == "LightShip")
-        //                gameObject.transform.LookAt(LockedTarget.transform.position + new Vector3(0, 0, 0));
-        //        }
-        //    }
-        //    else
-        //        gameObject.transform.localEulerAngles = new Vector3(0, 0, 0);
-        //}
     }
 
     public void WeaponAction()
@@ -127,17 +95,7 @@ public class Weapon : MonoBehaviour
                 && currentSeeker.GetComponent<FactionIndex>().dead == false
                 && colliders[i].GetComponent<FactionIndex>().isSimpleFollower == false
                 && colliders[i].GetComponent<FactionIndex>().dead == false) 
-                 
-                //(
-                //colliders[i].GetComponent<FractionIndexClass>() != null && objectToStick != null && colliders[i].gameObject != null
-                //&& colliders[i].GetComponent<FractionIndexClass>().fractionId != objectToStick.GetComponent<FractionIndexClass>().fractionId
-                //&& currentSeeker.GetComponent<FractionIndexClass>().dead == false
-                //&& colliders[i].GetComponent<FractionIndexClass>().isSimpleFollower == false
-                //&& colliders[i].GetComponent<FractionIndexClass>().dead == false && objectToStick.transform.GetComponent<TrooperClass>() != null 
-                //&& objectToStick.GetComponent<FractionIndexClass>().fractionId == 0)
-
-                /*&& colliders[i].gameObject == objectToStick.transform.GetComponent<TrooperClass>().targetToChaseByPlayerCommand*/)
-
+                )
                 {
                     foundTargetToShoot = true;
                     targetInSphere = colliders[i].gameObject;
@@ -225,8 +183,7 @@ public class Weapon : MonoBehaviour
                             if (hit.transform.GetComponent<FactionIndex>() != null)
                             {
                                 hit.transform.GetComponent<FactionIndex>().whoIsDamaging = objectToStick.gameObject;
-                                //ownerLevel = currentPlayer.transform.GetComponent<FractionIndexClass>().level;
-                                // hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
+
                                 if (hit.transform.tag != "Ship")
                                     hit.transform.GetComponent<FactionIndex>().TakeDamage(damageBullet * 1.5f);
                                 else
@@ -234,8 +191,7 @@ public class Weapon : MonoBehaviour
                             }
 
                             if (hit.transform.GetComponent<RocketShell>() != null)
-                            {
-                                //hit.transform.GetComponent<RocketShellClass>().damagedByBullet = true;
+                            {                               
                                 hit.transform.GetComponent<RocketShell>().Explode();
                             }
 
@@ -263,14 +219,13 @@ public class Weapon : MonoBehaviour
             if (foundTargetToShoot == true && targetInSphere != null)
             {
                 sprayShoot = Random.Range(-10, 10);
+                
                 if (currentSeeker.tag != "Tower")
                     transform.LookAt(targetInSphere.transform.position);
                 else
                 {
                     Quaternion lookOnLook = Quaternion.LookRotation(new Vector3(targetInSphere.transform.position.x, targetInSphere.transform.position.y - 10, targetInSphere.transform.position.z) - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 8);
-
-                    //transform.LookAt(targetInSphere.transform.position + new Vector3(0, -10, 0));
                 }
                    
                 if (targetInSphere.tag == "Tower")
@@ -376,8 +331,6 @@ public class Weapon : MonoBehaviour
                             if (targetInSphere.transform.GetComponent<FactionIndex>() != null && objectToStick != null && targetInSphere.transform.GetComponent<FactionIndex>().dead == false)
                             {
                                 targetInSphere.transform.GetComponent<FactionIndex>().whoIsDamaging = objectToStick.gameObject;
-                                //ownerLevel = currentSeeker.transform.GetComponent<FractionIndexClass>().level;
-                                //targetInSphere.transform.GetComponent<FractionIndexClass>().TakeDamage(damageBullet * ownerLevel);
                                 targetInSphere.transform.GetComponent<FactionIndex>().TakeDamage(damageBullet);
                             }
                     }
@@ -402,7 +355,6 @@ public class Weapon : MonoBehaviour
     {
         if ((collision.gameObject.tag == "Player") && (collision.gameObject.GetComponent<Player>() != null) && canBePickedUp)
         {
-           // collision.gameObject.GetComponent<PlayerClass>().alreadyHaveWeapon = true;
             collision.gameObject.GetComponent<Player>().pickup.Play();
             collision.gameObject.GetComponent<Player>().playerWeaponList.Add(this);
             collision.gameObject.GetComponent<Player>().currentWeapon = gameObject.GetComponent<Weapon>();
@@ -459,7 +411,6 @@ public class Weapon : MonoBehaviour
 
             gameObject.GetComponent<Collider>().enabled = false;
             objectToStick = collision.gameObject.transform;
-            //ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
         }
 
         if ((collision.gameObject.tag == "Seeker" || collision.gameObject.tag == "Trooper") && (collision.gameObject.GetComponent<Seeker>().alreadyHaveWeapon == false) && canBePickedUp)
@@ -497,8 +448,6 @@ public class Weapon : MonoBehaviour
             {
                 transform.localPosition = new Vector3(0f, 0f, 10f); ;
             }
-
-            //ownerLevel = objectToStick.gameObject.GetComponent<FractionIndexClass>().level;
         }
 
         if ((collision.gameObject.tag == "EnemyShip") && (collision.gameObject.GetComponent<Seeker>().alreadyHaveWeapon == false))

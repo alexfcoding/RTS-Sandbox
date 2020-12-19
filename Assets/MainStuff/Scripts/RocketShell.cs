@@ -46,7 +46,6 @@ public class RocketShell : MonoBehaviour
                     gameObject.transform.LookAt(hitInfo2.transform.position + new Vector3(0, 1, 0));
                     Vector3 normalizeDirection = (hitInfo2.transform.position + new Vector3(0, 1, 0) - gameObject.transform.position).normalized;
                     gameObject.transform.position += normalizeDirection * Time.deltaTime * 30;
-                    //GameObject Explode = Instantiate(GameMaster.GM.EnmemyDestroy, hitInfo2.transform.position, Quaternion.Euler(0, 0, 0));       
                 }
 
         if (Timer > 5)
@@ -68,12 +67,12 @@ public class RocketShell : MonoBehaviour
                 ContactPoint contact = collision.contacts[0];
                 Quaternion rot = Quaternion.FromToRotation(Vector3.up, contact.normal);
                 Vector3 pos = contact.point;
+
                 if (explosionRocketPrefab != null)
                 {
                     GameObject Explosions = Instantiate(explosionRocketPrefab, pos, Quaternion.Euler(0, 0, 0));
                     Destroy(Explosions, 2f);
                 }
-                
 
                 Explode();
             }
@@ -85,7 +84,6 @@ public class RocketShell : MonoBehaviour
 
         foreach (Transform child in gameObject.transform)
         {
-            // if (child.name != "WFXMR_Nuke 1")
             GameObject.Destroy(child.gameObject);
         }
 
@@ -94,7 +92,6 @@ public class RocketShell : MonoBehaviour
         ammoCollider.enabled = false;
         gameObject.transform.GetComponent<MeshRenderer>().enabled = false;
                 
-        //ExplosionParticleSystem.Play();
         Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 35);
 
         foreach (Collider hit in colliders)
@@ -115,11 +112,10 @@ public class RocketShell : MonoBehaviour
                         fractionHitObject.TakeDamage(damage * 2f);
                     else
                         fractionHitObject.TakeDamage(damage / 10);
-                    //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
+                    
                 }
                 else if (weaponToStick != null )
                 {
-                    //hit.transform.GetComponent<FractionIndexClass>().TakeDamage(damage * weaponToStick.GetComponent<WeaponClass>().ownerLevel);
                     if(fractionHitObject.transform.tag != "Ship")
                         fractionHitObject.TakeDamage(damage);
                     else

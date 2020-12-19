@@ -9,7 +9,6 @@ public class Fighter : Trooper
 
     public void Start()
     {
-        //randomY = Random.Range(0, 10); 
         timer = Random.Range(0, 100);
         health = 800;
         maxHP = 800;
@@ -27,14 +26,6 @@ public class Fighter : Trooper
     {
         FindItemsAround(GameMaster.GM.globalObjectList, GameMaster.GM.platformObjectList);
 
-        //Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
-
-        //foreach (Collider hit in colliders)
-        //{
-        //    if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<PlayerClass>() == null && hit.GetComponent<FighterClass>() != null)
-        //        hit.GetComponent<Rigidbody>().AddExplosionForce(100, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
-        //}
-
         if (dead == false)
             FlyAnimation();
         else
@@ -45,9 +36,6 @@ public class Fighter : Trooper
     {
         timer += Time.deltaTime;
 
-        //Vector3 MoveSin = new Vector3(transform.position.x + Mathf.Sin(Timer) * 0.1f,
-        //  Terrain.activeTerrain.SampleHeight(transform.position) + Mathf.Sin(Timer * 4f + randomY) * 1f + 15f,
-        
         Vector3 moveSin = new Vector3(transform.position.x + Mathf.Sin(timer) * 0.1f,
             transform.position.y + Mathf.Sin(timer * 2f) * 0.1f,
                 transform.position.z + Mathf.Sin(timer * 2f) * 0.1f);

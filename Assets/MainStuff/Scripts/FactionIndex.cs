@@ -75,15 +75,16 @@ public class FactionIndex : MonoBehaviour
                 if (healthBar != null)
                     healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
             }
-            // Обездвижили
             else
             {
                 if (dead == false)
                 {
                     if (healthBar != null)
                         healthBar.transform.localScale = new Vector3(0, 0, 0);
+
                     //DeathEffect = Instantiate(GameMaster.GM.SmokeAfterDeath, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
                     //DeathEffect.transform.parent = gameObject.transform;
+
                     if (deathEffect != null)
                     {
                         GameObject deadBoom = Instantiate(deathEffect, gameObject.transform.position, Quaternion.Euler(0, 0, 0));
@@ -112,7 +113,6 @@ public class FactionIndex : MonoBehaviour
                             createdObject.GetComponent<Rigidbody>().mass = 5;
                             if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
                                 createdObject.GetComponent<MeshCollider>().convex = true;
-                            //Destroy(createdObject, 10);
                         }
                     }
                 }

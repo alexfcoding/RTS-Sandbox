@@ -4,9 +4,7 @@ using UnityEngine;
 
 
 public class Tower : Seeker
-{
-    //public float setHealth;
-        
+{  
     public float healthBarTopPosition;
     public float levelTopPosition;
 
@@ -17,11 +15,8 @@ public class Tower : Seeker
         minDistNum = 0;
         countOfItemsCollected = 0;
         alreadyHaveWeapon = true;
-        //health = 5000;
-        //maxHP = 5000;
         dead = false;
         foundObject = false;
-        //isVulnerable = true;
 
         textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, levelTopPosition, 0), Quaternion.Euler(0, 0, 0));
         textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
@@ -42,7 +37,5 @@ public class Tower : Seeker
     {
 
     }
-
-    
 }
 

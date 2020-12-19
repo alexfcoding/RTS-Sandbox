@@ -9,10 +9,18 @@ public class MainMenu : MonoBehaviour
 {    
     public Slider factionsSlider;
     public Slider moneySlider;
-    public GameObject factionShip;
-    List<GameObject> shipsList;
+    public Slider unitsSlider;
+    public Slider probabilitySlider;
+    public Toggle aiOnlyToggle;
+    
     public TMP_Text factionCountText;
     public TMP_Text moneyCountText;
+    public TMP_Text unitsCountText;
+    public TMP_Text probabilityText;
+
+    public GameObject factionShip;
+
+    List<GameObject> shipsList;
     List<Color> factionColors;
         
     public void Start()
@@ -20,6 +28,9 @@ public class MainMenu : MonoBehaviour
         shipsList = new List<GameObject>();
         SetBaseCount();
         SetMoneyCount();
+        SetUnitsCount();
+        SetAttackProbability();
+        SetMode();
     }    
 
     public void PlayGame()
@@ -94,9 +105,27 @@ public class MainMenu : MonoBehaviour
     public void SetMoneyCount()
     {
         int startMoney = (int)moneySlider.value;
-        Settings.SET.startMoney = startMoney;
-
-
+        Settings.SET.startMoney = startMoney;        
         moneyCountText.GetComponent<TMP_Text>().text = $"Start Money: {startMoney.ToString()} %";
+    }
+
+    public void SetUnitsCount()
+    {
+        int maxUnits = (int)unitsSlider.value;
+        Settings.SET.unitsCount = maxUnits;
+        unitsCountText.GetComponent<TMP_Text>().text = $"Max Faction Units: {maxUnits.ToString()}";
+    }
+
+    public void SetAttackProbability()
+    {
+        int attackProbability = (int)probabilitySlider.value;
+        Settings.SET.attackProbability = attackProbability;
+        probabilityText.GetComponent<TMP_Text>().text = $"AI Attack Probability: {attackProbability.ToString()} %";
+    }
+
+    public void SetMode()
+    {
+        bool aiControlledPlayerBase = aiOnlyToggle.isOn;
+        Settings.SET.aiPlayerBase = aiControlledPlayerBase;
     }
 }

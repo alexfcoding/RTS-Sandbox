@@ -34,8 +34,7 @@ public class Main : MonoBehaviour
         SetupFactionsAndPlayer(GameMaster.GM.mainBaseCount); 
         CreateShipPlatforms();
         CreateSeekers(2);
-
-        //GameMaster.GM.shipObjectList[0].GetComponent<FactionIndex>().factionId = 2;
+                
         //CreateResources(1000);
         //CreateRollerBalls(20);
         //CreateWeapons(100);
@@ -54,7 +53,6 @@ public class Main : MonoBehaviour
             if (i == 0)
             {
                 GameMaster.GM.shipObjectList[0].GetComponent<Ship>().shipIsDeadEvent += printDeadHandler;
-                //GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(600, -110 + 5, -100);
                 GameMaster.GM.player.transform.position = GameMaster.GM.shipObjectList[0].transform.position + new Vector3(600, -100 + 5, 0);
                 GameMaster.GM.player.GetComponent<Player>().playerHealth3dText.color = GameMaster.GM.fractionColors[0];
                 GameMaster.GM.ConstructObject(GameMaster.GM.machineGunPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, -6000), Quaternion.Euler(0, 0, 0), "MachineGun", GameMaster.GM.weaponObjectList);
@@ -62,7 +60,7 @@ public class Main : MonoBehaviour
                 GameMaster.GM.ConstructObject(GameMaster.GM.rocketLauncherMiniPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, 0), Quaternion.Euler(0, 0, 0), "RocketLauncher", GameMaster.GM.weaponObjectList);
                 GameMaster.GM.ConstructObject(GameMaster.GM.bombLauncherPrefab, GameMaster.GM.player.transform.TransformPoint(10000, 0, 3000), Quaternion.Euler(0, 0, 0), "BombLauncher", GameMaster.GM.weaponObjectList);
                 
-                if (GameMaster.GM.aiModeOnly == true)
+                if (GameMaster.GM.aiPlayerBase == true)
                 {
                     for (int j = 0; j < 20; j++)
                     {
@@ -131,18 +129,15 @@ public class Main : MonoBehaviour
                 createdObject.AddComponent<Rigidbody>();
 
             createdObject.GetComponent<Rigidbody>().mass = 5;
-            //createdObject.transform.localScale = new Vector3(2, 2, 2);
-            //createdObject.GetComponent<Rigidbody>().useGravity = false;
             createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
             createdObject.GetComponent<Rigidbody>().drag = 1f;
-            //createdObject.GetComponent<Rigidbody>().AddForce(Random.Range(-200, 200), Random.Range(-200, 200), Random.Range(-200, 200), ForceMode.Impulse);
             createdObject.GetComponent<Rigidbody>().AddTorque(transform.up * Random.Range(-1000, 1000));
             createdObject.GetComponent<Rigidbody>().AddTorque(transform.forward * Random.Range(-1000, 1000));
             createdObject.GetComponent<Rigidbody>().AddTorque(transform.right * Random.Range(-1000, 1000));
+            
             if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
                 createdObject.GetComponent<MeshCollider>().convex = true;
 
-            // GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
             numCubes++;
         }
     }
@@ -150,18 +145,9 @@ public class Main : MonoBehaviour
     public void CreateRollerBalls(int count)
     {
         for (int i = 0; i < count; i++)
-        {
-            int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
+        {            
             GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, -1000, 1000, Random.Range(2, 40), Quaternion.Euler(0, 0, 0), "RollerEnemyBase", GameMaster.GM.globalObjectList);
-
-            //createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
             createdObject.GetComponent<FactionIndex>().SetFractionId(5);
-
-            int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
-
-            // createdObject.GetComponent<RollerEnemyBase>().targetToChase = GameMaster.GM.shipObjectList[rnDShip];
-
-
         }
     }
     
@@ -181,9 +167,7 @@ public class Main : MonoBehaviour
             for (int j = 0; j < count; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.trooperPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y, Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "Trooper", GameMaster.GM.unitList);
-                //GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
-                //float randomScale = Random.Range(2f, 4f); // Рандомизируем размеры пехоты
-                //createdObject.transform.localScale = new Vector3(randomScale, randomScale, randomScale); // Рандомизируем размеры пехоты
+                
                 createdObject.GetComponent<FactionIndex>().SetFractionId(i);
                 createdObject.GetComponent<Seeker>().textHP.gameObject.GetComponent<TextMesh>().color = GameMaster.GM.fractionColors[i];
 
@@ -209,7 +193,8 @@ public class Main : MonoBehaviour
             for (int j = 0; j < count; j++)
             {
                 GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.lightShipPrefab, GameMaster.GM.shipObjectList[i].transform.position + new Vector3(Random.Range(-130, 130), -GameMaster.GM.shipObjectList[i].transform.position.y + 3, Random.Range(-130, 130)), Quaternion.Euler(0, 0, 0), "LightShip", GameMaster.GM.unitList);
-                float RandomScale = Random.Range(2f, 3f); // Рандомизируем размеры пехоты
+                
+                //float RandomScale = Random.Range(2f, 3f); // Рандомизируем размеры пехоты
                 //CreatedObject.transform.localScale = new Vector3(RandomScale, RandomScale, RandomScale); // Рандомизируем размеры пехоты
 
                 createdObject.GetComponent<FactionIndex>().SetFractionId(i);
@@ -234,21 +219,15 @@ public class Main : MonoBehaviour
 
     public void GenerateCubes ()
     {
-        //Debug.Log("Troopers:" + GameObject.FindGameObjectsWithTag("Trooper").Length.ToString() + " Cubes: " + GameObject.FindGameObjectsWithTag("Follower").Length.ToString() + " Rockets: " + GameObject.FindGameObjectsWithTag("RocketAmmo").Length.ToString() + " TowerGun: " + GameObject.FindGameObjectsWithTag("TowerGun").Length.ToString() + " TowerRocket: " + GameObject.FindGameObjectsWithTag("Tower").Length.ToString());
-        
         int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
-        //GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], new Vector3(Random.Range(0, 200), 10, Random.Range(0, 200)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
         GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.detailsList[rndNum], new Vector3(spawnPlatform.transform.position.x + Random.Range(-100, 100), 20, spawnPlatform.transform.position.z + Random.Range(-100, 100)), Quaternion.Euler(0, 0, 0), "Follower", GameMaster.GM.globalObjectList);
 
         if (createdObject.GetComponent<Rigidbody>() == null)
             createdObject.AddComponent<Rigidbody>();
 
         createdObject.GetComponent<Rigidbody>().mass = 5;
-        //createdObject.transform.localScale = new Vector3(2, 2, 2);
-        //createdObject.GetComponent<Rigidbody>().useGravity = false;
         createdObject.GetComponent<Rigidbody>().angularDrag = 0.05f;
         createdObject.GetComponent<Rigidbody>().drag = 1f;
-        //createdObject.GetComponent<Rigidbody>().AddForce(Random.Range(-200, 200), Random.Range(-200, 200), Random.Range(-200, 200), ForceMode.Impulse);
         createdObject.GetComponent<Rigidbody>().AddTorque(transform.up * Random.Range(-1000, 1000));
         createdObject.GetComponent<Rigidbody>().AddTorque(transform.forward * Random.Range(-1000, 1000));
         createdObject.GetComponent<Rigidbody>().AddTorque(transform.right * Random.Range(-1000, 1000));
@@ -256,7 +235,6 @@ public class Main : MonoBehaviour
         if (createdObject.GetComponent<MeshCollider>() != null && createdObject.GetComponent<MeshCollider>().convex == false)
             createdObject.GetComponent<MeshCollider>().convex = true;
 
-        // GameObject Boom = Instantiate(GameMaster.GM.ExplosionPrefab, CreatedObject.transform.position, Quaternion.Euler(0, 0, 0));
         numCubes++;
     }
 
@@ -265,10 +243,7 @@ public class Main : MonoBehaviour
         int rndNum = Random.Range(0, GameMaster.GM.detailsList.Count);
         GameObject createdObject = GameMaster.GM.ConstructObject(GameMaster.GM.rollerEnemyBasePrefab, 0, 100, Random.Range(10, 20), Quaternion.Euler(0, 0, 0), "Roller", GameMaster.GM.globalObjectList);
 
-        //createdObject.GetComponent<FractionIndexClass>().SetFractionId(Random.Range(0, GameMaster.GM.mainBaseCount));
         createdObject.GetComponent<FactionIndex>().SetFractionId(5);
-        int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
-        // createdObject.GetComponent<RollerEnemyBase>().targetToChase = GameMaster.GM.shipObjectList[rnDShip];
     }
 
     public static void printDeadHandler()

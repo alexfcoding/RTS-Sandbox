@@ -26,13 +26,7 @@ public class RollerEnemyBase : Trooper
         textHP = Instantiate(GameMaster.GM.text3dDamage, transform.position + new Vector3(0, 10, 0), Quaternion.Euler(0, 0, 0));
         textHP.gameObject.GetComponent<TextMesh>().text = level.ToString();
         textHP.transform.parent = transform;
-
         healthBarScaleMultiplier = 0.8f;
-
-        //healthBar = Instantiate(GameMaster.GM.healthBar, transform.position + new Vector3(0, 5, 0), Quaternion.Euler(0, 0, 0));
-        //healthBar.transform.localScale = new Vector3(health / maxHP * healthBarScaleMultiplier, 0.05f, 1);
-        //healthBar.transform.SetParent(gameObject.transform);
-
         pointFromShootingRandomize.Set(Random.Range(-40, 40), 0, Random.Range(-40, 40));
     }
         
@@ -79,19 +73,15 @@ public class RollerEnemyBase : Trooper
             {
                 if (enemyToLook.GetComponent<Ship>() != null)
                 {
-                   // if (gameObject.name == "LightShip")
-                   //     gameObject.transform.LookAt(enemyToLook.transform.position);
                     wait = true;
                 }
                 else if (enemyToLook.GetComponent<Ship>() == null)
                 {
-                    //gameObject.transform.LookAt(enemyToLook.transform.position);
                     wait = true;
                 }
             }
             else
             {
-                //gameObject.transform.LookAt(PointFromShooting);
                 wait = false;
             }
 
@@ -101,18 +91,12 @@ public class RollerEnemyBase : Trooper
 
             if (((Vector3.Distance(transform.position, pointFromShooting)) > 80) && (wait == false))
             {
-                //gameObject.transform.LookAt(pointFromShooting);
-                //rbTrooper.AddRelativeForce(Vector3.forward * trooperSpeed * Time.deltaTime * 40, ForceMode.VelocityChange);//* Time.deltaTime * 30
                 Vector3 direction = (targetToChase.transform.position - transform.position).normalized;
                 rbTrooper.AddForce(direction * 1, ForceMode.VelocityChange);
-                //if (gameObject.GetComponent<Animator>() != null)
-                //    gameObject.GetComponent<Animator>().Play("Run_Guard");
             }
             else
             {
                 wait = true;
-                //if (gameObject.GetComponent<Animator>() != null)
-                //    gameObject.GetComponent<Animator>().Play("Idle");
             }
 
             if (((Vector3.Distance(transform.position, pointFromShooting)) > 120))
@@ -124,9 +108,6 @@ public class RollerEnemyBase : Trooper
         // Анимация смерти
         if (dead == true && stopDoing == false)
         {
-            //if (gameObject.GetComponent<Animator>() != null)
-            //    gameObject.GetComponent<Animator>().Play("Die");
-
             stopDoing = true;
         }
     }
