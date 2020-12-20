@@ -108,8 +108,7 @@ public class Weapon : MonoBehaviour
             if (foundTargetToShoot == false)
                 if (objectToStick.transform.GetComponent<Trooper>() != null)
                 { 
-                    objectToStick.transform.GetComponent<Trooper>().enemyToLook = null;
-                    
+                    objectToStick.transform.GetComponent<Trooper>().enemyToLook = null;                    
                 }
         }
 

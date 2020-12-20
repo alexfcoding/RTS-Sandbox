@@ -108,8 +108,14 @@ public class Player: FactionIndex
                     Smoke.transform.SetParent(gameObject.transform);
                     RB.isKinematic = true;
                     Time.timeScale = 0.3f;
-                    playerDeath.Play();
-                    missionFailed.Play();
+
+                    if (playerDeath != null)
+                        playerDeath.Play();
+
+                    if (missionFailed != null)
+                        missionFailed.Play();
+
+                    Invoke("GoToMainMenu", 1.0f);
                 }
 
                 deadPlayer = true;
@@ -470,6 +476,11 @@ public class Player: FactionIndex
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            GoToMainMenu();
+        }
+
         if (Input.GetAxis("Mouse ScrollWheel") > 0)
         {
             currentWeaponNumber += 1;
@@ -614,14 +625,17 @@ public class Player: FactionIndex
                             }
 
                             teamMate.GetComponent<Trooper>().targetToChase = clickedObject;
-                            teamMate.GetComponent<Trooper>().pointToChase = hit2.point;
+
+                            if (hit2.transform.GetComponent<Terrain>() != null)
+                                teamMate.GetComponent<Trooper>().pointToChase = hit2.point;
+                            else
+                                teamMate.GetComponent<Trooper>().pointToChase = new Vector3(0, 0, 0);
+
                             teamMate.GetComponent<Trooper>().targetToChaseByPlayerCommand = clickedObject;
                             teamMate.GetComponent<Trooper>().wait = false;
                             teamMate.GetComponent<Trooper>().enemyToLook = null;
                         }
-
                     }
-
                 }
 
                 if (teamMateList.Count > 0)
@@ -792,4 +806,11 @@ public class Player: FactionIndex
         }
     }
 
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0, LoadSceneMode.Single);
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
 }

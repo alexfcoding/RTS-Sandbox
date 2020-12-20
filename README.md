@@ -3,7 +3,7 @@ C# Unity 3D classes for creation of action / real-time strategy games
 
 ## Game Example (Player vs AI vs AI)
 
-[![](img/preview_1.png?raw=true)](https://youtu.be/i8iyddmY-NE "Game Example")
+[![](img/preview_1.png?raw=true)](https://youtu.be/MSCK4LUibh0 "Game Example")
 
 ## 600 Units Battle (AI vs AI)
 

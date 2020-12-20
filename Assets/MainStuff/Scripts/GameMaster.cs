@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -245,7 +246,7 @@ public class GameMaster : MonoBehaviour
         else
             GM = this;
 
-        DontDestroyOnLoad(this);
+        //DontDestroyOnLoad(this);
 
         if (Settings.SET != null)
         {

@@ -72,6 +72,8 @@ public class Trooper : Seeker
             randomCollisionStuckDirection = -1;
         if (randomCollisionStuckDirection == 1)
             randomCollisionStuckDirection = 1;
+
+        InvokeRepeating("KeepFormation", 0, 0.3f);
     }
     
     public override void Update()
@@ -81,19 +83,6 @@ public class Trooper : Seeker
 
     public override void FindItemsAround(List<GameObject> _GlobalObjectList, List<GameObject> _PlatformList)
     {
-        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 50);
-
-        foreach (Collider hit in colliders)
-        {
-            if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<Player>() == null && hit.GetComponent<Trooper>() != null)
-            {
-                if (hit.name == "LightShip")
-                    hit.GetComponent<Rigidbody>().AddExplosionForce(70, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
-                if (hit.name == "Trooper")
-                    hit.GetComponent<Rigidbody>().AddExplosionForce(700, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
-            }
-        }
-
         if (dead == false && stopDoing == false)
         {
             if (targetToChase != null)
@@ -114,26 +103,41 @@ public class Trooper : Seeker
 
                     if (targetToChase.GetComponent<Seeker>() != null)
                     {
-                        pointFromShooting = new Vector3(targetToChase.transform.position.x, targetToChase.transform.position.y, targetToChase.transform.position.z);
+                        if (gameObject.name == "LightShip")
+                            pointFromShooting = new Vector3(targetToChase.transform.position.x, targetToChase.transform.position.y, targetToChase.transform.position.z);
+                        if (gameObject.name == "Trooper")
+                            pointFromShooting = new Vector3(targetToChase.transform.position.x, transform.position.y, targetToChase.transform.position.z);
                     }  
                 }
             }
             else
             {
-                if (pointToChase != new Vector3(0,0,0))
-                    pointFromShooting = pointToChase;
+                if (pointToChase != new Vector3(0, 0, 0))
+                {
+                    pointFromShooting = pointToChase + pointFromShootingRandomize * 4;
+                }                    
                 else
                 {
-                    int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
+                    if (factionId == 0 && GameMaster.GM.aiPlayerBase == false)
+                    {
+                        if (gameObject.name == "Trooper")
+                            pointFromShooting = new Vector3(GameMaster.GM.player.transform.position.x, transform.position.y, GameMaster.GM.player.transform.position.z) + pointFromShootingRandomize * 4;
+                        if (gameObject.name == "LightShip")
+                            pointFromShooting = new Vector3(GameMaster.GM.player.transform.position.x, GameMaster.GM.player.transform.position.y, GameMaster.GM.player.transform.position.z) + pointFromShootingRandomize * 4;
+                    }
+                    else
+                    {
+                        int rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
 
-                    while (rnDShip == factionId)
-                        rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
+                        while (rnDShip == factionId)
+                            rnDShip = Random.Range(0, GameMaster.GM.mainBaseCount);
 
-                    if (GameMaster.GM.shipObjectList[rnDShip] != null)
-                        targetToChase = GameMaster.GM.shipObjectList[rnDShip];
+                        if (GameMaster.GM.shipObjectList[rnDShip] != null)
+                            targetToChase = GameMaster.GM.shipObjectList[rnDShip];
 
-                    if (factionId != 0 && GameMaster.GM.aiPlayerBase == false && GameMaster.GM.shipObjectList[rnDShip] != null)
-                        targetToChase = GameMaster.GM.shipObjectList[rnDShip];
+                        if (factionId != 0 && GameMaster.GM.aiPlayerBase == false && GameMaster.GM.shipObjectList[rnDShip] != null)
+                            targetToChase = GameMaster.GM.shipObjectList[rnDShip];
+                    }
                 }
             }
            
@@ -145,20 +149,20 @@ public class Trooper : Seeker
 
             if ((currentWeapon != null && enemyToLook != null) || (currentWeapon != null && enemyToLook != null) )
             {
-                if (gameObject.name != "LightShip")
+                if (gameObject.name == "Trooper")
                 {
                     body.transform.LookAt(enemyToLook.transform.position);
-                   
+
                     if (rotateBody)
                         body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
-                   
+
                     wait = true;
                 }
                 else
                 {
                     Quaternion lookOnLook = Quaternion.LookRotation(enemyToLook.transform.position - transform.position);
                     transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
-                    
+
                     if (rotateBody)
                         body.transform.eulerAngles = body.transform.eulerAngles + new Vector3(0, 0, -90);
                    
@@ -191,6 +195,12 @@ public class Trooper : Seeker
             {
                 wait = true;
 
+                if (enemyToLook == false)               
+                {
+                    Quaternion lookOnLook = Quaternion.LookRotation(Vector3.forward - transform.position);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, lookOnLook, Time.deltaTime * 4);
+                }
+
                 if (gameObject.GetComponent<Animator>() != null)
                     gameObject.GetComponent<Animator>().Play("Idle");
             }
@@ -211,11 +221,30 @@ public class Trooper : Seeker
         }
     }
 
+    public void KeepFormation()
+    {
+        if (wait == false)
+        {
+            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 100);
+
+            foreach (Collider hit in colliders)
+            {
+                if ((hit.GetComponent<Rigidbody>() != null) && (hit.name != "Rocket") && hit.GetComponent<Player>() == null && hit.GetComponent<Trooper>() != null)
+                {
+                    if (hit.name == "LightShip")
+                        hit.GetComponent<Rigidbody>().AddExplosionForce(70, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
+                    if (hit.name == "Trooper")
+                        hit.GetComponent<Rigidbody>().AddExplosionForce(800, gameObject.transform.position + new Vector3(0, 0, 0), 0, 1, ForceMode.Force);
+                }
+            }
+        }
+    }
+
     public virtual void OnCollisionStay(Collision collisioninfo)
     {
         if (collisioninfo.gameObject.GetComponent<Building>() != null || collisioninfo.gameObject.GetComponent<Tower>() != null || collisioninfo.gameObject.GetComponent<Seeker>() != null)
         {
-            gameObject.GetComponent<Rigidbody>().AddRelativeForce(Vector3.left * 300 * Random.Range(-1, 2), ForceMode.Impulse);     
+            rbTrooper.AddRelativeForce(Vector3.left * 300 * Random.Range(-1, 2), ForceMode.Impulse);     
         }
     }
 }
