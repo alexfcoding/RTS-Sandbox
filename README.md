@@ -7,11 +7,11 @@ C# Unity 3D classes for creation of action / real-time strategy games
 
 ## 600 Units Battle (AI vs AI)
 
-[![](img/preview_2.png?raw=true)](https://youtu.be/QG2a9d7SQ80 "Battle Simulation")
+[![](img/preview_2.png?raw=true)](https://youtu.be/4vnaKTg5Cvk "600 Units Test")
 
 ## Five Factions Battle (AI vs AI)
 
-[![](img/preview_3.png?raw=true)](https://youtu.be/QG2a9d7SQ80 "Battle Simulation")
+[![](img/preview_3.png?raw=true)](https://youtu.be/AgjpS3nFU-U "Five Factions")
 
 ## Class Diagram
 
